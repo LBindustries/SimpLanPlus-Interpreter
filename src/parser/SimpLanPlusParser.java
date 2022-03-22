@@ -1,4 +1,5 @@
 // Generated from C:/Users/loren/IdeaProjects/SimpLanPlus-Interpreter/src/parser\SimpLanPlus.g4 by ANTLR 4.9.2
+package parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
