@@ -37,4 +37,21 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return res;
     }
 
+    @Override public Node visitDecVar(SimpLanPlusParser.DecVarContext ctx){
+        DecVarNode res;
+        if(ctx.exp()!=null){
+           res = new DecVarNode(visit(ctx.type()), new IdNode(ctx.ID().getText()), visit(ctx.exp()));
+        }
+        else{
+            res = new DecVarNode(visit(ctx.type()), new IdNode(ctx.ID().getText()));
+        }
+
+        return res;
+    }
+
+    @Override public Node visitType(SimpLanPlusParser.TypeContext ctx){
+        return new TypeNode(ctx.getText());
+    }
+
+
 }

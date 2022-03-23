@@ -5,17 +5,17 @@ import util.SemanticError;
 
 import java.util.ArrayList;
 
-public class DeclarationNode implements Node{
+public class TypeNode implements Node{
 
-    private Node dec;
+    private String type;
 
-    public DeclarationNode(Node dec){
-        this.dec = dec;
+    public TypeNode(String type){
+        this.type = type;
     }
 
     @Override
     public String toPrint(String indent) {
-        return indent+"Decl\n"+dec.toPrint("   ");
+        return indent+this.type;
     }
 
     @Override

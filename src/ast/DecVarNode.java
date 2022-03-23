@@ -7,9 +7,27 @@ import java.util.ArrayList;
 
 public class DecVarNode implements Node{
 
+    private Node type;
+    private Node id;
+    private Node exp;
+
+    public DecVarNode(Node type, Node id, Node exp){
+        this.type = type;
+        this.id = id;
+        this.exp = exp;
+    }
+
+    public DecVarNode(Node type, Node id){
+        this.type = type;
+        this.id = id;
+    }
+
     @Override
     public String toPrint(String indent) {
-        return null;
+        if(this.exp!=null){
+            return indent+"DecVar "+this.type.toPrint(indent+" ")+this.id.toPrint(indent+" ")+this.exp.toPrint(indent+" ");
+        }
+        return indent+"DecVar "+this.type.toPrint(indent+" ")+this.id.toPrint(indent+" ");
     }
 
     @Override
