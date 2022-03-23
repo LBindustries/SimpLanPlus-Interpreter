@@ -24,4 +24,17 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return res;
     }
 
+    @Override public Node visitDeclaration(SimpLanPlusParser.DeclarationContext ctx){
+        DeclarationNode res;
+        if(ctx.decFun()!=null){
+            res = new DeclarationNode(visit(ctx.decFun()));
+        }
+        else{
+            res = new DeclarationNode(visit(ctx.decVar()));
+        }
+        //Node next = ctx.children;
+        // Todo: Is this a good idea? Better ask Laneve
+        return res;
+    }
+
 }
