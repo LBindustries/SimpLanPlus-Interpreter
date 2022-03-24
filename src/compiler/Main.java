@@ -19,15 +19,16 @@ public class Main {
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        SimpLanPlusParserError handler = new SimpLanPlusParserError();
+        SimpLanPlusParserError parser_handler = new SimpLanPlusParserError();
         SimpLanPlusParser parser = new SimpLanPlusParser(tokens);
-        parser.addErrorListener(handler);
+        parser.removeErrorListeners();
+        parser.addErrorListener(parser_handler);
         SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 
         Node ast = visitor.visit(parser.block());
 
-        if(handler.err_list.size() != 0){
-            System.out.println(handler);
+        if(parser_handler.err_list.size() != 0){
+            System.out.println(parser_handler);
         }
     }
 }

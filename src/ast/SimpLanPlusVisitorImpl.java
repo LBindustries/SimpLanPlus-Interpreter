@@ -29,8 +29,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         if(ctx.decFun()!=null){
             res = new DeclarationNode(visit(ctx.decFun()));
         }
-        else{
+        else if(ctx.decVar()!=null){
             res = new DeclarationNode(visit(ctx.decVar()));
+        }
+        else{
+            return null;
         }
         //Node next = ctx.children;
         // Todo: Is this a good idea? Better ask Laneve
@@ -98,4 +101,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override public Node visitValExp(SimpLanPlusParser.ValExpContext ctx){
         return new ValExpNode(Integer.parseInt(ctx.getText()));
     }
+
+
 }
