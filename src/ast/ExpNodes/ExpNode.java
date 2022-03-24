@@ -1,22 +1,17 @@
-package ast;
+package ast.ExpNodes;
 
+import ast.Node;
 import util.Environment;
 import util.SemanticError;
 
 import java.util.ArrayList;
 
-public class DecFunNode implements Node{
+public class ExpNode implements Node {
 
-    private Node type;
-    private Node id;
-    private ArrayList<Node> args;
-    private Node block;
+    private Node exp;
 
-    public DecFunNode(Node type, Node id, ArrayList<Node> args, Node block){
-        this.type = type;
-        this.id = id;
-        this.args = args;
-        this.block = block;
+    public ExpNode(Node exp){
+        this.exp = exp;
     }
 
     @Override

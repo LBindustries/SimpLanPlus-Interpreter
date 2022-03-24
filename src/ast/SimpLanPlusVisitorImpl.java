@@ -1,5 +1,6 @@
 package ast;
 
+import ast.ExpNodes.BaseExpNode;
 import parser.SimpLanPlusBaseVisitor;
 import parser.SimpLanPlusParser;
 import parser.*;
@@ -52,6 +53,25 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override public Node visitType(SimpLanPlusParser.TypeContext ctx){
         return new TypeNode(ctx.getText());
     }
+
+    @Override public Node visitDecFun(SimpLanPlusParser.DecFunContext ctx){
+        DecFunNode res;
+        ArrayList<Node> args = new ArrayList<Node>();
+        for(SimpLanPlusParser.ArgContext atx: ctx.arg()){
+            args.add(visit(atx));
+        }
+        res = new DecFunNode(visit(ctx.type()), visit(ctx.ID()), args, visit(ctx.block()));
+        return res;
+    }
+
+    @Override public Node visitArg(SimpLanPlusParser.ArgContext ctx){
+        return new ArgNode(visit(ctx.type()), visit(ctx.ID()));
+    }
+
+    @Override public Node visitBaseExp(SimpLanPlusParser.BaseExpContext ctx){
+        return new BaseExpNode(visit(ctx.exp()));
+    }
+
 
 
 }

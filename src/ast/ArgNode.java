@@ -5,12 +5,14 @@ import util.SemanticError;
 
 import java.util.ArrayList;
 
-public class ExpNode implements Node{
+public class ArgNode implements Node{
 
-    private Node exp;
+    private Node type;
+    private Node id;
 
-    public ExpNode(Node exp){
-        this.exp = exp;
+    public ArgNode(Node type, Node id){
+        this.type = type;
+        this.id = id;
     }
 
     @Override
