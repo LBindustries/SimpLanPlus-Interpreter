@@ -1,9 +1,8 @@
 package ast;
 
-import ast.ExpNodes.BaseExpNode;
+import ast.ExpNodes.*;
 import parser.SimpLanPlusBaseVisitor;
 import parser.SimpLanPlusParser;
-import parser.*;
 
 import java.util.ArrayList;
 
@@ -72,6 +71,31 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return new BaseExpNode(visit(ctx.exp()));
     }
 
+    @Override public Node visitNegExp(SimpLanPlusParser.NegExpContext ctx){
+        return new NegExpNode(visit(ctx.exp()));
+    }
 
+    @Override public Node visitNotExp(SimpLanPlusParser.NotExpContext ctx){
+        return new NotExpNode(visit(ctx.exp()));
+    }
 
+    @Override public Node visitDerExp(SimpLanPlusParser.DerExpContext ctx){
+        return new DerExpNode(visit(ctx.ID()));
+    }
+
+    @Override public Node visitBinExp(SimpLanPlusParser.BinExpContext ctx){
+        return new BinExpNode(ctx.op.getText(), visit(ctx.left), visit(ctx.right));
+    }
+
+    @Override public Node visitCallExp(SimpLanPlusParser.CallExpContext ctx){
+        return new CallExpNode(visit(ctx.call()));
+    }
+
+    @Override public Node visitBoolExp(SimpLanPlusParser.BoolExpContext ctx){
+        return new BoolExpNode(Boolean.parseBoolean(ctx.getText()));
+    }
+
+    @Override public Node visitValExp(SimpLanPlusParser.ValExpContext ctx){
+        return new ValExpNode(Integer.parseInt(ctx.getText()));
+    }
 }
