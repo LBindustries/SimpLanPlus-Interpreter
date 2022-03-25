@@ -40,6 +40,32 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return res;
     }
 
+    @Override public Node visitStatement(SimpLanPlusParser.StatementContext ctx){
+        Node res;
+        if(ctx.block()!=null){
+            res = visit(ctx.block());
+        }
+        else if(ctx.call()!=null){
+            res = visit(ctx.call());
+        }
+        else if(ctx.ite()!=null){
+            res = visit(ctx.ite());
+        }
+        else if(ctx.ret()!=null){
+            res = visit(ctx.ret());
+        }
+        else if(ctx.print()!=null){
+            res = visit(ctx.print());
+        }
+        else if(ctx.assignment()!=null){
+            res = visit(ctx.assignment());
+        }
+        else{
+            return null;
+        }
+        return new StatementNode(res);
+    }
+
     @Override public Node visitDecVar(SimpLanPlusParser.DecVarContext ctx){
         DecVarNode res;
         if(ctx.exp()!=null){

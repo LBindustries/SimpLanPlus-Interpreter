@@ -17,18 +17,19 @@ public class Main {
         FileInputStream is = new FileInputStream(fileName);
         ANTLRInputStream input = new ANTLRInputStream(is);
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
+        SimpLanPlusParserError handler = new SimpLanPlusParserError();
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(handler);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        SimpLanPlusParserError parser_handler = new SimpLanPlusParserError();
         SimpLanPlusParser parser = new SimpLanPlusParser(tokens);
         parser.removeErrorListeners();
-        parser.addErrorListener(parser_handler);
+        parser.addErrorListener(handler);
         SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 
         Node ast = visitor.visit(parser.block());
 
-        if(parser_handler.err_list.size() != 0){
-            System.out.println(parser_handler);
+        if(handler.err_list.size() != 0){
+            System.out.println(handler);
         }
     }
 }
