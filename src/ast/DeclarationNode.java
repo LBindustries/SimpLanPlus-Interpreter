@@ -15,7 +15,7 @@ public class DeclarationNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return indent+"Decl\n"+dec.toPrint("   ");
+        return indent+"Decl\n"+dec.toPrint("   ")+"\n";
     }
 
     @Override

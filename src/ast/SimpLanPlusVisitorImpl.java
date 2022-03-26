@@ -84,7 +84,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         for(SimpLanPlusParser.ArgContext atx: ctx.arg()){
             args.add(visit(atx));
         }
-        res = new DecFunNode(visit(ctx.type()), visit(ctx.ID()), args, visit(ctx.block()));
+        res = new DecFunNode(visit(ctx.type()), new IdNode(ctx.ID().getText()), args, visit(ctx.block()));
         return res;
     }
 
@@ -93,11 +93,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override public Node visitArg(SimpLanPlusParser.ArgContext ctx){
-        return new ArgNode(visit(ctx.type()), visit(ctx.ID()));
+        return new ArgNode(visit(ctx.type()), new IdNode(ctx.ID().getText()));
     }
 
     @Override public Node visitAssignment(SimpLanPlusParser.AssignmentContext ctx){
-        return new AssignmentNode(visit(ctx.ID()), visit(ctx.exp()));
+        return new AssignmentNode(new IdNode(ctx.ID().getText()), visit(ctx.exp()));
     }
 
     @Override public Node visitPrint(SimpLanPlusParser.PrintContext ctx){
@@ -128,13 +128,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override public Node visitCall(SimpLanPlusParser.CallContext ctx){
         if(ctx.exp().isEmpty()){
-            return new CallNode(visit(ctx.ID()));
+            return new CallNode(new IdNode(ctx.ID().getText()));
         }
         ArrayList<Node> params = new ArrayList<Node>();
         for(SimpLanPlusParser.ExpContext ex: ctx.exp()){
             params.add(visit(ex));
         }
-        return new CallNode(visit(ctx.ID()), params);
+        return new CallNode(new IdNode(ctx.ID().getText()), params);
     }
 
     @Override public Node visitNegExp(SimpLanPlusParser.NegExpContext ctx){
@@ -146,7 +146,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override public Node visitDerExp(SimpLanPlusParser.DerExpContext ctx){
-        return new DerExpNode(visit(ctx.ID()));
+        return new DerExpNode(new IdNode(ctx.ID().getText()));
     }
 
     @Override public Node visitBinExp(SimpLanPlusParser.BinExpContext ctx){

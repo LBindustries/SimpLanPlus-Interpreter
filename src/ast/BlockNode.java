@@ -5,7 +5,7 @@ import util.SemanticError;
 
 import java.util.ArrayList;
 
-public class BlockNode implements Node{
+public class BlockNode implements Node {
 
     /*
     Nella sintassi di SLP, le dichiarazioni delle variabili / funzioni devono venire fatte prima
@@ -14,7 +14,7 @@ public class BlockNode implements Node{
     private ArrayList<Node> declarations;
     private ArrayList<Node> statements;
 
-    public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements){
+    public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
         this.declarations = declarations;
         this.statements = statements;
     }
@@ -22,13 +22,17 @@ public class BlockNode implements Node{
     @Override
     public String toPrint(String indent) {
         String res = "";
-        for(Node dec:declarations){
-            res += dec.toPrint(indent+" ");
+        if (this.declarations != null) {
+            for (Node dec : declarations) {
+                res += dec.toPrint(indent + " ") + "\n";
+            }
         }
-        for(Node dec:statements){
-            res += dec.toPrint(indent+" ");
+        if (this.statements != null) {
+            for (Node dec : statements) {
+                res += dec.toPrint(indent + " ") + "\n";
+            }
         }
-        return indent+"Block\n"+res;
+        return indent + "Block\n" + res;
     }
 
     @Override

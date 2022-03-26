@@ -15,7 +15,7 @@ public class IdNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return indent+this.id;
+        return indent+"ID "+this.id+"\n";
     }
 
     @Override

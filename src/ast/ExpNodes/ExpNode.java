@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ExpNode implements Node {
 
-    private Node exp;
+    protected Node exp;
 
     public ExpNode(Node exp){
         this.exp = exp;
@@ -16,7 +16,7 @@ public class ExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent+"ExpNode"+exp.toPrint(indent+"\t")+"\n";
     }
 
     @Override
