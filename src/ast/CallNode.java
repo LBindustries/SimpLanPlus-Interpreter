@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class CallNode implements Node{
 
     private Node id;
-    private Node exp;
+    private ArrayList<Node> exp;
 
-    public CallNode(Node id, Node exp){
+    public CallNode(Node id, ArrayList<Node> exp){
         this.id = id;
         this.exp = exp;
     }
