@@ -18,7 +18,7 @@ public class AssignmentNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return ID.toPrint(indent) + " = " + exp.toPrint("");
+        return indent + "Assignment:\n" + ID.toPrint(indent) + " = " + exp.toPrint("");
     }
 
     @Override
