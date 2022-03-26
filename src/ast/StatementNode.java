@@ -15,7 +15,7 @@ public class StatementNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent+"Statement"+statement.toPrint(indent+"\t");
     }
 
     @Override

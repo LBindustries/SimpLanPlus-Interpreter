@@ -5,14 +5,14 @@ import util.SemanticError;
 
 import java.util.ArrayList;
 
-public class DecFunNode implements Node{
+public class DecFunNode implements Node {
 
     private Node type;
     private Node id;
     private ArrayList<Node> args;
     private Node block;
 
-    public DecFunNode(Node type, Node id, ArrayList<Node> args, Node block){
+    public DecFunNode(Node type, Node id, ArrayList<Node> args, Node block) {
         this.type = type;
         this.id = id;
         this.args = args;
@@ -21,7 +21,14 @@ public class DecFunNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        String res = indent + "DecFun" + this.type.toPrint(indent + "\t") + this.type.toPrint(indent + "\t");
+        if (this.args.size() != 0) {
+            for (Node arg : this.args) {
+                res += arg.toPrint(indent + "\t");
+            }
+        }
+        res += block.toPrint(indent + "\t") + "\n";
+        return res;
     }
 
     @Override

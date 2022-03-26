@@ -17,7 +17,7 @@ public class ArgNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent+"Arg"+this.type.toPrint(indent+"\t")+this.id.toPrint(indent+"\t");
     }
 
     @Override
