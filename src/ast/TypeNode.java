@@ -15,7 +15,7 @@ public class TypeNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return indent+"Type "+this.type;
+        return "\n"+indent+"Type "+this.type;
     }
 
     @Override

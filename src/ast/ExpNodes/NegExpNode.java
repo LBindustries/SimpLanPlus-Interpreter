@@ -9,6 +9,6 @@ public class NegExpNode extends BaseExpNode{
 
     @Override
     public String toPrint(String indent) {
-        return indent+"negExpNode"+this.exp.toPrint(indent+"\t")+"\n";
+        return "\n"+indent+"negExpNode"+this.exp.toPrint(indent+" ");
     }
 }

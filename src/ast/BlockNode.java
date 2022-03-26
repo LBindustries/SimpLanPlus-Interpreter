@@ -24,15 +24,15 @@ public class BlockNode implements Node {
         String res = "";
         if (this.declarations != null) {
             for (Node dec : declarations) {
-                res += dec.toPrint(indent + " ") + "\n";
+                res += dec.toPrint(indent + " ");
             }
         }
         if (this.statements != null) {
             for (Node dec : statements) {
-                res += dec.toPrint(indent + " ") + "\n";
+                res += dec.toPrint(indent + " ");
             }
         }
-        return indent + "Block\n" + res;
+        return "\n"+indent + "Block" + res;
     }
 
     @Override

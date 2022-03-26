@@ -20,7 +20,7 @@ public class BinExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return indent+"BinExp "+this.op+this.left.toPrint(indent+"\t")+this.right.toPrint(indent+"\t")+"\n";
+        return "\n"+indent+"BinExp "+this.op+this.left.toPrint(indent+" ")+this.right.toPrint(indent+" ");
     }
 
     @Override

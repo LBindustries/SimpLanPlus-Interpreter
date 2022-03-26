@@ -5,6 +5,10 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOError;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SimpLanPlusParserError extends BaseErrorListener {
@@ -28,5 +32,11 @@ public class SimpLanPlusParserError extends BaseErrorListener {
             res += event + "\n";
         }
         return res;
+    }
+
+    public void dumpToFile(String filename) throws IOException {
+        BufferedWriter wr = new BufferedWriter(new FileWriter(filename));
+        wr.write(this.toString());
+        wr.close();
     }
 }

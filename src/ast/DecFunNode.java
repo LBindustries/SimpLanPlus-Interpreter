@@ -21,13 +21,17 @@ public class DecFunNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        String res = indent + "DecFun" + this.type.toPrint(indent + "\t") + this.type.toPrint(indent + "\t");
+        String t="void";
+        if(this.type!=null){
+            t = this.type.toPrint(indent + " ");
+        }
+        String res = "\n"+indent + "DecFun "+t+this.id.toPrint(indent+" ");
         if (this.args.size() != 0) {
             for (Node arg : this.args) {
-                res += arg.toPrint(indent + "\t");
+                res += arg.toPrint(indent + " ");
             }
         }
-        res += block.toPrint(indent + "\t") + "\n";
+        res += block.toPrint(indent + " ");
         return res;
     }
 

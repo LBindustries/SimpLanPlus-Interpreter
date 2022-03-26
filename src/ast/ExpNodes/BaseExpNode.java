@@ -9,6 +9,6 @@ public class BaseExpNode extends ExpNode {
 
     @Override
     public String toPrint(String indent) {
-        return indent+"BaseExpNode"+this.exp.toPrint(indent+"\t")+"\n";
+        return "\n"+indent+"BaseExpNode"+this.exp.toPrint(indent+" ");
     }
 }

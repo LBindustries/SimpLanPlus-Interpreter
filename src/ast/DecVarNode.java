@@ -25,9 +25,9 @@ public class DecVarNode implements Node{
     @Override
     public String toPrint(String indent) {
         if(this.exp!=null){
-            return indent+"DecVar "+this.type.toPrint(indent+" ")+this.id.toPrint(indent+" ")+this.exp.toPrint(indent+" ")+"\n";
+            return "\n"+indent+"DecVar "+this.type.toPrint(indent+" ")+this.id.toPrint(indent+" ")+this.exp.toPrint(indent+" ");
         }
-        return indent+"DecVar "+this.type.toPrint(indent+" ")+this.id.toPrint(indent+" ")+"\n";
+        return "\n"+indent+"DecVar "+this.type.toPrint(indent+" ")+this.id.toPrint(indent+" ");
     }
 
     @Override

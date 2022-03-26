@@ -84,7 +84,13 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         for(SimpLanPlusParser.ArgContext atx: ctx.arg()){
             args.add(visit(atx));
         }
-        res = new DecFunNode(visit(ctx.type()), new IdNode(ctx.ID().getText()), args, visit(ctx.block()));
+        if(ctx.type()!=null){
+            res = new DecFunNode(visit(ctx.type()), new IdNode(ctx.ID().getText()), args, visit(ctx.block()));
+        }
+        else{
+            res = new DecFunNode(null, new IdNode(ctx.ID().getText()), args, visit(ctx.block()));
+        }
+
         return res;
     }
 
@@ -105,7 +111,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override public Node visitRet(SimpLanPlusParser.RetContext ctx){
-        return new ReturnNode(visit(ctx.exp()));
+        if(ctx.exp()!=null){
+            return new ReturnNode(visit(ctx.exp()));
+        }
+        return new ReturnNode(null);
     }
 
     @Override public Node visitBaseExp(SimpLanPlusParser.BaseExpContext ctx){
