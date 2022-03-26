@@ -16,7 +16,11 @@ public class ReturnNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return indent + "Return:\n" + exp.toPrint(indent);
+        String res = indent + "Return\n";
+        if(this.exp != null)
+            return res + exp.toPrint(indent);
+        else
+            return res;
     }
 
     @Override
