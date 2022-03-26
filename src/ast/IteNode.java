@@ -24,7 +24,14 @@ public class IteNode implements Node{
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        String res = indent + "ITE:\n" + exp.toString();
+        res += indent + " Then:\n" + then_statement.toPrint(indent);
+
+        if(else_statement != null){
+            res += indent + " Else:\n" + else_statement.toPrint(indent);
+        }
+
+        return res;
     }
 
     @Override

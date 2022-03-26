@@ -16,7 +16,7 @@ public class BoolExpNode implements Node {
 
     @Override
     public String toPrint(String indent) {
-        return null;
+        return indent + "Bool:\n" + bool + "\n";
     }
 
     @Override
