@@ -96,6 +96,18 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         return new ArgNode(visit(ctx.type()), visit(ctx.ID()));
     }
 
+    @Override public Node visitAssignment(SimpLanPlusParser.AssignmentContext ctx){
+        return new AssignmentNode(visit(ctx.ID()), visit(ctx.exp()));
+    }
+
+    @Override public Node visitPrint(SimpLanPlusParser.PrintContext ctx){
+        return new PrintNode(visit(ctx.exp()));
+    }
+
+    @Override public Node visitRet(SimpLanPlusParser.RetContext ctx){
+        return new ReturnNode(visit(ctx.exp()));
+    }
+
     @Override public Node visitBaseExp(SimpLanPlusParser.BaseExpContext ctx){
         return new BaseExpNode(visit(ctx.exp()));
     }
