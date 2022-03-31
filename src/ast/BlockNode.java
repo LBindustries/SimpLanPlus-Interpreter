@@ -63,7 +63,7 @@ public class BlockNode implements Node {
         if(this.statements!=null && this.statements.size()>0){
             env.offset = -2; // Why?
             for(Node n: this.statements){
-                //res.addAll(n.checkSemantics(env));
+                res.addAll(n.checkSemantics(env));
             }
         }
         env.symTable.remove(env.nestingLevel--);

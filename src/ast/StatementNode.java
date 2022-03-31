@@ -30,6 +30,9 @@ public class StatementNode implements Node{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+
+        res.addAll(this.statement.checkSemantics(env));
+        return res;
     }
 }

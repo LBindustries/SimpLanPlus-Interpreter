@@ -1,6 +1,8 @@
 package ast.ExpNodes;
 
+import ast.IdNode;
 import ast.Node;
+import ast.STentry;
 import util.Environment;
 import util.SemanticError;
 
@@ -8,9 +10,9 @@ import java.util.ArrayList;
 
 public class DerExpNode implements Node {
 
-    private Node id;
+    private IdNode id;
 
-    public DerExpNode(Node id){
+    public DerExpNode(IdNode id){
         this.id = id;
     }
 
@@ -31,6 +33,14 @@ public class DerExpNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+
+        int j=env.nestingLevel;
+        STentry tmp=null;
+        while (j>=0 && tmp==null)
+            tmp=(env.symTable.get(j--)).get(this.id.getId());
+        if (tmp==null)
+            res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
+        return res;
     }
 }
