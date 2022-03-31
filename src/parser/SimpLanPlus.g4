@@ -1,7 +1,7 @@
 grammar SimpLanPlus;
 
 // THIS IS THE PARSER INPUT
-
+program       : '{' declaration* statement* '}' EOF;
 block	    : '{' declaration* statement* '}';
 
 statement   : assignment ';'

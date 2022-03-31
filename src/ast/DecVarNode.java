@@ -4,20 +4,21 @@ import util.Environment;
 import util.SemanticError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DecVarNode implements Node{
 
-    private Node type;
-    private Node id;
+    private TypeNode type;
+    private IdNode id;
     private Node exp;
 
-    public DecVarNode(Node type, Node id, Node exp){
+    public DecVarNode(TypeNode type, IdNode id, Node exp){
         this.type = type;
         this.id = id;
         this.exp = exp;
     }
 
-    public DecVarNode(Node type, Node id){
+    public DecVarNode(TypeNode type, IdNode id){
         this.type = type;
         this.id = id;
     }
@@ -42,6 +43,14 @@ public class DecVarNode implements Node{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
+        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--)) != null){
+            res.add(new SemanticError("Variable id "+this.id.getId()+" already declared."));
+        }
+        if(this.exp!=null){
+            res.addAll(this.exp.checkSemantics(env));
+        }
+        return res;
     }
 }

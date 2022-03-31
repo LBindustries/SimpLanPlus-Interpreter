@@ -1,9 +1,9 @@
 package ast;
 public class STentry {
 
-    private int nl;
-    private Node type;
-    private int offset;
+    private int nl; // Nest Level
+    private Node type; // tipo della variabile (?)
+    private int offset; // "sarà utile per l'interprete"
 
     public STentry (int n, int os)
     {nl=n;

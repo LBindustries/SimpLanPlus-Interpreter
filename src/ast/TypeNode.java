@@ -18,6 +18,10 @@ public class TypeNode implements Node{
         return "\n"+indent+"Type "+this.type;
     }
 
+    public String getType() {
+        return type;
+    }
+
     @Override
     public Node typeCheck() {
         return null;

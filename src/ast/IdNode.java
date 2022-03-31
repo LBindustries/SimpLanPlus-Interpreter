@@ -23,6 +23,10 @@ public class IdNode implements Node{
         return null;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String codeGeneration() {
         return null;
