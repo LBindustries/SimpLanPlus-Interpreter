@@ -1,24 +1,24 @@
 package ast;
 
-import ast.ExpNodes.ValExpNode;
 import util.Environment;
 import util.SemanticError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AssignmentNode implements Node{
     // ID '=' exp
-    private Node ID;
+    private IdNode id;
     private Node exp;
 
-    public AssignmentNode(Node ID, Node exp){
-        this.ID = ID;
+    public AssignmentNode(IdNode ID, Node exp){
+        this.id = ID;
         this.exp = exp;
     }
 
     @Override
     public String toPrint(String indent) {
-        return "\n"+indent + "Assignment " + ID.toPrint(indent) + " = " + exp.toPrint(indent+" ");
+        return "\n"+indent + "Assignment " + id.toPrint(indent) + " = " + exp.toPrint(indent+" ");
     }
 
     @Override
@@ -33,6 +33,22 @@ public class AssignmentNode implements Node{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
+
+        // check for variable with such id in current level and below
+        int j=env.nestingLevel;
+        STentry tmp=null;
+        while (j>=0 && tmp==null)
+            tmp=(env.symTable.get(j--)).get(this.id.getId());
+        if (tmp==null)
+            res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
+        else{   // if variable exists, check the exp
+            if(this.exp != null) {
+                res.addAll(this.exp.checkSemantics(env));
+            }
+        }
+
+        return res;
     }
 }

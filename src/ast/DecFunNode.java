@@ -61,8 +61,7 @@ public class DecFunNode implements Node {
             env.symTable.add(st);
             if(this.args.size() >0){
                 for(Node arg:this.args){
-                    // TODO: rimuovere quando saranno completi gli arg e assignment nodes
-                    //res.addAll(arg.checkSemantics(env));
+                    res.addAll(arg.checkSemantics(env));
                 }
             }
             if(this.block!=null){

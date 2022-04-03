@@ -4,13 +4,14 @@ import util.Environment;
 import util.SemanticError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ArgNode implements Node{
 
-    private Node type;
-    private Node id;
+    private TypeNode type;
+    private IdNode id;
 
-    public ArgNode(Node type, Node id){
+    public ArgNode(TypeNode type, IdNode id){
         this.type = type;
         this.id = id;
     }
@@ -30,8 +31,15 @@ public class ArgNode implements Node{
         return null;
     }
 
-    @Override
+    @Override   // idk??
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
+
+        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--)) != null){
+            res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function."));
+        }
+
+        return res;
     }
 }
