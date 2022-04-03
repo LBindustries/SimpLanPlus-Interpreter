@@ -70,4 +70,22 @@ public class BlockNode implements Node {
 
         return res;
     }
+
+    public ArrayList<SemanticError> checkSemanticsFunction(Environment env) {
+        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
+        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+        if(this.declarations!=null && this.declarations.size()>0){
+            env.offset = -2; // Why?
+            for(Node n: this.declarations){
+                res.addAll(n.checkSemantics(env));
+            }
+        }
+        if(this.statements!=null && this.statements.size()>0){
+            env.offset = -2; // Why?
+            for(Node n: this.statements){
+                res.addAll(n.checkSemantics(env));
+            }
+        }
+        return res;
+    }
 }

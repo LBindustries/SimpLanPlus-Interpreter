@@ -4,19 +4,20 @@ import util.Environment;
 import util.SemanticError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DecFunNode implements Node {
 
-    private Node type;
-    private Node id;
+    private TypeNode type;
+    private IdNode id;
     private ArrayList<Node> args;
-    private Node block;
+    private BlockNode block;
 
     public DecFunNode(Node type, Node id, ArrayList<Node> args, Node block) {
-        this.type = type;
-        this.id = id;
+        this.type = (TypeNode) type;
+        this.id = (IdNode) id;
         this.args = args;
-        this.block = block;
+        this.block = (BlockNode) block;
     }
 
     @Override
@@ -47,6 +48,29 @@ public class DecFunNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return null;
+        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
+        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
+        // Check if function is not already declared
+        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--)) != null){
+            res.add(new SemanticError("Function id "+this.id.getId()+" already declared."));
+        }
+        else{
+            // Begin analyzing args
+            env.nestingLevel++;
+            st = new HashMap<String, STentry>();
+            env.symTable.add(st);
+            if(this.args.size() >0){
+                for(Node arg:this.args){
+                    // TODO: rimuovere quando saranno completi gli arg e assignment nodes
+                    //res.addAll(arg.checkSemantics(env));
+                }
+            }
+            if(this.block!=null){
+                res.addAll(this.block.checkSemanticsFunction(env));
+            }
+            env.symTable.remove(env.nestingLevel--);
+        }
+
+        return res;
     }
 }
