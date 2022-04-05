@@ -28,13 +28,16 @@ public class Main {
         parser.addErrorListener(handler);
         SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 
+        System.out.println("Parsing...");
         Node ast = visitor.visit(parser.block());
-        System.out.println(ast.toPrint(""));
+        //System.out.println(ast.toPrint(""));
         if(handler.err_list.size() != 0){
             System.out.println(handler);
             handler.dumpToFile(fileName+".log");
+            return;
         }
-
+        System.out.println("Parse completed without issues!");
+        System.out.println("Checking for semantic errors...");
         // Start Semantic analysis
         Environment env = new Environment();
         ArrayList<SemanticError> err = ast.checkSemantics(env);
@@ -42,6 +45,9 @@ public class Main {
             for(SemanticError e: err){
                 System.out.println(e);
             }
+            return;
         }
+        System.out.println("Environment is good!");
+        System.out.println("Program is valid.");
     }
 }
