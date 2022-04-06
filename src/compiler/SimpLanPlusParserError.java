@@ -22,12 +22,12 @@ public class SimpLanPlusParserError extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        this.err_list.add("Errore in posizione: " + line + ":" + charPositionInLine + " " + msg);
+        this.err_list.add("An error occurred at " + line + ", character " + charPositionInLine + ":" + msg);
     }
 
     @Override
     public String toString() {
-        String res = "Errori di compilazione: \n";
+        String res = "";
         for (String event : this.err_list) {
             res += event + "\n";
         }
