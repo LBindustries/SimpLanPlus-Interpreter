@@ -48,15 +48,26 @@ public class CallNode implements Node{
         STentry tmp=null;
         while (j>=0 && tmp==null)
             tmp=(env.symTable.get(j--)).get(this.id.getId());
-        if (tmp==null)
-            res.add(new SemanticError("Function "+this.id.getId()+" not declared"));
-        else{
-            if(this.exp != null) {
-                for (Node arg : exp)
-                    res.addAll(arg.checkSemantics(env));
-            }
+        if (tmp==null){
+            res.add(new SemanticError("Function "+this.id.getId()+" not declared."));
+            return res;
         }
-
+        if (!tmp.isFunction()){
+            res.add(new SemanticError("ID "+this.id.getId()+" is not a function."));
+            return res;
+        }
+        int argNumber=0;
+        if(this.exp!=null){
+            argNumber = this.exp.size();
+        }
+        if(argNumber!=tmp.getNargs()){
+            res.add(new SemanticError("Function "+this.id.getId()+" is being called with incorrect number of args. "+tmp.getNargs()+ " expected, "+argNumber+" given."));
+            return res;
+        }
+        if(this.exp != null) {
+            for (Node arg : exp)
+                res.addAll(arg.checkSemantics(env));
+        }
         return res;
     }
 }

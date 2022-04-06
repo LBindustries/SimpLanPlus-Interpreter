@@ -29,7 +29,7 @@ public class Main {
         SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 
         System.out.println("Parsing...");
-        Node ast = visitor.visit(parser.block());
+        Node ast = visitor.visit(parser.program());
         //System.out.println(ast.toPrint(""));
         if(handler.err_list.size() != 0){
             System.out.println(handler);
