@@ -19,7 +19,7 @@ public class Main {
         FileInputStream is = new FileInputStream(fileName);
         ANTLRInputStream input = new ANTLRInputStream(is);
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
-        SimpLanPlusParserError handler = new SimpLanPlusParserError();
+        SimpLanPlusErrorHandler handler = new SimpLanPlusErrorHandler();
         lexer.removeErrorListeners();
         lexer.addErrorListener(handler);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
