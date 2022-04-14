@@ -190,11 +190,11 @@ public class SimpLanPlusParser extends Parser {
 	}
 
 	public static class BlockContext extends ParserRuleContext {
-		public List<DeclarationContext> declaration() {
-			return getRuleContexts(DeclarationContext.class);
+		public List<DecVarContext> decVar() {
+			return getRuleContexts(DecVarContext.class);
 		}
-		public DeclarationContext declaration(int i) {
-			return getRuleContext(DeclarationContext.class,i);
+		public DecVarContext decVar(int i) {
+			return getRuleContext(DecVarContext.class,i);
 		}
 		public List<StatementContext> statement() {
 			return getRuleContexts(StatementContext.class);
@@ -233,11 +233,11 @@ public class SimpLanPlusParser extends Parser {
 			setState(48);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__8) | (1L << T__9))) != 0)) {
+			while (_la==T__8 || _la==T__9) {
 				{
 				{
 				setState(45);
-				declaration();
+				decVar();
 				}
 				}
 				setState(50);
@@ -1279,7 +1279,7 @@ public class SimpLanPlusParser extends Parser {
 			setState(183);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,17,_ctx);
-			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+			while ( _alt!=2 && _alt!= ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
@@ -1467,7 +1467,7 @@ public class SimpLanPlusParser extends Parser {
 		"\3\2\2\2\30\177\3\2\2\2\32\u0088\3\2\2\2\34\u00a3\3\2\2\2\36\"\7\3\2\2"+
 		"\37!\5\b\5\2 \37\3\2\2\2!$\3\2\2\2\" \3\2\2\2\"#\3\2\2\2#(\3\2\2\2$\""+
 		"\3\2\2\2%\'\5\6\4\2&%\3\2\2\2\'*\3\2\2\2(&\3\2\2\2()\3\2\2\2)+\3\2\2\2"+
-		"*(\3\2\2\2+,\7\4\2\2,-\7\2\2\3-\3\3\2\2\2.\62\7\3\2\2/\61\5\b\5\2\60/"+
+		"*(\3\2\2\2+,\7\4\2\2,-\7\2\2\3-\3\3\2\2\2.\62\7\3\2\2/\61\5\f\7\2\60/"+
 		"\3\2\2\2\61\64\3\2\2\2\62\60\3\2\2\2\62\63\3\2\2\2\638\3\2\2\2\64\62\3"+
 		"\2\2\2\65\67\5\6\4\2\66\65\3\2\2\2\67:\3\2\2\28\66\3\2\2\289\3\2\2\29"+
 		";\3\2\2\2:8\3\2\2\2;<\7\4\2\2<\5\3\2\2\2=>\5\22\n\2>?\7\5\2\2?L\3\2\2"+

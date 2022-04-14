@@ -1,9 +1,6 @@
 {   int a;
     int fun1(var int a, int b){
-        int fun2(int b, int c){
-            a = 2;
-            return a;
-        }
+        int c; int b;
         a=1; b=1;
     }
     fun1(1, a);

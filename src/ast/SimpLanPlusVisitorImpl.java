@@ -29,7 +29,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         ArrayList<Node> declarations = new ArrayList<Node>();
         ArrayList<Node> statements = new ArrayList<Node>();
         // per ogni dichiarazione del blocco...
-        for(SimpLanPlusParser.DeclarationContext dc: ctx.declaration()){
+        for(SimpLanPlusParser.DecVarContext dc: ctx.decVar()){
             declarations.add(visit(dc));
         }
         // per ogni statement del blocco...

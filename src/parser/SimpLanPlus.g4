@@ -2,7 +2,7 @@ grammar SimpLanPlus;
 
 // THIS IS THE PARSER INPUT
 program       : '{' declaration* statement* '}' EOF;
-block	    : '{' declaration* statement* '}';
+block	    : '{' decVar* statement* '}';
 
 statement   : assignment ';'
 	    | print ';'
