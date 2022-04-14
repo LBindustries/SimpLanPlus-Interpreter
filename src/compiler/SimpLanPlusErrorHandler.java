@@ -20,7 +20,7 @@ public class SimpLanPlusErrorHandler extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        this.err_list.add("An error occurred at " + line + ", character " + charPositionInLine + ":" + msg);
+        this.err_list.add("An error occurred at line " + line + ", character " + charPositionInLine + " :" + msg);
     }
 
     @Override
