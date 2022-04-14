@@ -51,19 +51,14 @@ public class DecFunNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
         // Check if function is not already declared
-        if(env.insideFunction){
-            res.add(new SemanticError("Function id "+this.id.getId()+" is being declared inside a function. This is not allowed."));
-            return res;
-        }
         int argNumber = 0;
         if(this.args!=null){
             argNumber = this.args.size();
         }
-        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, true, argNumber)) != null){
+        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--)) != null){
             res.add(new SemanticError("Function id "+this.id.getId()+" already declared."));
             return res;
         }
-        env.insideFunction=true;
         // Begin analyzing args
         env.nestingLevel++;
         st = new HashMap<String, STentry>();
@@ -77,7 +72,6 @@ public class DecFunNode implements Node {
             res.addAll(this.block.checkSemanticsFunction(env));
         }
         env.symTable.remove(env.nestingLevel--);
-        env.insideFunction=false;
         return res;
     }
 }

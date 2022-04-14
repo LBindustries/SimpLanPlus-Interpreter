@@ -15,8 +15,16 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws Exception {
         String fileName = "prova.simplan";
-
-        FileInputStream is = new FileInputStream(fileName);
+        if(args.length>0){
+            fileName = args[0];
+        }
+        FileInputStream is;
+        try {
+            is = new FileInputStream(fileName);
+        } catch (Exception e){
+            System.out.println("Something went wrong while accessing the file. Please check the filename.");
+            return;
+        }
         ANTLRInputStream input = new ANTLRInputStream(is);
         SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
         SimpLanPlusErrorHandler handler = new SimpLanPlusErrorHandler();
@@ -30,13 +38,13 @@ public class Main {
 
         System.out.println("Parsing...");
         Node ast = visitor.visit(parser.program());
-        //System.out.println(ast.toPrint(""));
         if(handler.err_list.size() != 0){
             System.out.println(handler);
             handler.dumpToFile(fileName+".log");
             return;
         }
         System.out.println("Parse completed without issues!");
+        System.out.println(ast.toPrint(""));
         System.out.println("Checking for semantic errors...");
         // Start Semantic analysis
         Environment env = new Environment();

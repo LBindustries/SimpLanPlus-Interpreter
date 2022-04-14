@@ -51,8 +51,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         else{
             return null;
         }
-        //Node next = ctx.children;
-        // Todo: Is this a good idea? Better ask Laneve
         return res;
     }
 
@@ -115,7 +113,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override public Node visitArg(SimpLanPlusParser.ArgContext ctx){
-        return new ArgNode((TypeNode)visit(ctx.type()), new IdNode(ctx.ID().getText()));
+        boolean isVar = false;
+        if(ctx.children.get(0).toString().equals("var")){
+            isVar = true;
+        }
+        return new ArgNode((TypeNode)visit(ctx.type()), new IdNode(ctx.ID().getText()), isVar);
     }
 
     @Override public Node visitAssignment(SimpLanPlusParser.AssignmentContext ctx){
