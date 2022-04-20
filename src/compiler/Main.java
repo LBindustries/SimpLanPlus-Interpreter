@@ -9,18 +9,20 @@ import parser.SimpLanPlusParser;
 import util.Environment;
 import util.SemanticError;
 
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        String fileName = "prova.simplan";
+        String filename = "prova.simplan";
         if(args.length>0){
-            fileName = args[0];
+            filename = args[0];
         }
         FileInputStream is;
         try {
-            is = new FileInputStream(fileName);
+            is = new FileInputStream(filename);
         } catch (Exception e){
             System.out.println("Something went wrong while accessing the file. Please check the filename.");
             return;
@@ -40,7 +42,7 @@ public class Main {
         Node ast = visitor.visit(parser.program());
         if(handler.err_list.size() != 0){
             System.out.println(handler);
-            handler.dumpToFile(fileName+".log");
+            handler.dumpToFile(filename+".log");
             return;
         }
         System.out.println("Parse completed without issues!");
@@ -50,9 +52,12 @@ public class Main {
         Environment env = new Environment();
         ArrayList<SemanticError> err = ast.checkSemantics(env);
         if(err!=null && err.size()>0){
+            BufferedWriter wr = new BufferedWriter(new FileWriter(filename+".log"));
             for(SemanticError e: err){
                 System.out.println(e);
+                wr.write(e.toString()+"\n");
             }
+            wr.close();
             return;
         }
         System.out.println("Environment is good!");
