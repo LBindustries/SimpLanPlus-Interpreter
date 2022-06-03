@@ -1,5 +1,6 @@
 // Generated from C:/Users/loren/IdeaProjects/SimpLanPlus-Interpreter/src/parser\SimpLanPlus.g4 by ANTLR 4.9.2
 package parser;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -10,6 +11,18 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * of the available methods.
  */
 public class SimpLanPlusBaseListener implements SimpLanPlusListener {
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterProgram(SimpLanPlusParser.ProgramContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitProgram(SimpLanPlusParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

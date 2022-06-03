@@ -1,0 +1,7 @@
+{   int a;
+    int fun1(int b){
+        int c;
+        a=1; b=1;
+    }
+    fun1(1, a);
+}

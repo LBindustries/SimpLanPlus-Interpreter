@@ -8,6 +8,16 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface SimpLanPlusListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link SimpLanPlusParser#program}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgram(SimpLanPlusParser.ProgramContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SimpLanPlusParser#program}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgram(SimpLanPlusParser.ProgramContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SimpLanPlusParser#block}.
 	 * @param ctx the parse tree
 	 */

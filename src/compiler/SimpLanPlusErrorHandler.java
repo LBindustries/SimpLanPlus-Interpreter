@@ -3,31 +3,29 @@ package compiler;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SimpLanPlusParserError extends BaseErrorListener {
-    public static final SimpLanPlusParserError INSTANCE = new SimpLanPlusParserError();
+public class SimpLanPlusErrorHandler extends BaseErrorListener {
+    public static final SimpLanPlusErrorHandler INSTANCE = new SimpLanPlusErrorHandler();
 
     ArrayList<String> err_list;
 
-    public SimpLanPlusParserError() {
+    public SimpLanPlusErrorHandler() {
         this.err_list = new ArrayList<String>();
     }
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        this.err_list.add("Errore in posizione: " + line + ":" + charPositionInLine + " " + msg);
+        this.err_list.add("An error occurred at line " + line + ", character " + charPositionInLine + " :" + msg);
     }
 
     @Override
     public String toString() {
-        String res = "Errori di compilazione: \n";
+        String res = "";
         for (String event : this.err_list) {
             res += event + "\n";
         }

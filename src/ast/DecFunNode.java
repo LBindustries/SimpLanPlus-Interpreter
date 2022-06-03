@@ -1,6 +1,5 @@
 package ast;
 
-import util.Effect;
 import util.Environment;
 import util.SemanticError;
 
@@ -52,25 +51,27 @@ public class DecFunNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
         // Check if function is not already declared
-        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(true))) != null){
+        int argNumber = 0;
+        if(this.args!=null){
+            argNumber = this.args.size();
+        }
+        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--)) != null){
             res.add(new SemanticError("Function id "+this.id.getId()+" already declared."));
+            return res;
         }
-        else{
-            // Begin analyzing args
-            env.nestingLevel++;
-            st = new HashMap<String, STentry>();
-            env.symTable.add(st);
-            if(this.args.size() >0){
-                for(Node arg:this.args){
-                    res.addAll(arg.checkSemantics(env));
-                }
+        // Begin analyzing args
+        env.nestingLevel++;
+        st = new HashMap<String, STentry>();
+        env.symTable.add(st);
+        if(this.args.size() >0){
+            for(Node arg:this.args){
+                res.addAll(arg.checkSemantics(env));
             }
-            if(this.block!=null){
-                res.addAll(this.block.checkSemanticsFunction(env));
-            }
-            env.symTable.remove(env.nestingLevel--);
         }
-
+        if(this.block!=null){
+            res.addAll(this.block.checkSemanticsFunction(env));
+        }
+        env.symTable.remove(env.nestingLevel--);
         return res;
     }
 }

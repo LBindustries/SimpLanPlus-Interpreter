@@ -11,10 +11,12 @@ public class ArgNode implements Node{
 
     private TypeNode type;
     private IdNode id;
+    private boolean isVar = false;
 
-    public ArgNode(TypeNode type, IdNode id){
+    public ArgNode(TypeNode type, IdNode id, boolean isVar){
         this.type = type;
         this.id = id;
+        this.isVar = isVar;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class ArgNode implements Node{
         return null;
     }
 
-    @Override   // idk??
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);

@@ -11,6 +11,12 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface SimpLanPlusVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link SimpLanPlusParser#program}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgram(SimpLanPlusParser.ProgramContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SimpLanPlusParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

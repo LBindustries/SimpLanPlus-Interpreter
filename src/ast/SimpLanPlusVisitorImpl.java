@@ -8,12 +8,28 @@ import java.util.ArrayList;
 
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
+    @Override public Node visitProgram(SimpLanPlusParser.ProgramContext ctx){
+        ProgramNode res;
+        ArrayList<Node> declarations = new ArrayList<Node>();
+        ArrayList<Node> statements = new ArrayList<Node>();
+        // per ogni dichiarazione del programma...
+        for(SimpLanPlusParser.DeclarationContext dc: ctx.declaration()){
+            declarations.add(visit(dc));
+        }
+        // per ogni statement del programma...
+        for(SimpLanPlusParser.StatementContext sc: ctx.statement()){
+            statements.add(visit(sc));
+        }
+        res = new ProgramNode(declarations, statements);
+        return res;
+    }
+
     @Override public Node visitBlock(SimpLanPlusParser.BlockContext ctx) {
         BlockNode res;
         ArrayList<Node> declarations = new ArrayList<Node>();
         ArrayList<Node> statements = new ArrayList<Node>();
         // per ogni dichiarazione del blocco...
-        for(SimpLanPlusParser.DeclarationContext dc: ctx.declaration()){
+        for(SimpLanPlusParser.DecVarContext dc: ctx.decVar()){
             declarations.add(visit(dc));
         }
         // per ogni statement del blocco...
@@ -35,8 +51,6 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         else{
             return null;
         }
-        //Node next = ctx.children;
-        // Todo: Is this a good idea? Better ask Laneve
         return res;
     }
 
@@ -99,7 +113,11 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     }
 
     @Override public Node visitArg(SimpLanPlusParser.ArgContext ctx){
-        return new ArgNode((TypeNode)visit(ctx.type()), new IdNode(ctx.ID().getText()));
+        boolean isVar = false;
+        if(ctx.children.get(0).toString().equals("var")){
+            isVar = true;
+        }
+        return new ArgNode((TypeNode)visit(ctx.type()), new IdNode(ctx.ID().getText()), isVar);
     }
 
     @Override public Node visitAssignment(SimpLanPlusParser.AssignmentContext ctx){
