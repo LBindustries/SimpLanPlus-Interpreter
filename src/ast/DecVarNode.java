@@ -1,5 +1,6 @@
 package ast;
 
+import util.Effect;
 import util.Environment;
 import util.SemanticError;
 
@@ -45,11 +46,12 @@ public class DecVarNode implements Node{
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
-        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--)) != null){
+        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(false))) != null){
             res.add(new SemanticError("Variable id "+this.id.getId()+" already declared."));
         }
         if(this.exp!=null){
             res.addAll(this.exp.checkSemantics(env));
+            st.get(this.id.getId()).getEffect().setInitialized(); // "non so se si può fare" -Ale
         }
         return res;
     }

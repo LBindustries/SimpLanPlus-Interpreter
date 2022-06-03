@@ -1,5 +1,6 @@
 package ast;
 
+import util.Effect;
 import util.Environment;
 import util.SemanticError;
 
@@ -36,7 +37,8 @@ public class ArgNode implements Node{
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
 
-        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--)) != null){
+        // "Nella DecFun i vari parametri li mettiamo a declared, vero?" -Ale
+        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(false))) != null){
             res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function."));
         }
 
