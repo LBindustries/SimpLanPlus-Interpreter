@@ -15,7 +15,7 @@ statement   : assignment ';'
 declaration : decFun
             | decVar ;
 
-decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' block ;
+decFun	    : (type | 'void') ID '(' (arg (',' arg)*)? ')' '{' decVar* statement* '}';
 
 decVar      : type ID ('=' exp)? ';' ;
 
