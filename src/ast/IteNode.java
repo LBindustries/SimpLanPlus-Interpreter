@@ -35,9 +35,37 @@ public class IteNode implements Node{
         return res;
     }
 
+    /*
+    *   La funzione ritorna:
+    *       - 0 se i tipi sono uguali;
+    *       - 1 se va tenuto il tipo del then, in quanto l'else è void
+    *       - 2 se va tenuto il tipo dell'else, in quanto il then è void
+    *       - -1 se sono diversi fra loro (int - bool)
+    */
+
+
+
+
     @Override
     public Node typeCheck() {
-        return null;
+
+        if(! exp.typeCheck().getClass().equals(BoolTypeNode.class)){
+            System.out.println("Condition of if statement not boolean");
+            System.exit(0);
+        }
+
+        Node then_node = then_statement.typeCheck();
+        if(else_statement!=null) {
+            Node else_node = else_statement.typeCheck();
+            if(! then_node.getClass().equals(else_node.getClass())) {
+                System.out.println("Then and else have different types");
+                System.exit(0);
+            }
+        }
+
+        return then_node;
+        // Il max degli effetti lo sta già facendo il typecheck di then_node e else_node
+
     }
 
     @Override

@@ -23,9 +23,20 @@ public class ReturnNode implements Node{
             return res;
     }
 
+/*
+    public int prova(){
+        return 3;
+        int a = 5;  // ERRORE!
+    }
+*/
+
     @Override
     public Node typeCheck() {
-        return null;
+        return new VoidTypeNode();
+    }
+
+    public Node getExp(){
+        return exp;
     }
 
     @Override

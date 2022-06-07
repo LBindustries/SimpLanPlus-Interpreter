@@ -1,5 +1,7 @@
 package ast.ExpNodes;
 
+import ast.BoolTypeNode;
+import ast.IntTypeNode;
 import ast.Node;
 import util.Environment;
 import util.SemanticError;
@@ -25,6 +27,39 @@ public class BinExpNode implements Node {
 
     @Override
     public Node typeCheck() {
+        switch(op){
+            case "==", "!=": {
+                if(! (left.typeCheck().getClass().equals(right.typeCheck().getClass()))) {
+                    System.out.println("No match of operators type in " + op);
+                    System.exit(0);
+                }
+                return new BoolTypeNode();
+            }
+            case "+", "-", "*", "/": {
+                if(! (left.typeCheck().getClass().equals(IntTypeNode.class) &&
+                        right.typeCheck().getClass().equals(IntTypeNode.class))) {
+                    System.out.println("No integers in " + op);
+                    System.exit(0);
+                }
+                return new IntTypeNode();
+            }
+            case ">=", "<=", "<", ">": {
+                if(! (left.typeCheck().getClass().equals(IntTypeNode.class) &&
+                        right.typeCheck().getClass().equals(IntTypeNode.class))) {
+                    System.out.println("No integers in " + op);
+                    System.exit(0);
+                }
+                return new BoolTypeNode();
+            }
+            case "&&", "||": {
+                if(! (left.typeCheck().getClass().equals(BoolTypeNode.class) &&
+                        right.typeCheck().getClass().equals(BoolTypeNode.class))) {
+                    System.out.println("No booleans in " + op);
+                    System.exit(0);
+                }
+                return new BoolTypeNode();
+            }
+        }
         return null;
     }
 

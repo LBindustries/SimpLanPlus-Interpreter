@@ -11,6 +11,8 @@ public class AssignmentNode implements Node{
     private IdNode id;
     private Node exp;
 
+    private STentry st;
+
     public AssignmentNode(IdNode ID, Node exp){
         this.id = ID;
         this.exp = exp;
@@ -23,7 +25,18 @@ public class AssignmentNode implements Node{
 
     @Override
     public Node typeCheck() {
-        return null;
+        if(st == null){
+            System.out.println("Variable "+this.id.getId()+" not declared");
+            System.exit(0);
+        }
+
+        if( ! exp.typeCheck().getClass().equals(st.getType().getClass())) {
+            System.out.println("Types of variable and value are not compatible");
+            System.exit(0);
+        }
+
+        st.getEffect().setInitialized();
+        return new VoidTypeNode();
     }
 
     @Override
@@ -48,6 +61,8 @@ public class AssignmentNode implements Node{
                 res.addAll(this.exp.checkSemantics(env));
             }
         }
+
+        this.st = tmp;
 
         return res;
     }

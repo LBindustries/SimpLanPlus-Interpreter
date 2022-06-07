@@ -10,7 +10,8 @@ import java.util.ArrayList;
 
 public class DerExpNode implements Node {
 
-    private IdNode id;
+    private IdNode id; // "Perché non c'è una stringa e basta T.T" -Ale
+    private STentry st;
 
     public DerExpNode(IdNode id){
         this.id = id;
@@ -23,7 +24,17 @@ public class DerExpNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        if(st == null){
+            System.out.println("Variable "+this.id.getId()+" not declared"); // "Vogliamo ristamparlo?" -Ale
+            System.exit(0);
+        }
+        if (! st.getEffect().isInitialized()){
+            System.out.println("Variable "+this.id.getId()+" not initialized");
+            System.exit(0);
+        }
+
+        st.getEffect().setUsed(); // "Idk se va bene" -Ale
+        return st.getType();
     }
 
     @Override
@@ -41,6 +52,8 @@ public class DerExpNode implements Node {
             tmp=(env.symTable.get(j--)).get(this.id.getId());
         if (tmp==null)
             res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
+
+        st = tmp;
         return res;
     }
 }
