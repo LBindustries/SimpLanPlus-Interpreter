@@ -12,13 +12,15 @@ public class DecFunNode implements Node {
     private TypeNode type;
     private IdNode id;
     private ArrayList<Node> args;
-    private BlockNode block;
+    private ArrayList<Node> decs;
+    private ArrayList<Node> stms;
 
-    public DecFunNode(Node type, Node id, ArrayList<Node> args, Node block) {
+    public DecFunNode(Node type, Node id, ArrayList<Node> args, ArrayList<Node> decs, ArrayList<Node> stms) {
         this.type = (TypeNode) type;
         this.id = (IdNode) id;
         this.args = args;
-        this.block = (BlockNode) block;
+        this.decs = decs;
+        this.stms = stms;
     }
 
     @Override
@@ -33,7 +35,16 @@ public class DecFunNode implements Node {
                 res += arg.toPrint(indent + " ");
             }
         }
-        res += block.toPrint(indent + " ");
+        if (this.decs.size() != 0) {
+            for (Node dec : this.decs) {
+                res += dec.toPrint(indent + " ");
+            }
+        }
+        if (this.stms.size() != 0) {
+            for (Node stm : this.stms) {
+                res += stm.toPrint(indent + " ");
+            }
+        }
         return res;
     }
 
@@ -64,13 +75,21 @@ public class DecFunNode implements Node {
         env.nestingLevel++;
         st = new HashMap<String, STentry>();
         env.symTable.add(st);
+        env.symTable.get(env.nestingLevel).put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(true)));
         if(this.args.size() >0){
             for(Node arg:this.args){
                 res.addAll(arg.checkSemantics(env));
             }
         }
-        if(this.block!=null){
-            res.addAll(this.block.checkSemanticsFunction(env));
+        if(this.decs.size()>0){
+            for(Node dec:this.decs){
+                res.addAll(dec.checkSemantics(env));
+            }
+        }
+        if(this.stms.size()>0){
+            for(Node stm:this.stms){
+                res.addAll(stm.checkSemantics(env));
+            }
         }
         env.symTable.remove(env.nestingLevel--);
         return res;

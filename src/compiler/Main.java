@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class Main {
+
     public static void main(String[] args) throws Exception {
         String filename = "prova.simplan";
         if(args.length>0){

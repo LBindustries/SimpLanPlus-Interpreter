@@ -1,9 +1,8 @@
-{
-    int c;
+{   int a;
     int fun1(int b){
-        int c;
+        int fun2;
         a=1; b=1;
+        return c;
     }
-    a = 1;
-    fun1(1, c);
+    fun1(1, a);
 }

@@ -4,6 +4,7 @@ import ast.ExpNodes.*;
 import parser.SimpLanPlusBaseVisitor;
 import parser.SimpLanPlusParser;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
@@ -95,14 +96,22 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override public Node visitDecFun(SimpLanPlusParser.DecFunContext ctx){
         DecFunNode res;
         ArrayList<Node> args = new ArrayList<Node>();
+        ArrayList<Node> decs = new ArrayList<Node>();
+        ArrayList<Node> stms = new ArrayList<Node>();
         for(SimpLanPlusParser.ArgContext atx: ctx.arg()){
             args.add(visit(atx));
         }
+        for(SimpLanPlusParser.DecVarContext dtx: ctx.decVar()){
+            decs.add(visit(dtx));
+        }
+        for(SimpLanPlusParser.StatementContext stx: ctx.statement()){
+            stms.add(visit(stx));
+        }
         if(ctx.type()!=null){
-            res = new DecFunNode(visit(ctx.type()), new IdNode(ctx.ID().getText()), args, visit(ctx.block()));
+            res = new DecFunNode(visit(ctx.type()), new IdNode(ctx.ID().getText()), args, decs, stms);
         }
         else{
-            res = new DecFunNode(null, new IdNode(ctx.ID().getText()), args, visit(ctx.block()));
+            res = new DecFunNode(null, new IdNode(ctx.ID().getText()), args, decs, stms);
         }
 
         return res;
