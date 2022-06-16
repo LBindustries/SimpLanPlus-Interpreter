@@ -35,13 +35,6 @@ public class IteNode implements Node{
         return res;
     }
 
-    /*
-    *   La funzione ritorna:
-    *       - 0 se i tipi sono uguali;
-    *       - 1 se va tenuto il tipo del then, in quanto l'else è void
-    *       - 2 se va tenuto il tipo dell'else, in quanto il then è void
-    *       - -1 se sono diversi fra loro (int - bool)
-    */
 
 
 

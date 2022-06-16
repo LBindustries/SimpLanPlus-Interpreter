@@ -38,7 +38,21 @@ public class BlockNode implements Node {
 
     @Override
     public Node typeCheck() {
-        return null;
+        if(this.declarations!=null){
+            // DECs rule
+            for(Node dec: declarations){
+                dec.typeCheck();
+            }
+        }
+        Node T;
+        if(this.statements!=null){
+            // STMs rule
+            for(Node stm: statements){
+                // QUI CI VA MAX*
+                T = stm.typeCheck();
+            }
+        }
+        return T;
     }
 
     @Override
@@ -55,13 +69,11 @@ public class BlockNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         if(this.declarations!=null && this.declarations.size()>0){
-            env.offset = -2; // Why?
             for(Node n: this.declarations){
                 res.addAll(n.checkSemantics(env));
             }
         }
         if(this.statements!=null && this.statements.size()>0){
-            env.offset = -2; // Why?
             for(Node n: this.statements){
                 res.addAll(n.checkSemantics(env));
             }

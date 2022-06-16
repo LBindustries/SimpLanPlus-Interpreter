@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DerExpNode implements Node {
 
-    private IdNode id; // "Perché non c'è una stringa e basta T.T" -Ale
+    private IdNode id; // "Perché non c'è una stringa e basta T.T" -Ale "Perchè sì" -Balu
     private STentry st;
 
     public DerExpNode(IdNode id){
