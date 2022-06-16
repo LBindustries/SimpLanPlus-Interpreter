@@ -35,6 +35,10 @@ public class SymbolTableManager {
         return null;
     }
 
+    public int getSize(){
+        return symbolTable.size();
+    }
+
     public void addLevel(HashMap<String, STentry> newLevel){
         symbolTable.add(newLevel);
     }

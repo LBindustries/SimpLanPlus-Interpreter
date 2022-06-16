@@ -2,6 +2,7 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,19 +38,19 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         if(this.declarations!=null){
             // DECs rule
             for(Node dec: declarations){
-                dec.typeCheck();
+                dec.typeCheck(stm);
             }
         }
         Node T = null;
         if(this.statements!=null){
             // STMs rule
-            for(Node stm: statements){
+            for(Node s: statements){
                 // QUI CI VA MAX*
-                T = stm.typeCheck();
+                T = s.typeCheck(stm);
             }
         }
         return T;

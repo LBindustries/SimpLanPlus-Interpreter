@@ -3,10 +3,12 @@ package ast;
 import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
-public class VoidTypeNode implements Node {
+public class VoidTypeNode extends TypeNode {
 
     public VoidTypeNode () {
+        super("void");
     }
 
     public String toPrint(String s) {
@@ -14,7 +16,7 @@ public class VoidTypeNode implements Node {
     }
 
     //non utilizzato
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         return null;
     }
 

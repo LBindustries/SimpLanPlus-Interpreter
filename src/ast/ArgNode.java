@@ -3,6 +3,7 @@ package ast;
 import util.Effect;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +26,16 @@ public class ArgNode implements Node{
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         return null;
+    }
+
+    public TypeNode getType(){
+        return type;
+    }
+
+    public boolean isVar() {
+        return isVar;
     }
 
     @Override

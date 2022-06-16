@@ -34,7 +34,7 @@ public class DecVarNode implements Node{
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         return null;
     }
 

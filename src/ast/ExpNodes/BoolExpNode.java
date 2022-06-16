@@ -5,6 +5,7 @@ import ast.Node;
 import ast.TypeNode;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class BoolExpNode implements Node {
     }
 
     @Override
-    public Node typeCheck() { return new BoolTypeNode(); }
+    public TypeNode typeCheck(SymbolTableManager stm) { return new BoolTypeNode(); }
 
     @Override
     public String codeGeneration() {

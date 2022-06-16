@@ -2,6 +2,8 @@ package ast.ExpNodes;
 
 import ast.BoolTypeNode;
 import ast.Node;
+import ast.TypeNode;
+import util.SymbolTableManager;
 
 public class NotExpNode extends BaseExpNode{
     public NotExpNode(Node exp) {
@@ -9,8 +11,8 @@ public class NotExpNode extends BaseExpNode{
     }
 
     @Override
-    public Node typeCheck() {
-        if(! (exp.typeCheck().getClass().equals(BoolTypeNode.class))) {
+    public TypeNode typeCheck(SymbolTableManager stm) {
+        if(! (exp.typeCheck(stm).getClass().equals(BoolTypeNode.class))) {
             System.out.println("No bool in not");
             System.exit(0);
         }

@@ -3,8 +3,10 @@ package ast.ExpNodes;
 import ast.BoolTypeNode;
 import ast.IntTypeNode;
 import ast.Node;
+import ast.TypeNode;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
@@ -26,34 +28,34 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         switch(op){
             case "==", "!=": {
-                if(! (left.typeCheck().getClass().equals(right.typeCheck().getClass()))) {
+                if(! (left.typeCheck(stm).getClass().equals(right.typeCheck(stm).getClass()))) {
                     System.out.println("No match of operators type in " + op);
                     System.exit(0);
                 }
                 return new BoolTypeNode();
             }
             case "+", "-", "*", "/": {
-                if(! (left.typeCheck().getClass().equals(IntTypeNode.class) &&
-                        right.typeCheck().getClass().equals(IntTypeNode.class))) {
+                if(! (left.typeCheck(stm).getClass().equals(IntTypeNode.class) &&
+                        right.typeCheck(stm).getClass().equals(IntTypeNode.class))) {
                     System.out.println("No integers in " + op);
                     System.exit(0);
                 }
                 return new IntTypeNode();
             }
             case ">=", "<=", "<", ">": {
-                if(! (left.typeCheck().getClass().equals(IntTypeNode.class) &&
-                        right.typeCheck().getClass().equals(IntTypeNode.class))) {
+                if(! (left.typeCheck(stm).getClass().equals(IntTypeNode.class) &&
+                        right.typeCheck(stm).getClass().equals(IntTypeNode.class))) {
                     System.out.println("No integers in " + op);
                     System.exit(0);
                 }
                 return new BoolTypeNode();
             }
             case "&&", "||": {
-                if(! (left.typeCheck().getClass().equals(BoolTypeNode.class) &&
-                        right.typeCheck().getClass().equals(BoolTypeNode.class))) {
+                if(! (left.typeCheck(stm).getClass().equals(BoolTypeNode.class) &&
+                        right.typeCheck(stm).getClass().equals(BoolTypeNode.class))) {
                     System.out.println("No booleans in " + op);
                     System.exit(0);
                 }

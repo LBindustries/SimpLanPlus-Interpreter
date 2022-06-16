@@ -2,8 +2,10 @@ package ast.ExpNodes;
 
 import ast.Node;
 import ast.STentry;
+import ast.TypeNode;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +41,7 @@ public class ProgramNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         return null;
     }
 

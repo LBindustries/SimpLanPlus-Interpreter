@@ -3,10 +3,12 @@ package ast;
 import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
-public class IntTypeNode implements Node {
+public class IntTypeNode extends TypeNode {
 
     public IntTypeNode () {
+        super("int");
     }
 
     public String toPrint(String s) {
@@ -14,7 +16,7 @@ public class IntTypeNode implements Node {
     }
 
     //non utilizzato
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         return null;
     }
 

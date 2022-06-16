@@ -3,6 +3,7 @@ package ast;
 import util.Effect;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +50,7 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         return null;
     }
 
@@ -64,10 +65,21 @@ public class DecFunNode implements Node {
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         // Check if function is not already declared
         int argNumber = 0;
+
+        ArrayList<ArgTypeNode> argTypeNodes = new ArrayList<ArgTypeNode>();
+
         if(this.args!=null){
             argNumber = this.args.size();
+            for(Node arg: this.args){
+                ArgNode argNode = (ArgNode) arg;
+                argTypeNodes.add(new ArgTypeNode(argNode.getType().getType(), argNode.isVar()));
+            }
         }
-        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(true))) != null){
+
+
+        FunctionTypeNode t = new FunctionTypeNode(type.getType(), argTypeNodes);
+
+        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), t, env.decOffset(1), new Effect(true))) != null){
             res.add(new SemanticError("Function id "+this.id.getId()+" already declared."));
             return res;
         }

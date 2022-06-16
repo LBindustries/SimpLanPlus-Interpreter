@@ -5,7 +5,7 @@ import util.Effect;
 public class STentry {
 
     private int nl;
-    private Node type;
+    private TypeNode type;
     private int offset;
     private Effect effect;
 
@@ -15,7 +15,7 @@ public class STentry {
         effect = ef;
     }
 
-    public STentry(int n, Node t, int os, Effect ef) {
+    public STentry(int n, TypeNode t, int os, Effect ef) {
         nl = n;
         type = t;
         offset = os;
@@ -26,11 +26,11 @@ public class STentry {
         return effect;
     }
 
-    public void addType(Node t) {
+    public void addType(TypeNode t) {
         type = t;
     }
 
-    public Node getType() {
+    public TypeNode getType() {
         return type;
     }
 

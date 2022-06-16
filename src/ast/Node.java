@@ -1,16 +1,16 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 public interface Node {
 
     String toPrint(String indent);
 
-    Node typeCheck();
+    TypeNode typeCheck(SymbolTableManager stm);
 
     String codeGeneration();
 

@@ -1,8 +1,8 @@
 {   int a;
-    int fun1(int b){
+    int fun1(var int a, int b){
         int fun2;
         a=1; b=1;
         return c;
     }
-    fun1(1, a);
+    fun1(a, 2);
 }

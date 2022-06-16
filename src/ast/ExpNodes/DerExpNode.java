@@ -3,8 +3,10 @@ package ast.ExpNodes;
 import ast.IdNode;
 import ast.Node;
 import ast.STentry;
+import ast.TypeNode;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ public class DerExpNode implements Node {
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         if(st == null){
             System.out.println("Variable "+this.id.getId()+" not declared"); // "Vogliamo ristamparlo?" -Ale
             System.exit(0);

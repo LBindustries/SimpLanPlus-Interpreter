@@ -2,9 +2,9 @@ package ast;
 
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AssignmentNode implements Node{
     // ID '=' exp
@@ -24,13 +24,13 @@ public class AssignmentNode implements Node{
     }
 
     @Override
-    public Node typeCheck() {
+    public TypeNode typeCheck(SymbolTableManager stm) {
         if(st == null){
             System.out.println("Variable "+this.id.getId()+" not declared");
             System.exit(0);
         }
 
-        if( ! exp.typeCheck().getClass().equals(st.getType().getClass())) {
+        if( ! exp.typeCheck(stm).getClass().equals(st.getType().getClass())) {
             System.out.println("Types of variable and value are not compatible");
             System.exit(0);
         }
