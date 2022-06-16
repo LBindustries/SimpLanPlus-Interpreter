@@ -27,6 +27,17 @@ public class Environment {
 
     public int decOffset(int toDec){
         this.offset -= toDec;
-        return offset;
+        return offset + toDec;
     }
+
+    public int decNestingLevel(int toInc){
+        this.nestingLevel -= toInc;
+        return nestingLevel + toInc;
+    }
+
+    public int incNestingLevel(int toInc){
+        this.nestingLevel += toInc;
+        return nestingLevel - toInc;
+    }
+
 }

@@ -44,7 +44,7 @@ public class BlockNode implements Node {
                 dec.typeCheck();
             }
         }
-        Node T;
+        Node T = null;
         if(this.statements!=null){
             // STMs rule
             for(Node stm: statements){
@@ -62,9 +62,9 @@ public class BlockNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        env.nestingLevel++;
-        HashMap<String, STentry> st = new HashMap<String, STentry>();
-        env.symTable.add(st);
+        env.incNestingLevel(1);
+        HashMap<String, STentry> level = new HashMap<String, STentry>();
+        env.getSymbolTableManager().addLevel(level);
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
@@ -78,7 +78,7 @@ public class BlockNode implements Node {
                 res.addAll(n.checkSemantics(env));
             }
         }
-        env.symTable.remove(env.nestingLevel--);
+        env.getSymbolTableManager().removeLevel(env.decNestingLevel(1));
 
         return res;
     }

@@ -37,10 +37,10 @@ public class ArgNode implements Node{
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
+        HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
 
         // "Nella DecFun i vari parametri li mettiamo a declared, vero?" -Ale
-        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(false))) != null){
+        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(false))) != null){
             res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function."));
         }
 

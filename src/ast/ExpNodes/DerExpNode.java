@@ -46,14 +46,12 @@ public class DerExpNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
-        int j=env.nestingLevel;
-        STentry tmp=null;
-        while (j>=0 && tmp==null)
-            tmp=(env.symTable.get(j--)).get(this.id.getId());
-        if (tmp==null)
+        STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel());
+
+        if (entry==null)
             res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
 
-        st = tmp;
+        st = entry;
         return res;
     }
 }

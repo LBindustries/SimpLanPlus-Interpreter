@@ -3,6 +3,7 @@ package ast;
 import util.Effect;
 import util.Environment;
 import util.SemanticError;
+import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,13 +46,13 @@ public class DecVarNode implements Node{
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
-        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(false))) != null){
+        HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
+        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(false))) != null){
             res.add(new SemanticError("Variable id "+this.id.getId()+" already declared."));
         }
         if(this.exp!=null){
             res.addAll(this.exp.checkSemantics(env));
-            st.get(this.id.getId()).getEffect().setInitialized(); // "non so se si può fare" -Ale
+            st.get(this.id.getId()).getEffect().setInitialized();
         }
         return res;
     }

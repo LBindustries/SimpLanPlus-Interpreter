@@ -50,44 +50,27 @@ public class ProgramNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        env.nestingLevel++;
+        env.incNestingLevel(1);
         HashMap<String, STentry> st = new HashMap<String, STentry>();
-        env.symTable.add(st);
+        env.getSymbolTableManager().addLevel(st);
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         if(this.declarations!=null && this.declarations.size()>0){
-            env.offset = -2; // Why?
+            env.setOffset(-2); // Why?
             for(Node n: this.declarations){
                 res.addAll(n.checkSemantics(env));
             }
         }
         if(this.statements!=null && this.statements.size()>0){
-            env.offset = -2; // Why?
+            env.setOffset(-2); // Why?
             for(Node n: this.statements){
                 res.addAll(n.checkSemantics(env));
             }
         }
-        env.symTable.remove(env.nestingLevel--);
 
+        env.getSymbolTableManager().removeLevel(env.decNestingLevel(1));
         return res;
     }
 
-    public ArrayList<SemanticError> checkSemanticsFunction(Environment env) {
-        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
-        ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-        if(this.declarations!=null && this.declarations.size()>0){
-            env.offset = -2; // Why?
-            for(Node n: this.declarations){
-                res.addAll(n.checkSemantics(env));
-            }
-        }
-        if(this.statements!=null && this.statements.size()>0){
-            env.offset = -2; // Why?
-            for(Node n: this.statements){
-                res.addAll(n.checkSemantics(env));
-            }
-        }
-        return res;
-    }
 }

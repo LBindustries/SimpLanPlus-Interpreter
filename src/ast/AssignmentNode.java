@@ -47,23 +47,18 @@ public class AssignmentNode implements Node{
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
 
         // check for variable with such id in current level and below
-        int j=env.nestingLevel;
-        STentry tmp=null;
-        while (j>=0 && tmp==null)
-            tmp=(env.symTable.get(j--)).get(this.id.getId());
-        if (tmp==null)
+        STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel());
+
+        if (entry==null)
             res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
-        else{   // if variable exists, check the exp
-            if(this.exp != null) {
+
+        // else, if variable exists, check the exp
+        else if(this.exp != null)
                 res.addAll(this.exp.checkSemantics(env));
-            }
-        }
 
-        this.st = tmp;
-
+        st = entry;
         return res;
     }
 }

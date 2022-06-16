@@ -43,14 +43,12 @@ public class CallNode implements Node{
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-        int j=env.nestingLevel;
-        STentry tmp=null;
-        while (j>=0 && tmp==null)
-            tmp=(env.symTable.get(j--)).get(this.id.getId());
-        if (tmp==null){
+
+        if (env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel())==null){
             res.add(new SemanticError("Function "+this.id.getId()+" not declared."));
             return res;
         }
+
         if(this.exp != null) {
             for (Node arg : exp)
                 res.addAll(arg.checkSemantics(env));

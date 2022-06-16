@@ -25,4 +25,21 @@ public class SymbolTableManager {
     public HashMap<String, STentry> getLevel(int nestingLevel){
         return symbolTable.get(nestingLevel);
     }
+
+    public STentry getLastEntry(String id, int nestingLevel){
+        for(int i=nestingLevel; i>=0; i--){
+            if(symbolTable.get(i).get(id) != null)
+                return symbolTable.get(i).get(id);
+        }
+
+        return null;
+    }
+
+    public void addLevel(HashMap<String, STentry> newLevel){
+        symbolTable.add(newLevel);
+    }
+
+    public void removeLevel(int index){
+        symbolTable.remove(index);
+    }
 }

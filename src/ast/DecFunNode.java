@@ -61,21 +61,21 @@ public class DecFunNode implements Node {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-        HashMap<String, STentry> st = env.symTable.get(env.nestingLevel);
+        HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         // Check if function is not already declared
         int argNumber = 0;
         if(this.args!=null){
             argNumber = this.args.size();
         }
-        if(st.put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(true))) != null){
+        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(true))) != null){
             res.add(new SemanticError("Function id "+this.id.getId()+" already declared."));
             return res;
         }
         // Begin analyzing args
-        env.nestingLevel++;
+        env.incNestingLevel(1);
         st = new HashMap<String, STentry>();
-        env.symTable.add(st);
-        env.symTable.get(env.nestingLevel).put(this.id.getId(), new STentry(env.nestingLevel, type, env.offset--, new Effect(true)));
+        env.getSymbolTableManager().addLevel(st);
+        env.getSymbolTableManager().getLevel(env.getNestingLevel()).put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(true)));
         if(this.args.size() >0){
             for(Node arg:this.args){
                 res.addAll(arg.checkSemantics(env));
@@ -91,7 +91,7 @@ public class DecFunNode implements Node {
                 res.addAll(stm.checkSemantics(env));
             }
         }
-        env.symTable.remove(env.nestingLevel--);
+        env.getSymbolTableManager().removeLevel(env.decNestingLevel(1));
         return res;
     }
 }
