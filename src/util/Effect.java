@@ -70,4 +70,16 @@ public class Effect {
         }
         return DECLARED;
     }
+
+    public Effect getMax(Effect e1, Effect e2){
+        if(e1.isMore(e2))
+            return e1;
+        return e2;
+    }
+
+    public Effect getMin(Effect e1, Effect e2){
+        if(e1.isLess(e2))
+            return e1;
+        return e2;
+    }
 }

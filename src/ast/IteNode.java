@@ -4,12 +4,14 @@ import util.Environment;
 import util.SemanticError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class IteNode implements Node{
 
     private Node exp;
     private Node then_statement;
     private Node else_statement;
+    private ArrayList<HashMap<String, STentry>> localSymbolTable;
 
     public IteNode(Node exp, Node then_statement, Node else_statement){
         this.exp = exp;
@@ -34,9 +36,6 @@ public class IteNode implements Node{
 
         return res;
     }
-
-
-
 
 
     @Override
@@ -78,6 +77,7 @@ public class IteNode implements Node{
         if(this.else_statement!=null){
             res.addAll(this.else_statement.checkSemantics(env));
         }
+        this.localSymbolTable = env.getSymbolTableManager().getSymbolTable();
         return res;
     }
 }
