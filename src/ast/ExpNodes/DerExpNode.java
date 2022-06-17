@@ -3,17 +3,16 @@ package ast.ExpNodes;
 import ast.IdNode;
 import ast.Node;
 import ast.STentry;
-import ast.TypeNode;
+import ast.Types.FunctionTypeNode;
+import ast.Types.TypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
 public class DerExpNode implements Node {
 
     private IdNode id; // "Perché non c'è una stringa e basta T.T" -Ale "Perchè sì" -Balu
-    private STentry st;
 
     public DerExpNode(IdNode id){
         this.id = id;
@@ -25,18 +24,22 @@ public class DerExpNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
-        if(st == null){
+    public TypeNode typeCheck(Environment env) {
+        if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()) == null){
             System.out.println("Variable "+this.id.getId()+" not declared"); // "Vogliamo ristamparlo?" -Ale
             System.exit(0);
         }
-        if (! st.getEffect().isInitialized()){
+        if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getType() instanceof FunctionTypeNode){
+            System.out.println("Trying to use function "+this.id.getId()+" as a variable.");
+            System.exit(0);
+        }
+        if (! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isInitialized() && ! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isUsed()){
             System.out.println("Variable "+this.id.getId()+" not initialized");
             System.exit(0);
         }
 
-        st.getEffect().setUsed(); // "Idk se va bene" -Ale
-        return st.getType();
+        env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().setUsed();
+        return env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getType();
     }
 
     @Override
@@ -52,8 +55,6 @@ public class DerExpNode implements Node {
 
         if (entry==null)
             res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
-
-        st = entry;
         return res;
     }
 }

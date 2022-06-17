@@ -1,5 +1,6 @@
 package ast;
 
+import ast.Types.TypeNode;
 import util.Effect;
 
 public class STentry {

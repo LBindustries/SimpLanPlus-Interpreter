@@ -2,10 +2,9 @@ package ast.ExpNodes;
 
 import ast.CallNode;
 import ast.Node;
-import ast.TypeNode;
+import ast.Types.TypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
@@ -24,8 +23,8 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
-        return call.typeCheck(stm);
+    public TypeNode typeCheck(Environment env) {
+        return call.typeCheck(env);
     }
 
     @Override

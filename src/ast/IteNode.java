@@ -1,8 +1,9 @@
 package ast;
 
+import ast.Types.BoolTypeNode;
+import ast.Types.TypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,16 +41,16 @@ public class IteNode implements Node{
 
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
 
-        if(! exp.typeCheck(stm).getClass().equals(BoolTypeNode.class)){
+        if(! exp.typeCheck(env).getClass().equals(BoolTypeNode.class)){
             System.out.println("Condition of if statement not boolean");
             System.exit(0);
         }
 
-        Node then_node = then_statement.typeCheck(stm);
+        TypeNode then_node = then_statement.typeCheck(env);
         if(else_statement!=null) {
-            Node else_node = else_statement.typeCheck(stm);
+            TypeNode else_node = else_statement.typeCheck(env);
             if(! then_node.getClass().equals(else_node.getClass())) {
                 System.out.println("Then and else have different types");
                 System.exit(0);

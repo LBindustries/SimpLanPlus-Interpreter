@@ -1,8 +1,18 @@
-{   int a;
-    int fun1(var int a, int b){
-        int fun2;
-        a=1; b=1;
-        return c;
+{   int x;
+    bool y = false;
+    int fun(var int a, bool b) {
+        b = false;
+        return a;
     }
-    fun1(a, 2);
+    x = 5;
+    fun(x, y);
+    {
+        int y;
+        bool x;
+        y = 6;
+        x = false;
+        print(x);
+        print(y);
+    }
+    print(x);
 }

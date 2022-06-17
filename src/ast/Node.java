@@ -2,15 +2,16 @@ package ast;
 
 import java.util.ArrayList;
 
+import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 public interface Node {
 
     String toPrint(String indent);
 
-    TypeNode typeCheck(SymbolTableManager stm);
+    TypeNode typeCheck(Environment env);
 
     String codeGeneration();
 

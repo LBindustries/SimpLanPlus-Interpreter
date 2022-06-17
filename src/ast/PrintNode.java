@@ -1,8 +1,8 @@
 package ast;
 
+import ast.Types.TypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
@@ -21,8 +21,8 @@ public class PrintNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
-        return null;
+    public TypeNode typeCheck(Environment env) {
+        return exp.typeCheck(env);
     }
 
     @Override

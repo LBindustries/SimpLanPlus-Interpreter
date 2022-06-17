@@ -1,8 +1,8 @@
 package ast;
 
+import ast.Types.TypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +15,7 @@ public class BlockNode implements Node {
      */
     private ArrayList<Node> declarations;
     private ArrayList<Node> statements;
+    private Environment localenv;
 
     public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
         this.declarations = declarations;
@@ -38,19 +39,22 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
         if(this.declarations!=null){
-            // DECs rule
             for(Node dec: declarations){
-                dec.typeCheck(stm);
+                dec.typeCheck(localenv);
             }
         }
-        Node T = null;
+        TypeNode T = null;
         if(this.statements!=null){
-            // STMs rule
             for(Node s: statements){
-                // QUI CI VA MAX*
-                T = s.typeCheck(stm);
+                T = s.typeCheck(localenv);
+
+            }
+        }
+        for(String id: localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()){
+            if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()){
+                System.out.println("Warning: symbol "+id+" is unused.");
             }
         }
         return T;
@@ -79,6 +83,7 @@ public class BlockNode implements Node {
                 res.addAll(n.checkSemantics(env));
             }
         }
+        this.localenv = new Environment(env);
         env.getSymbolTableManager().removeLevel(env.decNestingLevel(1));
 
         return res;

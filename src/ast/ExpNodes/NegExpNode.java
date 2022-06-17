@@ -1,9 +1,9 @@
 package ast.ExpNodes;
 
-import ast.IntTypeNode;
+import ast.Types.IntTypeNode;
 import ast.Node;
-import ast.TypeNode;
-import util.SymbolTableManager;
+import ast.Types.TypeNode;
+import util.Environment;
 
 public class NegExpNode extends BaseExpNode{
     public NegExpNode(Node exp) {
@@ -11,8 +11,8 @@ public class NegExpNode extends BaseExpNode{
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
-        if(! (exp.typeCheck(stm).getClass().equals(IntTypeNode.class))) {
+    public TypeNode typeCheck(Environment env) {
+        if(! (exp.typeCheck(env).getClass().equals(IntTypeNode.class))) {
             System.out.println("No integer in neg");
             System.exit(0);
         }

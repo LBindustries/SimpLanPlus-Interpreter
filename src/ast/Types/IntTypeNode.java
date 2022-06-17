@@ -1,22 +1,21 @@
-package ast;
+package ast.Types;
 
 import java.util.ArrayList;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
-public class BoolTypeNode extends TypeNode {
+public class IntTypeNode extends TypeNode {
 
-    public BoolTypeNode () {
-        super("bool");
+    public IntTypeNode () {
+        super("int");
     }
 
     public String toPrint(String s) {
-        return s+"BoolType\n";
+        return s+"IntType\n";
     }
 
     //non utilizzato
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
         return null;
     }
 

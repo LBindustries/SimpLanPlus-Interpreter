@@ -36,11 +36,12 @@ public class Effect {
     public void setInitialized(){
         if(this.status < INITIALIZED)
             this.status = INITIALIZED;
-
     }
 
     public void setUsed(){
-        this.status = USED;
+        if(this.status >= INITIALIZED){
+            this.status = USED;
+        }
     }
 
     public void setTop(){this.status = TOP;}

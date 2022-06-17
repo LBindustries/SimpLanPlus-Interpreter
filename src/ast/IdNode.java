@@ -1,8 +1,8 @@
 package ast;
 
+import ast.Types.TypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public class IdNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
         return null;
     }
 

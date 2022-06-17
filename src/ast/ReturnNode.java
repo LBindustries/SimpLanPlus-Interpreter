@@ -1,24 +1,25 @@
 package ast;
 
+import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
-public class ReturnNode implements Node{
+public class ReturnNode implements Node {
     // 'return' (exp)?;
 
     private Node exp;
 
-    public ReturnNode(Node exp){
+    public ReturnNode(Node exp) {
         this.exp = exp;
     }
 
     @Override
     public String toPrint(String indent) {
-        String res = "\n"+indent + "Return";
-        if(this.exp != null)
+        String res = "\n" + indent + "Return";
+        if (this.exp != null)
             return res + exp.toPrint(indent);
         else
             return res;
@@ -32,11 +33,14 @@ public class ReturnNode implements Node{
 */
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
-        return new VoidTypeNode();
+    public TypeNode typeCheck(Environment env) {
+        if (this.exp == null) {
+            return new VoidTypeNode();
+        }
+        return exp.typeCheck(env);
     }
 
-    public Node getExp(){
+    public Node getExp() {
         return exp;
     }
 
@@ -47,6 +51,9 @@ public class ReturnNode implements Node{
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return exp.checkSemantics(env);
+        if(exp != null) {
+            return exp.checkSemantics(env);
+        }
+        return new ArrayList<SemanticError>();
     }
 }

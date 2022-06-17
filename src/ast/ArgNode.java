@@ -1,9 +1,9 @@
 package ast;
 
+import ast.Types.TypeNode;
 import util.Effect;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class ArgNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
         return null;
     }
 
@@ -47,9 +47,7 @@ public class ArgNode implements Node{
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
-
-        // "Nella DecFun i vari parametri li mettiamo a declared, vero?" -Ale
-        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(false))) != null){
+        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(true))) != null){
             res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function."));
         }
 

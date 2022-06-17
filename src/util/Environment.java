@@ -1,9 +1,20 @@
 package util;
 
 public class Environment {
-    private SymbolTableManager symbolTableManager = new SymbolTableManager();
-    private int nestingLevel = -1;
-    private int offset = 0;
+    private SymbolTableManager symbolTableManager;
+    private int nestingLevel;
+    private int offset;
+
+    public Environment(Environment env){
+        this.symbolTableManager = new SymbolTableManager(env.getSymbolTableManager().getSymbolTable());
+        this.nestingLevel = env.nestingLevel;
+        this.offset = env.offset;
+    }
+    public Environment(){
+        symbolTableManager = new SymbolTableManager();
+        nestingLevel = -1;
+        offset = 0;
+    }
 
     public SymbolTableManager getSymbolTableManager() {
         return symbolTableManager;

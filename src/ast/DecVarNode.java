@@ -1,12 +1,13 @@
 package ast;
 
+import ast.Types.TypeNode;
 import util.Effect;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DecVarNode implements Node{
 
@@ -34,7 +35,14 @@ public class DecVarNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
+        if(this.exp!=null && !Objects.equals(this.type.getType(), exp.typeCheck(env).getType())){
+            System.out.println("Type mismatch: symbol "+id.getId()+" and expression are not matching types.");
+            System.exit(0);
+        }
+        if(this.exp!=null){
+            env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel()).getEffect().setInitialized();
+        }
         return null;
     }
 

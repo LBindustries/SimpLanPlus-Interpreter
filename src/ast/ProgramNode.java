@@ -1,11 +1,9 @@
-package ast.ExpNodes;
+package ast;
 
-import ast.Node;
-import ast.STentry;
-import ast.TypeNode;
+import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +16,7 @@ public class ProgramNode implements Node {
      */
     private ArrayList<Node> declarations;
     private ArrayList<Node> statements;
+    private Environment localenv;
 
     public ProgramNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
         this.declarations = declarations;
@@ -37,12 +36,27 @@ public class ProgramNode implements Node {
                 res += dec.toPrint(indent + " ");
             }
         }
-        return "\n"+indent + "Program" + res;
+        return "\n" + indent + "Program" + res;
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
-        return null;
+    public TypeNode typeCheck(Environment env) {
+        if (this.declarations != null) {
+            for (Node declaration : this.declarations) {
+                declaration.typeCheck(this.localenv);
+            }
+        }
+        if (this.statements != null) {
+            for (Node statement : this.statements) {
+                statement.typeCheck(this.localenv);
+            }
+        }
+        for(String id: localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()){
+            if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()){
+                System.out.println("Warning: symbol "+id+" is unused.");
+            }
+        }
+        return new VoidTypeNode();
     }
 
     @Override
@@ -58,19 +72,19 @@ public class ProgramNode implements Node {
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
-        if(this.declarations!=null && this.declarations.size()>0){
+        if (this.declarations != null && this.declarations.size() > 0) {
             env.setOffset(-2); // Why?
-            for(Node n: this.declarations){
+            for (Node n : this.declarations) {
                 res.addAll(n.checkSemantics(env));
             }
         }
-        if(this.statements!=null && this.statements.size()>0){
+        if (this.statements != null && this.statements.size() > 0) {
             env.setOffset(-2); // Why?
-            for(Node n: this.statements){
+            for (Node n : this.statements) {
                 res.addAll(n.checkSemantics(env));
             }
         }
-
+        localenv = new Environment(env);
         env.getSymbolTableManager().removeLevel(env.decNestingLevel(1));
         return res;
     }

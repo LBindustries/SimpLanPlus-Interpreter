@@ -1,10 +1,10 @@
 package ast;
 
 import ast.ExpNodes.*;
+import ast.Types.TypeNode;
 import parser.SimpLanPlusBaseVisitor;
 import parser.SimpLanPlusParser;
 
-import java.sql.Array;
 import java.util.ArrayList;
 
 public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {

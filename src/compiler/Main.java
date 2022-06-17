@@ -62,6 +62,7 @@ public class Main {
             return;
         }
         System.out.println("Environment is good!");
+        ast.typeCheck(env);
         System.out.println("Program is valid.");
     }
 }

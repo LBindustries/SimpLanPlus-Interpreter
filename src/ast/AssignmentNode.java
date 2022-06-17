@@ -1,10 +1,12 @@
 package ast;
 
+import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AssignmentNode implements Node{
     // ID '=' exp
@@ -24,13 +26,13 @@ public class AssignmentNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
         if(st == null){
             System.out.println("Variable "+this.id.getId()+" not declared");
             System.exit(0);
         }
 
-        if( ! exp.typeCheck(stm).getClass().equals(st.getType().getClass())) {
+        if(!Objects.equals(exp.typeCheck(env).getType(), st.getType().getType())) {
             System.out.println("Types of variable and value are not compatible");
             System.exit(0);
         }

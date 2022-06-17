@@ -1,11 +1,10 @@
 package ast.ExpNodes;
 
-import ast.BoolTypeNode;
+import ast.Types.BoolTypeNode;
 import ast.Node;
-import ast.TypeNode;
+import ast.Types.TypeNode;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
@@ -23,7 +22,7 @@ public class BoolExpNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) { return new BoolTypeNode(); }
+    public TypeNode typeCheck(Environment env) { return new BoolTypeNode(); }
 
     @Override
     public String codeGeneration() {

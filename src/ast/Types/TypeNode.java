@@ -1,12 +1,12 @@
-package ast;
+package ast.Types;
 
+import ast.Node;
 import util.Environment;
 import util.SemanticError;
-import util.SymbolTableManager;
 
 import java.util.ArrayList;
 
-public class TypeNode implements Node{
+public class TypeNode implements Node {
 
     private String type;
 
@@ -24,7 +24,7 @@ public class TypeNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(SymbolTableManager stm) {
+    public TypeNode typeCheck(Environment env) {
         return null;
     }
 
