@@ -24,6 +24,7 @@ public class IntTypeNode extends TypeNode {
         return "";
     }
 
+
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
 

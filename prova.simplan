@@ -1,18 +1,14 @@
-{   int x;
-    bool y = false;
-    int fun(var int a, bool b) {
-        b = false;
-        return a;
-    }
-    x = 5;
-    fun(x, y);
-    {
-        int y;
-        bool x;
-        y = 6;
-        x = false;
-        print(x);
-        print(y);
-    }
-    print(x);
+{
+  int a = 1;
+  bool b;
+  bool fun1(int x, int y){
+    bool bRet;
+    if (x == 1)
+      bRet = true;
+    else
+      bRet = false;
+    return bRet;
+  }
+  b = false;
+  print(fun1(1,a));
 }

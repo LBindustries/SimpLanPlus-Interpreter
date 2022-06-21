@@ -70,12 +70,29 @@ public class DecFunNode implements Node {
                         System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
                         System.exit(0);
                     }
+                } else if (tmp.getStatement() instanceof BlockNode && !Objects.equals(type.getType(), "void")) {
+                    fuse = true;
+                    if (!Objects.equals(type.getType(), this.type.getType())) {
+                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                        System.exit(0);
+                    }
+                } else if (tmp.getStatement() instanceof IteNode) {
+                    if (type instanceof VoidTypeNode) {
+                        if (!Objects.equals(type.getType(), this.type.getType())) {
+                            fuse = true;
+                        }
+                    } else {
+                        if (!Objects.equals(type.getType(), this.type.getType())) {
+                            System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                            System.exit(0);
+                        }
+                    }
                 }
             }
         }
-        for(String id: localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()){
-            if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() && !Objects.equals(id, this.id.getId())){
-                System.out.println("Warning: symbol "+id+" is unused.");
+        for (String id : localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()) {
+            if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() && !Objects.equals(id, this.id.getId())) {
+                System.out.println("Warning: symbol " + id + " is unused.");
             }
         }
         if (!fuse && !Objects.equals(this.type.getType(), "void")) {
@@ -115,7 +132,6 @@ public class DecFunNode implements Node {
         }
 
         FunctionTypeNode t = new FunctionTypeNode(type.getType(), argTypeNodes);
-
         if (st.put(this.id.getId(), new STentry(env.getNestingLevel(), t, env.decOffset(1), new Effect(true))) != null) {
             res.add(new SemanticError("Function id " + this.id.getId() + " already declared."));
             return res;
@@ -126,7 +142,7 @@ public class DecFunNode implements Node {
         Environment localenv = new Environment();
         localenv.incNestingLevel(1);
         localenv.getSymbolTableManager().addLevel(st);
-        localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), type, localenv.decOffset(1), new Effect(true)));
+        localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, localenv.decOffset(1), new Effect(true)));
         if (this.args.size() > 0) {
             for (Node arg : this.args) {
                 res.addAll(arg.checkSemantics(localenv));

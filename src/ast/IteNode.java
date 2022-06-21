@@ -2,6 +2,7 @@ package ast;
 
 import ast.Types.BoolTypeNode;
 import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.SemanticError;
 
@@ -49,17 +50,16 @@ public class IteNode implements Node{
         }
 
         TypeNode then_node = then_statement.typeCheck(env);
+
         if(else_statement!=null) {
             TypeNode else_node = else_statement.typeCheck(env);
-            if(! then_node.getClass().equals(else_node.getClass())) {
+            if(! then_node.getType().equals(else_node.getType())) {
                 System.out.println("Then and else have different types");
                 System.exit(0);
             }
         }
-
+        // TODO: join degli effetti tra branch
         return then_node;
-        // Il max degli effetti lo sta già facendo il typecheck di then_node e else_node
-
     }
 
     @Override

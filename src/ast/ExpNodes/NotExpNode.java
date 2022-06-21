@@ -12,7 +12,7 @@ public class NotExpNode extends BaseExpNode{
 
     @Override
     public TypeNode typeCheck(Environment env) {
-        if(! (exp.typeCheck(env).getClass().equals(BoolTypeNode.class))) {
+        if(! (exp.typeCheck(env).getType().equals("bool"))) {
             System.out.println("No bool in not");
             System.exit(0);
         }

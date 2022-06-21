@@ -46,10 +46,20 @@ public class BlockNode implements Node {
             }
         }
         TypeNode T = null;
+        int counter = 1; // TODO: check if actually correct
         if(this.statements!=null){
             for(Node s: statements){
+                StatementNode tmp = (StatementNode) s;
                 T = s.typeCheck(localenv);
-
+                if(tmp.getStatement() instanceof ReturnNode){
+                    break;
+                }
+                if(tmp.getStatement() instanceof IteNode){
+                    if(!T.getType().equals("void")){
+                        break;
+                    }
+                }
+                counter++;
             }
         }
         for(String id: localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()){

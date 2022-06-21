@@ -2,6 +2,7 @@ package ast;
 
 import ast.ExpNodes.*;
 import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import parser.SimpLanPlusBaseVisitor;
 import parser.SimpLanPlusParser;
 
@@ -111,7 +112,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
             res = new DecFunNode(visit(ctx.type()), new IdNode(ctx.ID().getText()), args, decs, stms);
         }
         else{
-            res = new DecFunNode(null, new IdNode(ctx.ID().getText()), args, decs, stms);
+            res = new DecFunNode(new VoidTypeNode(), new IdNode(ctx.ID().getText()), args, decs, stms);
         }
 
         return res;

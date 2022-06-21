@@ -1,6 +1,7 @@
 package ast;
 
 import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.SemanticError;
 
@@ -22,7 +23,8 @@ public class PrintNode implements Node{
 
     @Override
     public TypeNode typeCheck(Environment env) {
-        return exp.typeCheck(env);
+        exp.typeCheck(env);
+        return new VoidTypeNode();
     }
 
     @Override

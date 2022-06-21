@@ -24,6 +24,7 @@ public class BoolTypeNode extends TypeNode {
         return "";
     }
 
+
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
 
