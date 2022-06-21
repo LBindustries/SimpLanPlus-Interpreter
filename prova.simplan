@@ -1,14 +1,8 @@
 {
-  int a = 1;
-  bool b;
-  bool fun1(int x, int y){
-    bool bRet;
-    if (x == 1)
-      bRet = true;
-    else
-      bRet = false;
-    return bRet;
-  }
-  b = false;
-  print(fun1(1,a));
+    int a = 4;
+    if(true){
+        a = 5;
+    }else{
+        int x = a;
+    }
 }

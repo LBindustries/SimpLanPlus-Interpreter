@@ -1,6 +1,7 @@
 package ast;
 
 import ast.Types.TypeNode;
+import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.SemanticError;
 
@@ -45,7 +46,7 @@ public class BlockNode implements Node {
                 dec.typeCheck(localenv);
             }
         }
-        TypeNode T = null;
+        TypeNode T = new VoidTypeNode();
         int counter = 1; // TODO: check if actually correct
         if(this.statements!=null){
             for(Node s: statements){
