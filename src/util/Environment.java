@@ -16,6 +16,13 @@ public class Environment {
         offset = 0;
     }
 
+    public Environment(Environment env, boolean copy){
+        this.symbolTableManager = new SymbolTableManager(env.getSymbolTableManager().getSymbolTable(), true);
+        this.nestingLevel = env.getNestingLevel();
+        this.offset = env.getOffset();
+    }
+
+
     public SymbolTableManager getSymbolTableManager() {
         return symbolTableManager;
     }

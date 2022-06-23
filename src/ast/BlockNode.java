@@ -41,6 +41,7 @@ public class BlockNode implements Node {
 
     @Override
     public TypeNode typeCheck(Environment env) {
+        this.checkSemantics(env);
         if(this.declarations!=null){
             for(Node dec: declarations){
                 dec.typeCheck(localenv);

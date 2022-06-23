@@ -3,6 +3,7 @@ package ast;
 import ast.Types.BoolTypeNode;
 import ast.Types.TypeNode;
 import ast.Types.VoidTypeNode;
+import util.Effect;
 import util.Environment;
 import util.SemanticError;
 
@@ -49,16 +50,27 @@ public class IteNode implements Node{
             System.exit(0);
         }
 
+        Environment envOld = new Environment(env,true);
+
         TypeNode then_node = then_statement.typeCheck(env);
 
         if(else_statement!=null) {
-            TypeNode else_node = else_statement.typeCheck(env);
+            TypeNode else_node = else_statement.typeCheck(envOld);
             if(! then_node.getType().equals(else_node.getType())) {
                 System.out.println("Then and else have different types");
                 System.exit(0);
             }
         }
-        // TODO: join degli effetti tra branch
+
+        for(int i = 0; i < env.getSymbolTableManager().getSymbolTable().size(); i++){
+            HashMap<String, STentry> tmp = env.getSymbolTableManager().getSymbolTable().get(i);
+            HashMap<String, STentry> tmp1 = envOld.getSymbolTableManager().getSymbolTable().get(i);
+            for(String key : tmp.keySet()){
+                tmp.get(key).getEffect().join(tmp1.get(key).getEffect().getStatus());
+            }
+
+        }
+
         return then_node;
     }
 
