@@ -3,6 +3,7 @@ package ast.ExpNodes;
 import ast.Node;
 import ast.Types.TypeNode;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class ExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(LabelGenerator labgen) {
+        return exp.codeGeneration(labgen);
     }
 
     @Override

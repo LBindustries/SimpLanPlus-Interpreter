@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ast.Types.TypeNode;
 import ast.Types.VoidTypeNode;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 public interface Node {
@@ -13,7 +14,7 @@ public interface Node {
 
     TypeNode typeCheck(Environment env);
 
-    String codeGeneration();
+    String codeGeneration(LabelGenerator labgen);
 
     ArrayList<SemanticError> checkSemantics(Environment env);
 

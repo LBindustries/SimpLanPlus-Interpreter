@@ -2,6 +2,7 @@ package ast.Types;
 
 import java.util.ArrayList;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 public class BoolTypeNode extends TypeNode {
@@ -20,7 +21,7 @@ public class BoolTypeNode extends TypeNode {
     }
 
     //non utilizzato
-    public String codeGeneration() {
+    public String codeGeneration(LabelGenerator labgen) {
         return "";
     }
 

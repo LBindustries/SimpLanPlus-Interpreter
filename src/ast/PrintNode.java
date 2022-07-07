@@ -3,6 +3,7 @@ package ast;
 import ast.Types.TypeNode;
 import ast.Types.VoidTypeNode;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -28,8 +29,10 @@ public class PrintNode implements Node{
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(LabelGenerator labgen) {
+        String asm = exp.codeGeneration(labgen);
+        asm += "print $a0\n";
+        return asm;
     }
 
     @Override

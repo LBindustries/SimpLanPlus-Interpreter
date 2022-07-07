@@ -2,6 +2,7 @@ package ast.Types;
 
 import ast.Node;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class TypeNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(LabelGenerator labgen) {
         return null;
     }
 

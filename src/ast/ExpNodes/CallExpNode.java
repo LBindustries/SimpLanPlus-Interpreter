@@ -4,6 +4,7 @@ import ast.CallNode;
 import ast.Node;
 import ast.Types.TypeNode;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(LabelGenerator labgen) {
         return null;
     }
 

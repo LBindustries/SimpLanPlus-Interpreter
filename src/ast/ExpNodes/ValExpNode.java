@@ -4,6 +4,7 @@ import ast.Types.IntTypeNode;
 import ast.Node;
 import ast.Types.TypeNode;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ public class ValExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(LabelGenerator labgen) {
+        return "li $a0 "+this.value+"\n";
     }
 
     @Override

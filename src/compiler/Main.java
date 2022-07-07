@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.io.BufferedWriter;
@@ -64,5 +65,9 @@ public class Main {
         System.out.println("Environment is good!");
         ast.typeCheck(env);
         System.out.println("Program is valid.");
+        System.out.println("Assembling...");
+        LabelGenerator labgen = new LabelGenerator();
+        ast.codeGeneration(labgen);
+        System.out.println("Code ready for execution!");
     }
 }

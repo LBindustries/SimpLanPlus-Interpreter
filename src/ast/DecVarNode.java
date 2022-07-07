@@ -3,6 +3,7 @@ package ast;
 import ast.Types.TypeNode;
 import util.Effect;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class DecVarNode implements Node{
     }
 
     @Override
-    public String codeGeneration() {
+    public String codeGeneration(LabelGenerator labgen) {
         return null;
     }
 

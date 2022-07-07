@@ -4,6 +4,7 @@ import ast.Types.BoolTypeNode;
 import ast.Node;
 import ast.Types.TypeNode;
 import util.Environment;
+import util.LabelGenerator;
 
 public class NotExpNode extends BaseExpNode{
     public NotExpNode(Node exp) {
@@ -17,6 +18,13 @@ public class NotExpNode extends BaseExpNode{
             System.exit(0);
         }
         return new BoolTypeNode();
+    }
+
+    @Override
+    public String codeGeneration(LabelGenerator labgen) {
+        String asm = exp.codeGeneration(labgen);
+        asm += "not $a0 $a0";
+        return asm;
     }
 
     @Override

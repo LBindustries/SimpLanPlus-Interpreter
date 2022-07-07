@@ -3,6 +3,7 @@ package ast;
 import ast.Types.TypeNode;
 import ast.Types.VoidTypeNode;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -73,8 +74,19 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(LabelGenerator labgen) {
+        String asm = "";
+        if (this.declarations != null) {
+            for (Node declaration : this.declarations) {
+                asm += declaration.codeGeneration(labgen);
+            }
+        }
+        if (this.statements != null) {
+            for (Node statement : this.statements) {
+                asm += statement.codeGeneration(labgen);
+            }
+        }
+        return asm;
     }
 
     @Override

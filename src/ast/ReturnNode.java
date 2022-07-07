@@ -3,6 +3,7 @@ package ast;
 import ast.Types.TypeNode;
 import ast.Types.VoidTypeNode;
 import util.Environment;
+import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
@@ -45,8 +46,8 @@ public class ReturnNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(LabelGenerator labgen) {
+        return this.exp.codeGeneration(labgen);
     }
 
     @Override

@@ -1,10 +1,7 @@
 package ast;
 
 import ast.Types.*;
-import util.Effect;
-import util.Environment;
-import util.SemanticError;
-import util.SymbolTableManager;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,8 +109,19 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public String codeGeneration() {
-        return null;
+    public String codeGeneration(LabelGenerator labgen) {
+        String asm = "";
+        if (this.decs != null) {
+            for (Node declaration : this.decs) {
+                asm += declaration.codeGeneration(labgen);
+            }
+        }
+        if (this.stms != null) {
+            for (Node statement : this.stms) {
+                asm += statement.codeGeneration(labgen);
+            }
+        }
+        return asm;
     }
 
     @Override

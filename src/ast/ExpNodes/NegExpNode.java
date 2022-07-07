@@ -4,6 +4,7 @@ import ast.Types.IntTypeNode;
 import ast.Node;
 import ast.Types.TypeNode;
 import util.Environment;
+import util.LabelGenerator;
 
 public class NegExpNode extends BaseExpNode{
     public NegExpNode(Node exp) {
@@ -17,6 +18,13 @@ public class NegExpNode extends BaseExpNode{
             System.exit(0);
         }
         return new IntTypeNode();
+    }
+
+    @Override
+    public String codeGeneration(LabelGenerator labgen) {
+        String asm = exp.codeGeneration(labgen);
+        asm += "neg $a0 $a0";
+        return asm;
     }
 
     @Override
