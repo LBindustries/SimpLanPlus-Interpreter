@@ -31,7 +31,7 @@ public class PrintNode implements Node{
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = exp.codeGeneration(labgen, localenv);
-        asm += "print $a0\n";
+        asm += ";Print\nprint $a0\n";
         return asm;
     }
 

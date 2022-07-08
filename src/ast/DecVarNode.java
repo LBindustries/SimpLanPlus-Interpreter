@@ -49,7 +49,7 @@ public class DecVarNode implements Node{
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        String asm = "li $t1 "+ (Objects.equals(type.getType(), "int") ? "4":"1") +"\nadd $fp $fp $t1\n";
+        String asm = ";Variable Declaration\nli $t1 "+ (Objects.equals(type.getType(), "int") ? "4":"1") +"\nadd $fp $fp $t1\n";
         if(exp!=null){
             asm += exp.codeGeneration(labgen, localenv);
             asm += "lw $a0 "+localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset()+"($fp)\n";

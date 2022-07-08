@@ -29,7 +29,7 @@ public class ValExpNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        return "li $a0 "+this.value+"\n";
+        return ";Integer Load Immediate\nli $a0 "+this.value+"\n";
     }
 
     @Override

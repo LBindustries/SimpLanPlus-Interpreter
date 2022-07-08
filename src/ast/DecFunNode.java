@@ -110,7 +110,7 @@ public class DecFunNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        String asm = "";
+        String asm = ";Function\n";
         if (this.decs != null) {
             for (Node declaration : this.decs) {
                 asm += declaration.codeGeneration(labgen, this.localenv);

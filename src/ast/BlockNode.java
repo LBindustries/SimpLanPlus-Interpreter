@@ -75,7 +75,7 @@ public class BlockNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        String asm = "";
+        String asm = ";Block\n";
         if (this.declarations != null) {
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);

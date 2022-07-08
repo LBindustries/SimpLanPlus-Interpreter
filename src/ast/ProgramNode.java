@@ -62,7 +62,7 @@ public class ProgramNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        String asm = "";
+        String asm = ";Program\n";
         if (this.declarations != null) {
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);

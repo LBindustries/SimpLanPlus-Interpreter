@@ -75,7 +75,7 @@ public class IteNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        String asm = exp.codeGeneration(labgen, localenv);
+        String asm = ";Ite\n"+exp.codeGeneration(labgen, localenv);
         String then_label = labgen.new_label("ITE_THEN");
         String exit_label = labgen.new_label("ITE_EXIT");
         asm += "li $t1 1\nbeq $a0 $t1 " + then_label + "\n" +

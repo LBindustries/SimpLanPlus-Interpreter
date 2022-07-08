@@ -45,7 +45,7 @@ public class AssignmentNode implements Node{
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = exp.codeGeneration(labgen, localenv);
-        asm += "sw $a0 "+localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset()+"($fp)\n";
+        asm += ";Assignment\nsw $a0 "+localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset()+"($fp)\n";
         return asm;
     }
 

@@ -27,7 +27,7 @@ public class BoolExpNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        return "li $a0 "+(bool ? "1" : "0")+"\n";
+        return ";Bool Load Immediate\nli $a0 "+(bool ? "1" : "0")+"\n";
     }
 
     @Override

@@ -45,7 +45,7 @@ public class DerExpNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        return "lw $a0 "+ localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+        return ";Variable load\nlw $a0 "+ localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
     }
 
     @Override

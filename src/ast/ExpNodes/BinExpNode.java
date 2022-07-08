@@ -70,6 +70,7 @@ public class BinExpNode implements Node {
         String asm = left.codeGeneration(labgen, localenv);
         asm += "push $a0\n";
         asm += right.codeGeneration(labgen, localenv);
+        asm += ";Binary Operation\n";
         String operation = switch (this.op) {
             case "+" -> "add";
             case "-" -> "sub";
