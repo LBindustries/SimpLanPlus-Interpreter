@@ -85,13 +85,11 @@ public class ProgramNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         if (this.declarations != null && this.declarations.size() > 0) {
-            env.setOffset(-2); // Why?
             for (Node n : this.declarations) {
                 res.addAll(n.checkSemantics(env));
             }
         }
         if (this.statements != null && this.statements.size() > 0) {
-            env.setOffset(-2); // Why?
             for (Node n : this.statements) {
                 res.addAll(n.checkSemantics(env));
             }
