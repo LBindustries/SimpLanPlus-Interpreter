@@ -26,7 +26,7 @@ public class BoolExpNode implements Node {
     public TypeNode typeCheck(Environment env) { return new BoolTypeNode(); }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         return "li $a0 "+(bool ? "1" : "0")+"\n";
     }
 

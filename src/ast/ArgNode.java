@@ -40,7 +40,7 @@ public class ArgNode implements Node{
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         return null;
     }
 

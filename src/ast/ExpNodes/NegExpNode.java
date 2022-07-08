@@ -21,8 +21,8 @@ public class NegExpNode extends BaseExpNode{
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
-        String asm = exp.codeGeneration(labgen);
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
+        String asm = exp.codeGeneration(labgen, localenv);
         asm += "neg $a0 $a0";
         return asm;
     }

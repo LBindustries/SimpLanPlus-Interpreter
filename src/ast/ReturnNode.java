@@ -46,8 +46,8 @@ public class ReturnNode implements Node {
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
-        return this.exp.codeGeneration(labgen);
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
+        return this.exp.codeGeneration(labgen, localenv);
     }
 
     @Override

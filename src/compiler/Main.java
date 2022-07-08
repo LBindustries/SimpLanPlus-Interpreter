@@ -67,7 +67,7 @@ public class Main {
         System.out.println("Program is valid.");
         System.out.println("Assembling...");
         LabelGenerator labgen = new LabelGenerator();
-        ast.codeGeneration(labgen);
+        String asm = ast.codeGeneration(labgen, env);
         System.out.println("Code ready for execution!");
     }
 }

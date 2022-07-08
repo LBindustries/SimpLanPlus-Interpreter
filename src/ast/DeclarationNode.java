@@ -26,8 +26,8 @@ public class DeclarationNode implements Node{
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
-        return dec.codeGeneration(labgen);
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
+        return dec.codeGeneration(labgen, localenv);
     }
 
     @Override

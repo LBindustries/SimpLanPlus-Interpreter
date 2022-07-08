@@ -14,7 +14,7 @@ public interface Node {
 
     TypeNode typeCheck(Environment env);
 
-    String codeGeneration(LabelGenerator labgen);
+    String codeGeneration(LabelGenerator labgen, Environment localenv);
 
     ArrayList<SemanticError> checkSemantics(Environment env);
 

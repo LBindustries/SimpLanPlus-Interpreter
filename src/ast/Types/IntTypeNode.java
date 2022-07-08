@@ -21,7 +21,7 @@ public class IntTypeNode extends TypeNode {
     }
 
     //non utilizzato
-    public String codeGeneration(LabelGenerator labgen) {
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         return "";
     }
 

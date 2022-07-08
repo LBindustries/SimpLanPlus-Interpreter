@@ -30,8 +30,8 @@ public class StatementNode implements Node {
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
-        return statement.codeGeneration(labgen);
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
+        return statement.codeGeneration(labgen, localenv);
     }
 
     @Override

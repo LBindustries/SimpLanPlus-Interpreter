@@ -66,10 +66,10 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
-        String asm = left.codeGeneration(labgen);
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
+        String asm = left.codeGeneration(labgen, localenv);
         asm += "push $a0\n";
-        asm += right.codeGeneration(labgen);
+        asm += right.codeGeneration(labgen, localenv);
         String operation = switch (this.op) {
             case "+" -> "add";
             case "-" -> "sub";

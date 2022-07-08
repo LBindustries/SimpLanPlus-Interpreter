@@ -30,7 +30,7 @@ public class IdNode implements Node{
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         return null;
     }
 

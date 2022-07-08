@@ -27,8 +27,8 @@ public class ExpNode implements Node {
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen) {
-        return exp.codeGeneration(labgen);
+    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
+        return exp.codeGeneration(labgen, localenv);
     }
 
     @Override
