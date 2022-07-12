@@ -61,9 +61,11 @@ public class ProgramNode implements Node {
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        String asm = ";Program\n";
+    public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
+        String asm = ";Program\nli $sp MEM_TOP\nli $fp MEM_TOP\n";
         if (this.declarations != null) {
+            asm += ";Variable Declaration\nli $t1 " + localenv.getOffset() + "\n";
+            asm += "sub $fp $fp $t1\n";
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }

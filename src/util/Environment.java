@@ -22,6 +22,9 @@ public class Environment {
         this.offset = env.getOffset();
     }
 
+    public int getDecSpace(){
+        return symbolTableManager.getDecSpace(nestingLevel);
+    }
 
     public SymbolTableManager getSymbolTableManager() {
         return symbolTableManager;
@@ -44,8 +47,8 @@ public class Environment {
     }
 
     public int decOffset(int toDec){
-        this.offset -= toDec;
-        return offset + toDec;
+        this.offset += toDec;
+        return offset - toDec;
     }
 
     public int decNestingLevel(int toInc){

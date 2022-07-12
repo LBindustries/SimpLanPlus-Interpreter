@@ -34,6 +34,19 @@ public class SymbolTableManager {
         }
     }
 
+    public int getDecSpace(int nl){
+        int totSpace = 0;
+        HashMap<String, STentry> tmp = symbolTable.get(nl);
+        for (String key : tmp.keySet()) {
+            if(tmp.get(key).getType().getType().equals("int") ) {
+                totSpace += 4;
+            }else if(tmp.get(key).getType().getType().equals("bool")) {
+                totSpace += 1;
+            }
+        }
+        return totSpace;
+    }
+
     public ArrayList<HashMap<String, STentry>> getSymbolTable() {
         return symbolTable;
     }

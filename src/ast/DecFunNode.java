@@ -140,7 +140,7 @@ public class DecFunNode implements Node {
         }
 
         FunctionTypeNode t = new FunctionTypeNode(type.getType(), argTypeNodes);
-        if (st.put(this.id.getId(), new STentry(env.getNestingLevel(), t, env.decOffset(1), new Effect(true))) != null) {
+        if (st.put(this.id.getId(), new STentry(env.getNestingLevel(), t, 0, new Effect(true))) != null) {
             res.add(new SemanticError("Function id " + this.id.getId() + " already declared."));
             return res;
         }
@@ -150,7 +150,7 @@ public class DecFunNode implements Node {
         Environment localenv = new Environment();
         localenv.incNestingLevel(1);
         localenv.getSymbolTableManager().addLevel(st);
-        localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, localenv.decOffset(1), new Effect(true)));
+        localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, 0, new Effect(true)));
         if (this.args.size() > 0) {
             for (Node arg : this.args) {
                 res.addAll(arg.checkSemantics(localenv));
