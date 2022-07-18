@@ -62,7 +62,8 @@ public class ProgramNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
-        String asm = ";Program\nli $sp MEM_TOP\nli $fp MEM_TOP\n";
+        String asm = ";Program\n"; // li $sp MEM_TOP\nli $fp MEM_TOP causano problemi con il parser
+
         if (this.declarations != null) {
             asm += ";Variable Declaration\nli $t1 " + localenv.getOffset() + "\n";
             asm += "sub $fp $fp $t1\n";

@@ -79,7 +79,7 @@ public class IteNode implements Node {
         String then_label = labgen.new_label("ITE_THEN");
         String exit_label = labgen.new_label("ITE_EXIT");
         asm += "li $t1 1\nbeq $a0 $t1 " + then_label + "\n" +
-                (else_statement != null ? else_statement.codeGeneration(labgen, localenv) : "") + "jmp " + exit_label + "\n" +
+                (else_statement != null ? else_statement.codeGeneration(labgen, localenv) : "") + "jal " + exit_label + "\n" +
                 then_label + ":\n" + then_statement.codeGeneration(labgen, localenv) + exit_label + ":\n";
         return asm;
     }

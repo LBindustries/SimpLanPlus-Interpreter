@@ -2,6 +2,7 @@ package compiler;
 
 import ast.Node;
 import ast.SimpLanPlusVisitorImpl;
+import interpreter.Interpreter;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SimpLanPlusLexer;
@@ -70,5 +71,12 @@ public class Main {
         String asm = ast.codeGeneration(labgen, env);
         System.out.println(asm);
         System.out.println("Code ready for execution!");
+
+        BufferedWriter wr = new BufferedWriter(new FileWriter(filename+".asm"));
+        wr.write(asm+"\n");
+        wr.close();
+
+        Interpreter interpreter = new Interpreter(filename+".asm");
+        interpreter.runVM();
     }
 }
