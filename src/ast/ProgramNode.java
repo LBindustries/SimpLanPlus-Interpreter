@@ -65,17 +65,25 @@ public class ProgramNode implements Node {
         String asm = ";Program\n"; // li $sp MEM_TOP\nli $fp MEM_TOP causano problemi con il parser
 
         if (this.declarations != null) {
-            asm += ";Variable Declaration\nli $t1 " + localenv.getOffset() + "\n";
-            asm += "sub $fp $fp $t1\n";
+            asm += ";Variable Declaration\nli $t1 " + localenv.getDecSpace() + "\n";
+            asm += "sub $sp $sp $t1\n";
+            asm += "push $fp\n";
+            asm += "move $fp $sp\n";
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }
+        }else {
+            asm += "push $fp\n";
+            asm += "move $fp $sp\n";
         }
         if (this.statements != null) {
             for (Node statement : this.statements) {
                 asm += statement.codeGeneration(labgen, this.localenv);
             }
         }
+        asm += "pop $fp\n";
+        asm += "li $t1 " + localenv.getDecSpace() + "\n";
+        asm += "add $sp $sp $t1\n";
         return asm;
     }
 
@@ -84,6 +92,7 @@ public class ProgramNode implements Node {
         env.incNestingLevel(1);
         HashMap<String, STentry> st = new HashMap<String, STentry>();
         env.getSymbolTableManager().addLevel(st);
+        env.setOffset(4);
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 

@@ -69,7 +69,7 @@ public class Main {
         System.out.println("Assembling...");
         LabelGenerator labgen = new LabelGenerator();
         String asm = ast.codeGeneration(labgen, env);
-        System.out.println(asm);
+        //System.out.println(asm);
         System.out.println("Code ready for execution!");
 
         BufferedWriter wr = new BufferedWriter(new FileWriter(filename+".asm"));

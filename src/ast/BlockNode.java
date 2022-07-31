@@ -42,7 +42,7 @@ public class BlockNode implements Node {
 
     @Override
     public TypeNode typeCheck(Environment env) {
-        this.checkSemantics(env);
+        //this.checkSemantics(env);
         if(this.declarations!=null){
             for(Node dec: declarations){
                 dec.typeCheck(localenv);
@@ -77,17 +77,26 @@ public class BlockNode implements Node {
     public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
         String asm = ";Block\n";
         if (this.declarations != null) {
-            asm += ";Variable Declaration\nli $t1 " + localenv.getOffset() + "\n";
-            asm += "sub $fp $fp $t1\n";
+            asm += ";Variable Declaration\nli $t1 " + localenv.getDecSpace() + "\n";
+            asm += "sub $sp $sp $t1\n";
+            asm += "push $fp\n";
+            asm += "move $fp $sp\n";
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }
+
+        }else {
+            asm += "push $fp\n";
+            asm += "move $fp $sp\n";
         }
         if (this.statements != null) {
             for (Node statement : this.statements) {
                 asm += statement.codeGeneration(labgen, this.localenv);
             }
         }
+        asm += "pop $fp\n";
+        asm += "li $t1 " + localenv.getDecSpace() + "\n";
+        asm += "add $sp $sp $t1\n";
         return asm;
     }
 
@@ -96,6 +105,7 @@ public class BlockNode implements Node {
         env.incNestingLevel(1);
         HashMap<String, STentry> level = new HashMap<String, STentry>();
         env.getSymbolTableManager().addLevel(level);
+        env.setOffset(4);
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 

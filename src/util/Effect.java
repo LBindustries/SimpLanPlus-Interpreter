@@ -68,14 +68,16 @@ public class Effect {
         else if(effect1 == USED && effect2 !=USED){
             if(effect2==DECLARED){
                 iRet = DECLARED;
+            }else {
+                iRet = USED;
             }
-            iRet = USED;
         }
         else if(effect2 == USED && effect1 !=USED){
             if(effect1==DECLARED){
                 iRet = DECLARED;
+            }else {
+                iRet = USED;
             }
-            iRet = USED;
         }
         this.status = iRet;
     }
