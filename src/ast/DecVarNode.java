@@ -52,7 +52,14 @@ public class DecVarNode implements Node{
         String asm = "";
         if(exp!=null){
             asm = exp.codeGeneration(labgen, localenv);
-            asm += "sw $a0 "+localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset()+"($fp)\n";
+            if( type.getType().equals("int")) {
+                asm += "sw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+            } else if (type.getType().equals("bool")) {
+                asm += "sb $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+            }
+            {
+
+            }
         }
         return asm;
     }

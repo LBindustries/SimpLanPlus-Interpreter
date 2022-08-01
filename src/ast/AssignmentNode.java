@@ -45,7 +45,11 @@ public class AssignmentNode implements Node{
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = exp.codeGeneration(labgen, localenv);
-        asm += ";Assignment\nsw $a0 "+localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset()+"($fp)\n";
+        if(localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("int")) {
+            asm += ";Assignment\nsw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+        } else if (localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("bool")) {
+            asm += ";Assignment\nsb $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+        }
         return asm;
     }
 

@@ -82,7 +82,13 @@ public class CallNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        return null;
+        String asm = ";Function Call\n";
+        for (int i = 0; i < exp.size(); i++) {
+            asm += exp.get(i).codeGeneration(labgen, localenv);
+            asm += "push $a0\n";
+        }
+        asm += "jal " + id.getId() + "\n";
+        return asm;
     }
 
     @Override

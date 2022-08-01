@@ -80,14 +80,14 @@ public class BlockNode implements Node {
             asm += ";Variable Declaration\nli $t1 " + localenv.getDecSpace() + "\n";
             asm += "sub $sp $sp $t1\n";
             asm += "push $fp\n";
-            asm += "move $fp $sp\n";
+            asm += "mov $fp $sp\n";
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }
 
         }else {
             asm += "push $fp\n";
-            asm += "move $fp $sp\n";
+            asm += "mov $fp $sp\n";
         }
         if (this.statements != null) {
             for (Node statement : this.statements) {

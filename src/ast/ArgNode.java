@@ -48,7 +48,7 @@ public class ArgNode implements Node{
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
-        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(1), new Effect(true))) != null){
+        if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset((type.getType().equals("int")? 4 : 1)), new Effect(true))) != null){
             res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function."));
         }
 

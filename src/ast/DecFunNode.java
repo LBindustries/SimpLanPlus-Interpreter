@@ -109,18 +109,37 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public String codeGeneration(LabelGenerator labgen, Environment localenv) {
+    public String codeGeneration(LabelGenerator labgen, Environment localenv1) {
         String asm = ";Function\n";
+        String jump_label = labgen.new_label("JUMP_FUNC");
+        asm += "jal " + jump_label + "\n";
+        asm += id.getId() + ":\n";
+
         if (this.decs != null) {
+            asm += ";Variable Declaration\nli $t1 " + localenv.getDecSpace() + "\n";
+            asm += "sub $sp $sp $t1\n";
+            asm += "push $fp\n";
+            asm += "mov $fp $sp\n";
+            asm += "push $ra\n";
             for (Node declaration : this.decs) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }
+        }else {
+            asm += "push $fp\n";
+            asm += "mov $fp $sp\n";
+            asm += "push $ra\n";
         }
         if (this.stms != null) {
             for (Node statement : this.stms) {
                 asm += statement.codeGeneration(labgen, this.localenv);
             }
         }
+        asm += "pop $ra\n";
+        asm += "pop $fp\n";
+        asm += "li $t1 " + localenv.getDecSpace() + "\n";
+        asm += "add $sp $sp $t1\n";
+        asm += "jr $ra\n";
+        asm += jump_label + ":\n";
         return asm;
     }
 
@@ -129,6 +148,7 @@ public class DecFunNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         // Check if function is not already declared
+
 
         ArrayList<ArgTypeNode> argTypeNodes = new ArrayList<ArgTypeNode>();
 
@@ -150,6 +170,7 @@ public class DecFunNode implements Node {
         Environment localenv = new Environment();
         localenv.incNestingLevel(1);
         localenv.getSymbolTableManager().addLevel(st);
+        localenv.setOffset(4);
         localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, 0, new Effect(true)));
         if (this.args.size() > 0) {
             for (Node arg : this.args) {
