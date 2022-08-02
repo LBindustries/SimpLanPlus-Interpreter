@@ -65,8 +65,9 @@ public class ProgramNode implements Node {
         String asm = ";Program\n"; // li $sp MEM_TOP\nli $fp MEM_TOP causano problemi con il parser
 
         if (this.declarations != null) {
-            asm += ";Variable Declaration\nli $t1 " + localenv.getDecSpace() + "\n";
-            asm += "sub $sp $sp $t1\n";
+            asm += ";Variable Declaration\n";
+            //li $t1 " + localenv.getDecSpace() + "\n";
+            asm += "subi $sp $sp " + localenv.getDecSpace() + "\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
             for (Node declaration : this.declarations) {
@@ -82,8 +83,8 @@ public class ProgramNode implements Node {
             }
         }
         asm += "pop $fp\n";
-        asm += "li $t1 " + localenv.getDecSpace() + "\n";
-        asm += "add $sp $sp $t1\n";
+        //asm += "li $t1 " + localenv.getDecSpace() + "\n";
+        asm += "addi $sp $sp " + localenv.getDecSpace() + "\n";
         return asm;
     }
 

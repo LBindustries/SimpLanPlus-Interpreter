@@ -28,7 +28,7 @@ public class SymbolTableManager {
                 TypeNode type = new TypeNode(m.get(key).getType().getType());
                 int offset = m.get(key).getOffset();
                 Effect effect = new Effect(m.get(key).getEffect());
-                tmp.put(key, new STentry(nl, type, offset, effect));
+                tmp.put(key, new STentry(nl, type, offset, effect, m.get(key).isFn()));
             }
             this.symbolTable.add(tmp);
         }
@@ -38,10 +38,12 @@ public class SymbolTableManager {
         int totSpace = 0;
         HashMap<String, STentry> tmp = symbolTable.get(nl);
         for (String key : tmp.keySet()) {
-            if(tmp.get(key).getType().getType().equals("int") ) {
-                totSpace += 4;
-            }else if(tmp.get(key).getType().getType().equals("bool")) {
-                totSpace += 1;
+            if(!tmp.get(key).isFn()) {
+                if (tmp.get(key).getType().getType().equals("int")) {
+                    totSpace += 4;
+                } else if (tmp.get(key).getType().getType().equals("bool")) {
+                    totSpace += 1;
+                }
             }
         }
         return totSpace;

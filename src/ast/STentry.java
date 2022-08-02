@@ -10,17 +10,21 @@ public class STentry {
     private int offset;
     private Effect effect;
 
-    public STentry(int n, int os, Effect ef) {
+    private boolean isFn = false;
+
+    public STentry(int n, int os, Effect ef, boolean fn) {
         nl = n;
         offset = os;
         effect = ef;
+        this.isFn = fn;
     }
 
-    public STentry(int n, TypeNode t, int os, Effect ef) {
+    public STentry(int n, TypeNode t, int os, Effect ef, boolean fn) {
         nl = n;
         type = t;
         offset = os;
         effect = ef;
+        this.isFn = fn;
     }
 
     public Effect getEffect() {
@@ -48,5 +52,9 @@ public class STentry {
                 s + "STentry: type\n" +
                 type.toPrint(s + "  ") +
                 s + "STentry: offset " + Integer.toString(offset) + "\n";
+    }
+
+    public boolean isFn() {
+        return isFn;
     }
 }

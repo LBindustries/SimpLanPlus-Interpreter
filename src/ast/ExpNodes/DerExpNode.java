@@ -19,6 +19,10 @@ public class DerExpNode implements Node {
         this.id = id;
     }
 
+    public IdNode getId() {
+        return id;
+    }
+
     @Override
     public String toPrint(String indent) {
         return "\n"+indent + "DerExpNode" + this.id.toPrint(indent+" ");
@@ -46,10 +50,17 @@ public class DerExpNode implements Node {
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = ";Variable load\n";
+
+        asm += "mov $t1 $fp\n";
+
+        for(int i = 0; i < (localenv.getNestingLevel() - localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getNestinglevel()); i++ ){
+            asm += "lw $t1 0($t1)\n";
+        }
+
         if(localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("int")) {
-            asm = "lw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+            asm += "lw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($t1)\n";
         } else if (localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("bool")) {
-            asm = "lb $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+            asm += "lb $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($t1)\n";
         }
         return asm;
     }

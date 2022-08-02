@@ -83,9 +83,31 @@ public class CallNode implements Node {
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = ";Function Call\n";
-        for (int i = 0; i < exp.size(); i++) {
+
+        STentry entry = localenv.getSymbolTableManager().getLastEntry(id.getId(), 0);
+        FunctionTypeNode t = (FunctionTypeNode) entry.getType();
+
+        for (int i =  (exp.size() - 1); i >= 0; i--) {
+            asm += ";Loading arg " + i + "\n";
+
+            if(t.getArgs().get(i).isVar()){
+                asm += "mov $t1 $fp\n";
+                DerExpNode idName = (DerExpNode) exp.get(i);
+                for(int j = 0; j < (localenv.getNestingLevel() - localenv.getSymbolTableManager().getLastEntry(idName.getId().getId(), localenv.getNestingLevel()).getNestinglevel()); j++ ){
+                    asm += "lw $t1 0($t1)\n";
+                }
+                asm += "addi $t1 $t1 " + localenv.getSymbolTableManager().getLastEntry(idName.getId().getId(), localenv.getNestingLevel()).getOffset() + "\n";
+                asm += "push $t1\n";
+            }
+
             asm += exp.get(i).codeGeneration(labgen, localenv);
-            asm += "push $a0\n";
+
+            if (t.getArgs().get(i).getType().equals("int")){
+                asm += "push $a0\n";
+            } else if (t.getArgs().get(i).getType().equals("bool")) {
+                asm += "subi $sp $sp 1\n";
+                asm += "sb $a0 0($sp)\n";
+            }
         }
         asm += "jal " + id.getId() + "\n";
         return asm;

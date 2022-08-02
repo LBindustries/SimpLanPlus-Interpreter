@@ -45,10 +45,18 @@ public class AssignmentNode implements Node{
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = exp.codeGeneration(labgen, localenv);
+        asm += ";Assignment\n";
+
+        asm += "mov $t1 $fp\n";
+
+        for(int i = 0; i < (localenv.getNestingLevel() - localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getNestinglevel()); i++ ){
+            asm += "lw $t1 0($t1)\n";
+        }
+
         if(localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("int")) {
-            asm += ";Assignment\nsw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+            asm += "sw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($t1)\n";
         } else if (localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("bool")) {
-            asm += ";Assignment\nsb $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+            asm += "sb $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($t1)\n";
         }
         return asm;
     }

@@ -115,9 +115,24 @@ public class DecFunNode implements Node {
         asm += "jal " + jump_label + "\n";
         asm += id.getId() + ":\n";
 
+        // Spazio da allocare per le variabili
+        int DecSpace = localenv.getDecSpace();
+        int nVar = 0;
+        if (this.args.size() > 0) {
+            for (Node arg : this.args) {
+                ArgNode t = (ArgNode) arg;
+                DecSpace -= ( t.getType().getType().equals("int")? 4 : 1 );
+                if(t.isVar()){
+                    nVar++;
+                }
+            }
+        }
+
+
         if (this.decs != null) {
-            asm += ";Variable Declaration\nli $t1 " + localenv.getDecSpace() + "\n";
-            asm += "sub $sp $sp $t1\n";
+            asm += ";Variable Declaration\n";
+            //li $t1 " + localenv.getDecSpace() + "\n";
+            asm += "subi $sp $sp " + DecSpace + "\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
             asm += "push $ra\n";
@@ -134,10 +149,29 @@ public class DecFunNode implements Node {
                 asm += statement.codeGeneration(labgen, this.localenv);
             }
         }
+
+        if (this.args != null) {
+            for (Node arg : this.args) {
+                ArgNode argNode = (ArgNode) arg;
+                if(argNode.isVar()){
+                    if(argNode.getType().getType().equals("int")){
+                        asm += "lw $t1 " + localenv.getSymbolTableManager().getLastEntry(argNode.getId().getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+                        asm += "lw $t2 " + (localenv.getSymbolTableManager().getLastEntry(argNode.getId().getId(), localenv.getNestingLevel()).getOffset()+4) + "($fp)\n";
+                        asm += "sw $t1 0($t2)\n";
+                    } else if (argNode.getType().getType().equals("bool")) {
+                        asm += "lb $t1 " + localenv.getSymbolTableManager().getLastEntry(argNode.getId().getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
+                        asm += "lw $t2 " + (localenv.getSymbolTableManager().getLastEntry(argNode.getId().getId(), localenv.getNestingLevel()).getOffset()+1) + "($fp)\n";
+                        asm += "sb $t1 0($t2)\n";
+                    }
+
+                }
+            }
+        }
+
         asm += "pop $ra\n";
         asm += "pop $fp\n";
-        asm += "li $t1 " + localenv.getDecSpace() + "\n";
-        asm += "add $sp $sp $t1\n";
+        //asm += "li $t1 " + localenv.getDecSpace() + "\n";
+        asm += "addi $sp $sp " + (localenv.getDecSpace() + (nVar * 4)) + "\n";
         asm += "jr $ra\n";
         asm += jump_label + ":\n";
         return asm;
@@ -160,7 +194,7 @@ public class DecFunNode implements Node {
         }
 
         FunctionTypeNode t = new FunctionTypeNode(type.getType(), argTypeNodes);
-        if (st.put(this.id.getId(), new STentry(env.getNestingLevel(), t, 0, new Effect(true))) != null) {
+        if (st.put(this.id.getId(), new STentry(env.getNestingLevel(), t, 0, new Effect(true), true)) != null) {
             res.add(new SemanticError("Function id " + this.id.getId() + " already declared."));
             return res;
         }
@@ -171,7 +205,7 @@ public class DecFunNode implements Node {
         localenv.incNestingLevel(1);
         localenv.getSymbolTableManager().addLevel(st);
         localenv.setOffset(4);
-        localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, 0, new Effect(true)));
+        localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, 0, new Effect(true), true));
         if (this.args.size() > 0) {
             for (Node arg : this.args) {
                 res.addAll(arg.checkSemantics(localenv));

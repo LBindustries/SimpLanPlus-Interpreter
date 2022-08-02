@@ -77,8 +77,9 @@ public class BlockNode implements Node {
     public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
         String asm = ";Block\n";
         if (this.declarations != null) {
-            asm += ";Variable Declaration\nli $t1 " + localenv.getDecSpace() + "\n";
-            asm += "sub $sp $sp $t1\n";
+            asm += ";Variable Declaration\n";
+            //li $t1 " + localenv.getDecSpace() + "\n";
+            asm += "subi $sp $sp "+ localenv.getDecSpace() + "\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
             for (Node declaration : this.declarations) {
@@ -95,8 +96,8 @@ public class BlockNode implements Node {
             }
         }
         asm += "pop $fp\n";
-        asm += "li $t1 " + localenv.getDecSpace() + "\n";
-        asm += "add $sp $sp $t1\n";
+        //asm += "li $t1 " + localenv.getDecSpace() + "\n";
+        asm += "addi $sp $sp "+ localenv.getDecSpace() + "\n";
         return asm;
     }
 
