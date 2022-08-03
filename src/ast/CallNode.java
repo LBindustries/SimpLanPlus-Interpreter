@@ -50,26 +50,32 @@ public class CallNode implements Node {
         }
 
         FunctionTypeNode t = (FunctionTypeNode) entry.getType();
-        if (t.getArgs().size() != this.exp.size()) { // stesso numero di parametri
+        if (t.getArgs().size() > 0) {
+            if (t.getArgs().size() != this.exp.size()) { // stesso numero di parametri
+                System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size());
+                System.exit(0);
+            }
+            for (int i = 0; i < exp.size(); i++) {
+
+                if (!Objects.equals(exp.get(i).typeCheck(env).getType(), t.getArgs().get(i).getType())) { // tipi coerenti alle exp
+                    System.out.println("Parameters type mismatch for " + this.id.getId() + ": expecting " + t.getArgs().get(i).getType() + ", got " + exp.get(i).typeCheck(env).getType()+ " for parameter "+(i+1));
+                    System.exit(0);
+                }
+
+                if (t.getArgs().get(i).isVar()) {
+                    if (!exp.get(i).getClass().equals(DerExpNode.class)) { // se di tipo var deve essere una variabile
+                        System.out.println("Expecting variable in call of symbol " + this.id.getId() + " for parameter "+(i+1));
+                        System.exit(0);
+                    }
+                }
+            }
+        } else if (this.exp != null) {
             System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size());
             System.exit(0);
         }
-        for (int i = 0; i < exp.size(); i++) {
 
-            if (!Objects.equals(exp.get(i).typeCheck(env).getType(), t.getArgs().get(i).getType())) { // tipi coerenti alle exp
-                System.out.println("Parameters type mismatch for " + this.id.getId() + ": expecting " + t.getArgs().get(i).getType() + ", got " + exp.get(i).typeCheck(env).getType()+ " for parameter "+(i+1));
-                System.exit(0);
-            }
-
-            if (t.getArgs().get(i).isVar()) {
-                if (!exp.get(i).getClass().equals(DerExpNode.class)) { // se di tipo var deve essere una variabile
-                    System.out.println("Expecting variable in call of symbol " + this.id.getId() + " for parameter "+(i+1));
-                    System.exit(0);
-                }
-            }
-        }
         entry.getEffect().setUsed();
-        if (isExp)
+        if (!isExp)
             return new VoidTypeNode();
         else
             return env.getSymbolTableManager().getLastEntry(id.getId(), 0).getType();
@@ -87,26 +93,28 @@ public class CallNode implements Node {
         STentry entry = localenv.getSymbolTableManager().getLastEntry(id.getId(), 0);
         FunctionTypeNode t = (FunctionTypeNode) entry.getType();
 
-        for (int i =  (exp.size() - 1); i >= 0; i--) {
-            asm += ";Loading arg " + i + "\n";
+        if(this.exp != null) {
+            for (int i = (exp.size() - 1); i >= 0; i--) {
+                asm += ";Loading arg " + i + "\n";
 
-            if(t.getArgs().get(i).isVar()){
-                asm += "mov $t1 $fp\n";
-                DerExpNode idName = (DerExpNode) exp.get(i);
-                for(int j = 0; j < (localenv.getNestingLevel() - localenv.getSymbolTableManager().getLastEntry(idName.getId().getId(), localenv.getNestingLevel()).getNestinglevel()); j++ ){
-                    asm += "lw $t1 0($t1)\n";
+                if (t.getArgs().get(i).isVar()) {
+                    asm += "mov $t1 $fp\n";
+                    DerExpNode idName = (DerExpNode) exp.get(i);
+                    for (int j = 0; j < (localenv.getNestingLevel() - localenv.getSymbolTableManager().getLastEntry(idName.getId().getId(), localenv.getNestingLevel()).getNestinglevel()); j++) {
+                        asm += "lw $t1 0($t1)\n";
+                    }
+                    asm += "addi $t1 $t1 " + localenv.getSymbolTableManager().getLastEntry(idName.getId().getId(), localenv.getNestingLevel()).getOffset() + "\n";
+                    asm += "push $t1\n";
                 }
-                asm += "addi $t1 $t1 " + localenv.getSymbolTableManager().getLastEntry(idName.getId().getId(), localenv.getNestingLevel()).getOffset() + "\n";
-                asm += "push $t1\n";
-            }
 
-            asm += exp.get(i).codeGeneration(labgen, localenv);
+                asm += exp.get(i).codeGeneration(labgen, localenv);
 
-            if (t.getArgs().get(i).getType().equals("int")){
-                asm += "push $a0\n";
-            } else if (t.getArgs().get(i).getType().equals("bool")) {
-                asm += "subi $sp $sp 1\n";
-                asm += "sb $a0 0($sp)\n";
+                if (t.getArgs().get(i).getType().equals("int")) {
+                    asm += "push $a0\n";
+                } else if (t.getArgs().get(i).getType().equals("bool")) {
+                    asm += "subi $sp $sp 1\n";
+                    asm += "sb $a0 0($sp)\n";
+                }
             }
         }
         asm += "jal " + id.getId() + "\n";

@@ -73,17 +73,22 @@ public class DecFunNode implements Node {
                         System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
                         System.exit(0);
                     }
-                } else if (tmp.getStatement() instanceof IteNode) {
-                    if (type instanceof VoidTypeNode) {
-                        if (!Objects.equals(type.getType(), this.type.getType())) {
-                            fuse = true;
-                        }
-                    } else {
-                        if (!Objects.equals(type.getType(), this.type.getType())) {
-                            System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
-                            System.exit(0);
-                        }
+                } else if (tmp.getStatement() instanceof IteNode  && !Objects.equals(type.getType(), "void")) {
+                    fuse = true;
+                    if (!Objects.equals(type.getType(), this.type.getType())) {
+                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                        System.exit(0);
                     }
+//                    if (type instanceof VoidTypeNode) {
+//                        if (!Objects.equals(type.getType(), this.type.getType())) {
+//                            fuse = true;
+//                        }
+//                    } else {
+//                        if (!Objects.equals(type.getType(), this.type.getType())) {
+//                            System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+//                            System.exit(0);
+//                        }
+//                    }
                 }
             }
         }

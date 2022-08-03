@@ -30,7 +30,7 @@ public class CallExpNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        return null;
+        return this.call.codeGeneration(labgen,localenv);
     }
 
     @Override
