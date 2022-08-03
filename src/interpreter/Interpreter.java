@@ -14,6 +14,10 @@ public class Interpreter {
     public int MEMSIZE = 10000;
     public int pc = 0;
 
+    public byte[] stack = new byte[MEMSIZE];
+    public int sp = MEMSIZE;
+    public int fp = MEMSIZE;
+    public int a0, t1, t2, ra;
 
     public Interpreter(String path) throws Exception{
         FileInputStream is;
