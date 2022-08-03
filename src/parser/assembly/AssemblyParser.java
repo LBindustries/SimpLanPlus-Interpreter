@@ -1,4 +1,4 @@
-// Generated from C:/Users/loren/Documents/GitHub/SimpLanPlus-Interpreter/src/parser/assembly\Assembly.g4 by ANTLR 4.9.2
+// Generated from C:/Users/loren/IdeaProjects/SimpLanPlus-Interpreter/src/parser/assembly\Assembly.g4 by ANTLR 4.9.2
 package parser.assembly;
 
 import java.util.HashMap;
@@ -149,7 +149,7 @@ public class AssemblyParser extends Parser {
 			setState(73);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PUSH) | (1L << POP) | (1L << TOP) | (1L << LI) | (1L << MOV) | (1L << LW) | (1L << SW) | (1L << LB) | (1L << ADD) | (1L << ADDI) | (1L << SUB) | (1L << SUBI) | (1L << MULT) | (1L << MULTI) | (1L << DIV) | (1L << DIVI) | (1L << LT) | (1L << LTE) | (1L << GT) | (1L << GTE) | (1L << EQ) | (1L << NEQ) | (1L << AND) | (1L << OR) | (1L << NOT) | (1L << NEG) | (1L << PRINT) | (1L << BEQ) | (1L << HALT) | (1L << JAL) | (1L << JR) | (1L << LABEL))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << PUSH) | (1L << POP) | (1L << TOP) | (1L << LI) | (1L << MOV) | (1L << LW) | (1L << SW) | (1L << LB) | (1L << SB) | (1L << ADD) | (1L << ADDI) | (1L << SUB) | (1L << SUBI) | (1L << MULT) | (1L << MULTI) | (1L << DIV) | (1L << DIVI) | (1L << LT) | (1L << LTE) | (1L << GT) | (1L << GTE) | (1L << EQ) | (1L << NEQ) | (1L << AND) | (1L << OR) | (1L << NOT) | (1L << NEG) | (1L << PRINT) | (1L << BEQ) | (1L << HALT) | (1L << JAL) | (1L << JR) | (1L << LABEL))) != 0)) {
 				{
 				{
 				setState(70);
@@ -298,238 +298,240 @@ public class AssemblyParser extends Parser {
 		try {
 			setState(109);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
-			case 1:
+			switch (_input.LA(1)) {
+			case LABEL:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(76);
 				label();
 				}
 				break;
-			case 2:
+			case PUSH:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(77);
 				push();
 				}
 				break;
-			case 3:
+			case POP:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(78);
 				pop();
 				}
 				break;
-			case 4:
+			case TOP:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(79);
 				top();
 				}
 				break;
-			case 5:
+			case LI:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(80);
 				li();
 				}
 				break;
-			case 6:
+			case MOV:
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(81);
 				mov();
 				}
 				break;
-			case 7:
+			case LW:
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(82);
 				lw();
 				}
 				break;
-			case 8:
+			case SW:
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(83);
 				sw();
 				}
 				break;
-			case 9:
+			case LB:
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(84);
 				lb();
 				}
 				break;
-			case 10:
+			case SB:
 				enterOuterAlt(_localctx, 10);
 				{
 				setState(85);
 				sb();
 				}
 				break;
-			case 11:
+			case ADD:
 				enterOuterAlt(_localctx, 11);
 				{
 				setState(86);
 				add();
 				}
 				break;
-			case 12:
+			case ADDI:
 				enterOuterAlt(_localctx, 12);
 				{
 				setState(87);
 				addi();
 				}
 				break;
-			case 13:
+			case SUB:
 				enterOuterAlt(_localctx, 13);
 				{
 				setState(88);
 				sub();
 				}
 				break;
-			case 14:
+			case SUBI:
 				enterOuterAlt(_localctx, 14);
 				{
 				setState(89);
 				subi();
 				}
 				break;
-			case 15:
+			case MULT:
 				enterOuterAlt(_localctx, 15);
 				{
 				setState(90);
 				mult();
 				}
 				break;
-			case 16:
+			case MULTI:
 				enterOuterAlt(_localctx, 16);
 				{
 				setState(91);
 				multi();
 				}
 				break;
-			case 17:
+			case DIV:
 				enterOuterAlt(_localctx, 17);
 				{
 				setState(92);
 				div();
 				}
 				break;
-			case 18:
+			case DIVI:
 				enterOuterAlt(_localctx, 18);
 				{
 				setState(93);
 				divi();
 				}
 				break;
-			case 19:
+			case LT:
 				enterOuterAlt(_localctx, 19);
 				{
 				setState(94);
 				lt();
 				}
 				break;
-			case 20:
+			case LTE:
 				enterOuterAlt(_localctx, 20);
 				{
 				setState(95);
 				lte();
 				}
 				break;
-			case 21:
+			case GT:
 				enterOuterAlt(_localctx, 21);
 				{
 				setState(96);
 				gt();
 				}
 				break;
-			case 22:
+			case GTE:
 				enterOuterAlt(_localctx, 22);
 				{
 				setState(97);
 				gte();
 				}
 				break;
-			case 23:
+			case EQ:
 				enterOuterAlt(_localctx, 23);
 				{
 				setState(98);
 				eq();
 				}
 				break;
-			case 24:
+			case NEQ:
 				enterOuterAlt(_localctx, 24);
 				{
 				setState(99);
 				neq();
 				}
 				break;
-			case 25:
+			case AND:
 				enterOuterAlt(_localctx, 25);
 				{
 				setState(100);
 				and();
 				}
 				break;
-			case 26:
+			case OR:
 				enterOuterAlt(_localctx, 26);
 				{
 				setState(101);
 				or();
 				}
 				break;
-			case 27:
+			case NOT:
 				enterOuterAlt(_localctx, 27);
 				{
 				setState(102);
 				not();
 				}
 				break;
-			case 28:
+			case NEG:
 				enterOuterAlt(_localctx, 28);
 				{
 				setState(103);
 				neg();
 				}
 				break;
-			case 29:
+			case PRINT:
 				enterOuterAlt(_localctx, 29);
 				{
 				setState(104);
 				print();
 				}
 				break;
-			case 30:
+			case JAL:
 				enterOuterAlt(_localctx, 30);
 				{
 				setState(105);
 				jal();
 				}
 				break;
-			case 31:
+			case JR:
 				enterOuterAlt(_localctx, 31);
 				{
 				setState(106);
 				jr();
 				}
 				break;
-			case 32:
+			case BEQ:
 				enterOuterAlt(_localctx, 32);
 				{
 				setState(107);
 				beq();
 				}
 				break;
-			case 33:
+			case HALT:
 				enterOuterAlt(_localctx, 33);
 				{
 				setState(108);
 				halt();
 				}
 				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -967,7 +969,7 @@ public class AssemblyParser extends Parser {
 		public Token reg1;
 		public Token offset;
 		public Token reg2;
-		public TerminalNode SW() { return getToken(AssemblyParser.SW, 0); }
+		public TerminalNode SB() { return getToken(AssemblyParser.SB, 0); }
 		public List<TerminalNode> REG() { return getTokens(AssemblyParser.REG); }
 		public TerminalNode REG(int i) {
 			return getToken(AssemblyParser.REG, i);
@@ -999,7 +1001,7 @@ public class AssemblyParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(149);
-			match(SW);
+			match(SB);
 			setState(150);
 			((SbContext)_localctx).reg1 = match(REG);
 			setState(151);
@@ -2339,7 +2341,7 @@ public class AssemblyParser extends Parser {
 		"\u008a\7\13\2\2\u008a\u008b\7\'\2\2\u008b\u008c\7*\2\2\u008c\u008d\7\3"+
 		"\2\2\u008d\u008e\7\'\2\2\u008e\u008f\7\4\2\2\u008f\23\3\2\2\2\u0090\u0091"+
 		"\7\f\2\2\u0091\u0092\7\'\2\2\u0092\u0093\7*\2\2\u0093\u0094\7\3\2\2\u0094"+
-		"\u0095\7\'\2\2\u0095\u0096\7\4\2\2\u0096\25\3\2\2\2\u0097\u0098\7\13\2"+
+		"\u0095\7\'\2\2\u0095\u0096\7\4\2\2\u0096\25\3\2\2\2\u0097\u0098\7\r\2"+
 		"\2\u0098\u0099\7\'\2\2\u0099\u009a\7*\2\2\u009a\u009b\7\3\2\2\u009b\u009c"+
 		"\7\'\2\2\u009c\u009d\7\4\2\2\u009d\27\3\2\2\2\u009e\u009f\7\16\2\2\u009f"+
 		"\u00a0\7\'\2\2\u00a0\u00a1\7\'\2\2\u00a1\u00a2\7\'\2\2\u00a2\31\3\2\2"+

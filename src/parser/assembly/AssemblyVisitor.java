@@ -1,4 +1,4 @@
-// Generated from C:/Users/loren/Documents/GitHub/SimpLanPlus-Interpreter/src/parser/assembly\Assembly.g4 by ANTLR 4.9.2
+// Generated from C:/Users/loren/IdeaProjects/SimpLanPlus-Interpreter/src/parser/assembly\Assembly.g4 by ANTLR 4.9.2
 package parser.assembly;
 
 import java.util.HashMap;

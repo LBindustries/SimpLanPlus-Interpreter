@@ -59,7 +59,7 @@ mov     : MOV dest=REG src=REG;
 lw      : LW reg1=REG offset=NUMBER'('reg2=REG')';
 sw      : SW reg1=REG offset=NUMBER'('reg2=REG')';
 lb      : LB reg1=REG offset=NUMBER'('reg2=REG')';
-sb      : SW reg1=REG offset=NUMBER'('reg2=REG')';
+sb      : SB reg1=REG offset=NUMBER'('reg2=REG')';
 
 // EXP
 add     : ADD dest=REG reg1=REG reg2=REG;
