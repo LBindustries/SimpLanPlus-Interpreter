@@ -194,10 +194,17 @@ public class DecFunNode implements Node {
             res.add(new SemanticError("Function id " + this.id.getId() + " already declared."));
             return res;
         }
+
         // Begin analyzing args
 
         st = new HashMap<String, STentry>();
         Environment localenv = new Environment();
+        // Add function name to the new env
+        for( String key : env.getSymbolTableManager().getSymbolTable().get(0).keySet()){
+            if(env.getSymbolTableManager().getSymbolTable().get(0).get(key).isFn()){
+                st.put(key, new STentry(env.getNestingLevel(), env.getSymbolTableManager().getSymbolTable().get(0).get(key).getType(), 0, new Effect(true), true));
+            }
+        }
         localenv.incNestingLevel(1);
         localenv.getSymbolTableManager().addLevel(st);
         localenv.setOffset(4);

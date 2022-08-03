@@ -51,6 +51,10 @@ public class CallNode implements Node {
 
         FunctionTypeNode t = (FunctionTypeNode) entry.getType();
         if (t.getArgs().size() > 0) {
+            if(this.exp == null){
+                System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got 0");
+                System.exit(0);
+            }
             if (t.getArgs().size() != this.exp.size()) { // stesso numero di parametri
                 System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size());
                 System.exit(0);
