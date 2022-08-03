@@ -24,6 +24,10 @@ public class ProgramNode implements ASMNode {
         return code.get(pc);
     }
 
+    public void delIst(int pc) {
+        code.remove(pc);
+    }
+
     @Override
     public String toPrint() {
         return null;

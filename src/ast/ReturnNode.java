@@ -26,13 +26,6 @@ public class ReturnNode implements Node {
             return res;
     }
 
-/*
-    public int prova(){
-        return 3;
-        int a = 5;  // ERRORE!
-    }
-*/
-
     @Override
     public TypeNode typeCheck(Environment env) {
         if (this.exp == null) {

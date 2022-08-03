@@ -5,7 +5,10 @@ import interpreter.ASMNode;
 import java.util.ArrayList;
 
 public class InstructionNode implements ASMNode {
-    public String opcode, param1, param2, param3;
+    public String opcode;
+    public String param1;
+    public String param2;
+    public String param3;
     public String classname;
 
     public InstructionNode(String opcode, String param1, String param2, String param3, String classname){
@@ -38,5 +41,23 @@ public class InstructionNode implements ASMNode {
     public String toPrint() {
         return (this.opcode!=null ? (this.opcode):(""))+(this.param1!=null ? (" "+this.param1):(""))
                 +(this.param2!=null ? (" "+this.param2):(""))+(this.param3!=null ? (" "+this.param3):(""));
+    }
+
+    public String getOpcode(){
+        return this.opcode;
+    }
+    public String getParam1() {
+        return param1;
+    }
+
+    public String getParam2() {
+        return param2;
+    }
+
+    public String getParam3() {
+        return param3;
+    }
+    public String getClassname() {
+        return classname;
     }
 }

@@ -57,9 +57,6 @@ public class DecVarNode implements Node{
             } else if (type.getType().equals("bool")) {
                 asm += "sb $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($fp)\n";
             }
-            {
-
-            }
         }
         return asm;
     }

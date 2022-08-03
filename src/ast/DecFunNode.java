@@ -79,16 +79,6 @@ public class DecFunNode implements Node {
                         System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
                         System.exit(0);
                     }
-//                    if (type instanceof VoidTypeNode) {
-//                        if (!Objects.equals(type.getType(), this.type.getType())) {
-//                            fuse = true;
-//                        }
-//                    } else {
-//                        if (!Objects.equals(type.getType(), this.type.getType())) {
-//                            System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
-//                            System.exit(0);
-//                        }
-//                    }
                 }
             }
         }
@@ -178,6 +168,7 @@ public class DecFunNode implements Node {
         //asm += "li $t1 " + localenv.getDecSpace() + "\n";
         asm += "addi $sp $sp " + (localenv.getDecSpace() + (nVar * 4)) + "\n";
         asm += "jr $ra\n";
+        //asm += "label " + jump_label + ":\n";
         asm += jump_label + ":\n";
         return asm;
     }
