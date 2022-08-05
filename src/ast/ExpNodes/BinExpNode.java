@@ -74,7 +74,7 @@ public class BinExpNode implements Node {
         String operation = switch (this.op) {
             case "+" -> "add";
             case "-" -> "sub";
-            case "*" -> "mul";
+            case "*" -> "mult";
             case "/" -> "div";
             case "<" -> "lt";
             case ">" -> "gt";
