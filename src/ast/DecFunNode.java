@@ -108,7 +108,8 @@ public class DecFunNode implements Node {
         String asm = ";Function\n";
         String jump_label = labgen.new_label("JUMP_FUNC");
         asm += "jal " + jump_label + "\n";
-        asm += id.getId() + ":\n";
+        //asm += id.getId() + ":\n";
+        asm += "label " + id.getId() + ":\n";
 
         // Spazio da allocare per le variabili
         int DecSpace = localenv.getDecSpace();
@@ -124,26 +125,39 @@ public class DecFunNode implements Node {
         }
 
 
-        if (this.decs != null) {
+        if (this.decs != null && this.decs.size() > 0) {
             asm += ";Variable Declaration\n";
             //li $t1 " + localenv.getDecSpace() + "\n";
             asm += "subi $sp $sp " + DecSpace + "\n";
+            asm += "mov $t1 $ra\n";
+            asm += "jal " + id.getId() + "_end\n";
+            asm += "label " + id.getId() + "_start :\n";
+            asm += "push $ra\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
-            asm += "push $ra\n";
+            asm += "push $t1\n";
             for (Node declaration : this.decs) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }
         }else {
+            asm += "mov $t1 $ra\n";
+            asm += "jal " + id.getId() + "_end\n";
+            asm += "label " + id.getId() + "_start :\n";
+            asm += "push $ra\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
-            asm += "push $ra\n";
+            asm += "push $t1\n";
         }
         if (this.stms != null) {
             for (Node statement : this.stms) {
                 asm += statement.codeGeneration(labgen, this.localenv);
             }
         }
+
+        asm += "lw $t1 4($fp)\n";
+        asm += "jr $t1\n";
+        asm += "label " + id.getId() + "_end :\n";
+        asm += "jal " + id.getId() + "_start\n";
 
         if (this.args != null) {
             for (Node arg : this.args) {
@@ -165,11 +179,12 @@ public class DecFunNode implements Node {
 
         asm += "pop $ra\n";
         asm += "pop $fp\n";
+        asm += "pop $t1\n";
         //asm += "li $t1 " + localenv.getDecSpace() + "\n";
         asm += "addi $sp $sp " + (localenv.getDecSpace() + (nVar * 4)) + "\n";
         asm += "jr $ra\n";
-        //asm += "label " + jump_label + ":\n";
-        asm += jump_label + ":\n";
+        asm += "label " + jump_label + ":\n";
+        //asm += jump_label + ":\n";
         return asm;
     }
 
@@ -207,13 +222,24 @@ public class DecFunNode implements Node {
         }
         localenv.incNestingLevel(1);
         localenv.getSymbolTableManager().addLevel(st);
-        localenv.setOffset(4);
+
+        // Calcolo offset dichiarazioni
+        int offsetDecs = 8;
+        if (this.decs.size() > 0) {
+            for (Node decNode : this.decs) {
+                DecVarNode dec = (DecVarNode) decNode;
+                offsetDecs += (dec.getType().getType().equals("int")? 4 : 1);
+            }
+        }
+
+        localenv.setOffset(offsetDecs);
         localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, 0, new Effect(true), true));
         if (this.args.size() > 0) {
             for (Node arg : this.args) {
                 res.addAll(arg.checkSemantics(localenv));
             }
         }
+        localenv.setOffset(8);
         if (this.decs.size() > 0) {
             for (Node dec : this.decs) {
                 res.addAll(dec.checkSemantics(localenv));

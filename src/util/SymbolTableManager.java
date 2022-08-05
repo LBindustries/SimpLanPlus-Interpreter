@@ -1,6 +1,7 @@
 package util;
 
 import ast.STentry;
+import ast.Types.FunctionTypeNode;
 import ast.Types.TypeNode;
 
 import java.util.ArrayList;
@@ -25,7 +26,12 @@ public class SymbolTableManager {
             HashMap tmp = new HashMap<>();
             for(String key : m.keySet()){
                 int nl = m.get(key).getNestinglevel();
-                TypeNode type = new TypeNode(m.get(key).getType().getType());
+                TypeNode type;
+                if(m.get(key).getType() instanceof FunctionTypeNode) {
+                    type = new FunctionTypeNode(m.get(key).getType().getType(), ((FunctionTypeNode) m.get(key).getType()).getArgs());
+                }else {
+                    type = new TypeNode(m.get(key).getType().getType());
+                }
                 int offset = m.get(key).getOffset();
                 Effect effect = new Effect(m.get(key).getEffect());
                 tmp.put(key, new STentry(nl, type, offset, effect, m.get(key).isFn()));

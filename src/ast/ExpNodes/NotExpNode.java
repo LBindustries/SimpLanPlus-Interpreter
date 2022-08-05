@@ -23,7 +23,7 @@ public class NotExpNode extends BaseExpNode{
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = exp.codeGeneration(labgen, localenv);
-        asm += ";Logical not\nnot $a0 $a0";
+        asm += ";Logical not\nnot $a0 $a0\n";
         return asm;
     }
 

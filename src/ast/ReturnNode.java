@@ -40,7 +40,16 @@ public class ReturnNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        return ";Return\n"+this.exp.codeGeneration(labgen, localenv);
+        String asm = ";Return\n";
+        asm += this.exp.codeGeneration(labgen, localenv);
+        asm += "mov $t1 $fp\n";
+        for(int i = 0; i < localenv.getNestingLevel(); i++ ){
+            asm += "lw $t1 0($t1)\n";
+        }
+        asm += "subi $sp $t1 4\n";
+        asm += "lw $t1 4($t1)\n";
+        asm += "jr $t1\n";
+        return asm;
     }
 
     @Override

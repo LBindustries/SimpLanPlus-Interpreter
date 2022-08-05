@@ -12,6 +12,7 @@ import java.util.Objects;
 
 public class DecVarNode implements Node{
 
+
     private TypeNode type;
     private IdNode id;
     private Node exp;
@@ -25,6 +26,10 @@ public class DecVarNode implements Node{
     public DecVarNode(TypeNode type, IdNode id){
         this.type = type;
         this.id = id;
+    }
+
+    public TypeNode getType() {
+        return type;
     }
 
     @Override

@@ -86,7 +86,7 @@ print   : PRINT src=REG;
 beq     : BEQ reg1=REG reg2=REG lab=LABEL;
 
 // Program
-label   : lab=LABEL':';
+label   : LABEL_IST lab=LABEL':';
 halt    : HALT;
 jal     : JAL lab=LABEL;
 jr      : JR dest=REG;
@@ -130,6 +130,7 @@ PRINT	 : 'print' ;	// print top of stack
 BEQ      : 'beq' ;	// Break if equal w
 
 //Program
+LABEL_IST : 'label' ;
 HALT	 : 'halt' ;	// stop execution
 JAL     : 'jal' ; // Jump to label
 JR      : 'jr' ; // Jump to register

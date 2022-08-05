@@ -12,10 +12,12 @@ import java.util.ArrayList;
 public class AssemblyVisitorImpl extends AssemblyBaseVisitor<ASMNode> {
     @Override public ASMNode visitProgram(AssemblyParser.ProgramContext ctx){
         ProgramNode program = new ProgramNode();
-        for(AssemblyParser.InstructionContext ins: ctx.instruction()){
+        for(AssemblyParser.InstructionContext ins: ctx.instruction()) {
             ArrayList<String> contents = new ArrayList<>();
-            for(int i = 0; i<ins.children.get(0).getChildCount(); i++){
-                contents.add(ins.children.get(0).getChild(i).toString());
+            for (int i = 0; i < ins.children.get(0).getChildCount(); i++) {
+                if (!ins.children.get(0).getChild(i).toString().equals("(") && !ins.children.get(0).getChild(i).toString().equals(")")){
+                    contents.add(ins.children.get(0).getChild(i).toString());
+                }
             }
             if(contents.size()>4){
                 StringBuilder coll = new StringBuilder(contents.get(2));

@@ -76,7 +76,7 @@ public class BlockNode implements Node {
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
         String asm = ";Block\n";
-        if (this.declarations != null) {
+        if (this.declarations != null && this.declarations.size() > 0) {
             asm += ";Variable Declaration\n";
             //li $t1 " + localenv.getDecSpace() + "\n";
             asm += "subi $sp $sp "+ localenv.getDecSpace() + "\n";

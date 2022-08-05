@@ -87,7 +87,7 @@ public class BinExpNode implements Node {
             default -> "err";
         };
         asm += "pop $t1\n";
-        asm += operation+" $a0 $a0 $t1\n";
+        asm += operation+" $a0 $t1 $a0\n";
         return asm;
     }
 

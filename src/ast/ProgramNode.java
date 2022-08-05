@@ -64,16 +64,23 @@ public class ProgramNode implements Node {
     public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
         String asm = ";Program\n"; // li $sp MEM_TOP\nli $fp MEM_TOP causano problemi con il parser
 
-        if (this.declarations != null) {
+        if (this.declarations != null && this.declarations.size() > 0) {
             asm += ";Variable Declaration\n";
             //li $t1 " + localenv.getDecSpace() + "\n";
             asm += "subi $sp $sp " + localenv.getDecSpace() + "\n";
+            asm += "jal main_end\n";
+            asm += "label main_start :\n";
+            asm += "push $ra\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }
         }else {
+            asm += "mov $t1 $ra\n";
+            asm += "jal main_end\n";
+            asm += "label main_start :\n";
+            asm += "push $ra\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
         }
@@ -82,6 +89,11 @@ public class ProgramNode implements Node {
                 asm += statement.codeGeneration(labgen, this.localenv);
             }
         }
+
+        asm += "lw $t1 4($fp)\n";
+        asm += "jr $t1\n";
+        asm += "label main_end :\n";
+        asm += "jal main_start\n";
         asm += "pop $fp\n";
         //asm += "li $t1 " + localenv.getDecSpace() + "\n";
         asm += "addi $sp $sp " + localenv.getDecSpace() + "\n";
@@ -93,7 +105,7 @@ public class ProgramNode implements Node {
         env.incNestingLevel(1);
         HashMap<String, STentry> st = new HashMap<String, STentry>();
         env.getSymbolTableManager().addLevel(st);
-        env.setOffset(4);
+        env.setOffset(8);
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
