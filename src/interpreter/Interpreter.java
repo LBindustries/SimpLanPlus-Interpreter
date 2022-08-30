@@ -66,16 +66,26 @@ public class Interpreter {
     }
 
     private  void StoreBool(int trg, int offset, int addrs){
-        byte[] trgByte;
-        trgByte = toByteArray(trg);
-        stack[addrs+offset] =  trgByte[0];
+        try {
+            byte[] trgByte;
+            trgByte = toByteArray(trg);
+            stack[addrs + offset] = trgByte[0];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: out of memory.");
+            System.exit(1);
+        }
     }
 
     private void StoreWord(int trg, int offset, int addrs){
-        byte[] trgByte;
-        trgByte = toByteArray(trg);
-        for(int i = 0; i<4; i++){
-            stack[addrs+offset+i] =  trgByte[i];
+        try {
+            byte[] trgByte;
+            trgByte = toByteArray(trg);
+            for (int i = 0; i < 4; i++) {
+                stack[addrs + offset + i] = trgByte[i];
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: out of memory.");
+            System.exit(1);
         }
     }
 
