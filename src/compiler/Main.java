@@ -49,7 +49,6 @@ public class Main {
             return;
         }
         System.out.println("Parse completed without issues!");
-        System.out.println(ast.toPrint(""));
         System.out.println("Checking for semantic errors...");
         // Start Semantic analysis
         Environment env = new Environment();
@@ -69,7 +68,7 @@ public class Main {
         System.out.println("Assembling...");
         LabelGenerator labgen = new LabelGenerator();
         String asm = ast.codeGeneration(labgen, env);
-        System.out.println(asm);
+        //System.out.println(asm);
         System.out.println("Code ready for execution!");
 
         BufferedWriter wr = new BufferedWriter(new FileWriter(filename+".asm"));

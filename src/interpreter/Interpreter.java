@@ -162,8 +162,6 @@ public class Interpreter {
         while(pc<code.getProgSize()){
             ASMNode instruction = code.getInstruction(pc++);
             InstructionNode ist = (InstructionNode) instruction;
-
-            System.out.println(instruction.toPrint());
         }
 
         System.out.println("-----------------------\n\n");
