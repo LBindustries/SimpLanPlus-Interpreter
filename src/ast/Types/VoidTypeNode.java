@@ -26,7 +26,7 @@ public class VoidTypeNode extends TypeNode {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
 
         return new ArrayList<SemanticError>();
     }

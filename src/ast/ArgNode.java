@@ -14,11 +14,13 @@ public class ArgNode implements Node{
     private TypeNode type;
     private IdNode id;
     private boolean isVar = false;
+    private int line;
 
-    public ArgNode(TypeNode type, IdNode id, boolean isVar){
+    public ArgNode(TypeNode type, IdNode id, boolean isVar, int line){
         this.type = type;
         this.id = id;
         this.isVar = isVar;
+        this.line = line;
     }
 
     @Override
@@ -49,7 +51,7 @@ public class ArgNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
 

@@ -90,7 +90,7 @@ public class Main {
             System.out.println("Checking for semantic errors...");
             // Start Semantic analysis
             Environment env = new Environment();
-            ArrayList<SemanticError> err = ast.checkSemantics(env, 0);
+            ArrayList<SemanticError> err = ast.checkSemantics(env);
             if (err != null && err.size() > 0) {
                 BufferedWriter wr = new BufferedWriter(new FileWriter(filename + ".log"));
                 for (SemanticError e : err) {

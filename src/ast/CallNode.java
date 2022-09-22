@@ -16,16 +16,19 @@ public class CallNode implements Node {
     private IdNode id;
     private ArrayList<Node> exp;
     private boolean isExp;
+    private int line;
 
-    public CallNode(IdNode id, ArrayList<Node> exp) {
+    public CallNode(IdNode id, ArrayList<Node> exp, int line) {
         this.id = id;
         this.exp = exp;
         this.isExp = false;
+        this.line = line;
     }
 
     public CallNode(IdNode id) {
         this.id = id;
         this.isExp = false;
+        this.line = line;
     }
 
     @Override
@@ -126,7 +129,7 @@ public class CallNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         if (env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel()) == null) {
@@ -136,7 +139,7 @@ public class CallNode implements Node {
 
         if (this.exp != null) {
             for (Node arg : exp)
-                res.addAll(arg.checkSemantics(env, line));
+                res.addAll(arg.checkSemantics(env));
         }
         return res;
     }

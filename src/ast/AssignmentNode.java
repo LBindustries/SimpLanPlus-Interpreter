@@ -13,12 +13,14 @@ public class AssignmentNode implements Node{
     // ID '=' exp
     private IdNode id;
     private Node exp;
+    private int line;
 
     private STentry st;
 
-    public AssignmentNode(IdNode ID, Node exp){
+    public AssignmentNode(IdNode ID, Node exp, int line){
         this.id = ID;
         this.exp = exp;
+        this.line = line;
     }
 
     @Override
@@ -62,7 +64,7 @@ public class AssignmentNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         // check for variable with such id in current level and below
@@ -73,7 +75,7 @@ public class AssignmentNode implements Node{
 
         // else, if variable exists, check the exp
         else if(this.exp != null)
-                res.addAll(this.exp.checkSemantics(env, line));
+                res.addAll(this.exp.checkSemantics(env));
 
         st = entry;
         return res;

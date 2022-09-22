@@ -15,11 +15,13 @@ public class BinExpNode implements Node {
     private String op;
     private Node left;
     private Node right;
+    private int line;
 
-    public BinExpNode(String op, Node left, Node right) {
+    public BinExpNode(String op, Node left, Node right, int line) {
         this.op = op;
         this.left = left;
         this.right = right;
+        this.line = line;
     }
 
     @Override
@@ -92,13 +94,13 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         if (this.left != null) {
-            res.addAll(left.checkSemantics(env, line));
+            res.addAll(left.checkSemantics(env));
         }
         if (this.right != null) {
-            res.addAll(right.checkSemantics(env, line));
+            res.addAll(right.checkSemantics(env));
         }
         return res;
     }

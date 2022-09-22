@@ -7,8 +7,8 @@ import util.Environment;
 import util.LabelGenerator;
 
 public class NegExpNode extends BaseExpNode{
-    public NegExpNode(Node exp) {
-        super(exp);
+    public NegExpNode(Node exp, int line) {
+        super(exp, line);
     }
 
     @Override

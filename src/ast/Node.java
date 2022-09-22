@@ -16,7 +16,7 @@ public interface Node {
 
     String codeGeneration(LabelGenerator labgen, Environment localenv);
 
-    ArrayList<SemanticError> checkSemantics(Environment env, int line);
+    ArrayList<SemanticError> checkSemantics(Environment env);
 
     /*
      *   La funzione ritorna:

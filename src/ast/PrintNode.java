@@ -12,9 +12,11 @@ public class PrintNode implements Node{
     //'print' exp;
 
     private Node exp;
+    private int line;
 
-    public PrintNode(Node exp){
+    public PrintNode(Node exp, int line){
         this.exp = exp;
+        this.line = line;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class PrintNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
-        return exp.checkSemantics(env, line);
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return exp.checkSemantics(env);
     }
 }

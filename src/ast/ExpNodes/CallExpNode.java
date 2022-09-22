@@ -12,10 +12,12 @@ import java.util.ArrayList;
 public class CallExpNode implements Node {
 
     private CallNode call;
+    private int line;
 
-    public CallExpNode(Node call){
+    public CallExpNode(Node call, int line){
         this.call = (CallNode) call;
         this.call.setIsExp(true);
+        this.line = line;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
-        return call.checkSemantics(env, line);
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
+        return call.checkSemantics(env);
     }
 }

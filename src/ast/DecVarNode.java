@@ -70,14 +70,14 @@ public class DecVarNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset((Objects.equals(type.getType(), "int")? 4:1)), new Effect(false), false)) != null){
             res.add(new SemanticError("Variable id "+this.id.getId()+" already declared at line "+ this.line +"."));
         }
         if(this.exp!=null){
-            res.addAll(this.exp.checkSemantics(env, this.line));
+            res.addAll(this.exp.checkSemantics(env));
             st.get(this.id.getId()).getEffect().setInitialized();
         }
         return res;

@@ -15,13 +15,15 @@ public class DecFunNode implements Node {
     private ArrayList<Node> decs;
     private ArrayList<Node> stms;
     private Environment localenv;
+    private int line;
 
-    public DecFunNode(Node type, Node id, ArrayList<Node> args, ArrayList<Node> decs, ArrayList<Node> stms) {
+    public DecFunNode(Node type, Node id, ArrayList<Node> args, ArrayList<Node> decs, ArrayList<Node> stms, int line) {
         this.type = (TypeNode) type;
         this.id = (IdNode) id;
         this.args = args;
         this.decs = decs;
         this.stms = stms;
+        this.line = line;
     }
 
     @Override
@@ -189,7 +191,7 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         // Check if function is not already declared
@@ -236,18 +238,18 @@ public class DecFunNode implements Node {
         localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, 0, new Effect(true), true));
         if (this.args.size() > 0) {
             for (Node arg : this.args) {
-                res.addAll(arg.checkSemantics(localenv, line));
+                res.addAll(arg.checkSemantics(localenv));
             }
         }
         localenv.setOffset(8);
         if (this.decs.size() > 0) {
             for (Node dec : this.decs) {
-                res.addAll(dec.checkSemantics(localenv, line));
+                res.addAll(dec.checkSemantics(localenv));
             }
         }
         if (this.stms.size() > 0) {
             for (Node stm : this.stms) {
-                res.addAll(stm.checkSemantics(localenv, line));
+                res.addAll(stm.checkSemantics(localenv));
             }
         }
         this.localenv = localenv;

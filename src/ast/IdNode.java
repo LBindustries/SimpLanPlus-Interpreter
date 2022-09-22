@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class IdNode implements Node{
 
     private String id;
+    private int line;
 
-    public IdNode(String id){
+    public IdNode(String id, int line){
         this.id = id;
+        this.line = line;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class IdNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         return new ArrayList<SemanticError>();
     }
 }

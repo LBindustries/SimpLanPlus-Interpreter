@@ -12,9 +12,11 @@ public class ReturnNode implements Node {
     // 'return' (exp)?;
 
     private Node exp;
+    private int line;
 
-    public ReturnNode(Node exp) {
+    public ReturnNode(Node exp, int line) {
         this.exp = exp;
+        this.line = line;
     }
 
     @Override
@@ -55,9 +57,9 @@ public class ReturnNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         if(exp != null) {
-            return exp.checkSemantics(env, line);
+            return exp.checkSemantics(env);
         }
         return new ArrayList<SemanticError>();
     }

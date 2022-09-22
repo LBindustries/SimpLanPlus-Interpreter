@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class DerExpNode implements Node {
 
     private IdNode id; // "Perché non c'è una stringa e basta T.T" -Ale "Perchè sì" -Balu
+    private int line;
 
-    public DerExpNode(IdNode id){
+    public DerExpNode(IdNode id, int line){
         this.id = id;
+        this.line = line;
     }
 
     public IdNode getId() {
@@ -66,7 +68,7 @@ public class DerExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel());

@@ -15,16 +15,19 @@ public class IteNode implements Node {
     private Node then_statement;
     private Node else_statement;
     private ArrayList<HashMap<String, STentry>> localSymbolTable;
+    private int line;
 
-    public IteNode(Node exp, Node then_statement, Node else_statement) {
+    public IteNode(Node exp, Node then_statement, Node else_statement, int line) {
         this.exp = exp;
         this.then_statement = then_statement;
         this.else_statement = else_statement;
+        this.line = line;
     }
 
-    public IteNode(Node exp, Node then_statement) {
+    public IteNode(Node exp, Node then_statement, int line) {
         this.exp = exp;
         this.then_statement = then_statement;
+        this.line = line;
     }
 
     @Override
@@ -89,16 +92,16 @@ public class IteNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         if (this.exp != null) {
-            res.addAll(this.exp.checkSemantics(env, line));
+            res.addAll(this.exp.checkSemantics(env));
         }
         if (this.then_statement != null) {
-            res.addAll(this.then_statement.checkSemantics(env, line));
+            res.addAll(this.then_statement.checkSemantics(env));
         }
         if (this.else_statement != null) {
-            res.addAll(this.else_statement.checkSemantics(env, line));
+            res.addAll(this.else_statement.checkSemantics(env));
         }
         this.localSymbolTable = env.getSymbolTableManager().getSymbolTable();
         return res;

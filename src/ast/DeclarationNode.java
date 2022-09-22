@@ -33,10 +33,10 @@ public class DeclarationNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+    public ArrayList<SemanticError> checkSemantics(Environment env) {
         if(dec==null){
             return new ArrayList<SemanticError>();
         }
-        return this.dec.checkSemantics(env, this.line);
+        return this.dec.checkSemantics(env);
     }
 }
