@@ -92,7 +92,10 @@ public class Main {
         BufferedWriter wr = new BufferedWriter(new FileWriter(filename+".asm"));
         wr.write(asm+"\n");
         wr.close();
-
+        if(Runtime.getRuntime().freeMemory()<memsize){
+            System.out.println("Not enough free system memory. Use -m argument to change allocated memory.");
+            System.exit(1);
+        }
         Interpreter interpreter = new Interpreter(filename+".asm", memsize);
         interpreter.runVM();
     }
