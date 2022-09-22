@@ -1,6 +1,7 @@
 {
     void fun(var int a){
-        if(a==1){
+        int c = b;
+        if(a==z){
             return;
         }
         a = b - 1;

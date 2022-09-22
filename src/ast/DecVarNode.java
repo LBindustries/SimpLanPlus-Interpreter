@@ -16,16 +16,19 @@ public class DecVarNode implements Node{
     private TypeNode type;
     private IdNode id;
     private Node exp;
+    private int line;
 
-    public DecVarNode(TypeNode type, IdNode id, Node exp){
+    public DecVarNode(TypeNode type, IdNode id, Node exp, int line){
         this.type = type;
         this.id = id;
         this.exp = exp;
+        this.line = line;
     }
 
-    public DecVarNode(TypeNode type, IdNode id){
+    public DecVarNode(TypeNode type, IdNode id, int line){
         this.type = type;
         this.id = id;
+        this.line = line;
     }
 
     public TypeNode getType() {
@@ -71,10 +74,10 @@ public class DecVarNode implements Node{
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset((Objects.equals(type.getType(), "int")? 4:1)), new Effect(false), false)) != null){
-            res.add(new SemanticError("Variable id "+this.id.getId()+" already declared at line "+ line +"."));
+            res.add(new SemanticError("Variable id "+this.id.getId()+" already declared at line "+ this.line +"."));
         }
         if(this.exp!=null){
-            res.addAll(this.exp.checkSemantics(env, line));
+            res.addAll(this.exp.checkSemantics(env, this.line));
             st.get(this.id.getId()).getEffect().setInitialized();
         }
         return res;
