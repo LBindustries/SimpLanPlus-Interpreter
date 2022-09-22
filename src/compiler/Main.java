@@ -7,14 +7,17 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
+import util.AsmChecksum;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.zip.CRC32;
 
 public class Main {
 
@@ -46,52 +49,72 @@ public class Main {
             is = new FileInputStream(filename);
         } catch (Exception e){
             System.out.println("Something went wrong while accessing the file. Please check the filename.");
+            System.exit(1);
             return;
         }
-        ANTLRInputStream input = new ANTLRInputStream(is);
-        SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
-        SimpLanPlusErrorHandler handler = new SimpLanPlusErrorHandler();
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(handler);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        SimpLanPlusParser parser = new SimpLanPlusParser(tokens);
-        parser.removeErrorListeners();
-        parser.addErrorListener(handler);
-        SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
 
-        System.out.println("Parsing...");
-        Node ast = visitor.visit(parser.program());
-        if(handler.err_list.size() != 0){
-            System.out.println(handler);
-            handler.dumpToFile(filename+".log");
-            return;
+        AsmChecksum source = new AsmChecksum(Files.readString(Paths.get(filename)));
+        BufferedReader asm_file;
+        Boolean compile = true;
+        try{
+            asm_file = new BufferedReader(new FileReader(filename +".asm"));
+        } catch (Exception e){
+            asm_file = null;
         }
-        System.out.println("Parse completed without issues!");
-        System.out.println("Checking for semantic errors...");
-        // Start Semantic analysis
-        Environment env = new Environment();
-        ArrayList<SemanticError> err = ast.checkSemantics(env);
-        if(err!=null && err.size()>0){
-            BufferedWriter wr = new BufferedWriter(new FileWriter(filename+".log"));
-            for(SemanticError e: err){
-                System.out.println(e);
-                wr.write(e.toString()+"\n");
+        if(asm_file!=null){
+            String value = asm_file.readLine().substring(1);
+            if(source.isEqual(Long.parseLong(value))){
+                compile = false;
+                System.out.println("An already compiled program has been found, and will be executed.");
             }
-            wr.close();
-            return;
-        }
-        System.out.println("Environment is good!");
-        ast.typeCheck(env);
-        System.out.println("Program is valid.");
-        System.out.println("Assembling...");
-        LabelGenerator labgen = new LabelGenerator();
-        String asm = ast.codeGeneration(labgen, env);
-        //System.out.println(asm);
-        System.out.println("Code ready for execution!");
 
-        BufferedWriter wr = new BufferedWriter(new FileWriter(filename+".asm"));
-        wr.write(asm+"\n");
-        wr.close();
+        }
+        if(compile) {
+            ANTLRInputStream input = new ANTLRInputStream(is);
+            SimpLanPlusLexer lexer = new SimpLanPlusLexer(input);
+            SimpLanPlusErrorHandler handler = new SimpLanPlusErrorHandler();
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(handler);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            SimpLanPlusParser parser = new SimpLanPlusParser(tokens);
+            parser.removeErrorListeners();
+            parser.addErrorListener(handler);
+            SimpLanPlusVisitorImpl visitor = new SimpLanPlusVisitorImpl();
+
+            System.out.println("Parsing...");
+            Node ast = visitor.visit(parser.program());
+            if (handler.err_list.size() != 0) {
+                System.out.println(handler);
+                handler.dumpToFile(filename + ".log");
+                return;
+            }
+            System.out.println("Parse completed without issues!");
+            System.out.println("Checking for semantic errors...");
+            // Start Semantic analysis
+            Environment env = new Environment();
+            ArrayList<SemanticError> err = ast.checkSemantics(env);
+            if (err != null && err.size() > 0) {
+                BufferedWriter wr = new BufferedWriter(new FileWriter(filename + ".log"));
+                for (SemanticError e : err) {
+                    System.out.println(e);
+                    wr.write(e.toString() + "\n");
+                }
+                wr.close();
+                return;
+            }
+            System.out.println("Environment is good!");
+            ast.typeCheck(env);
+            System.out.println("Program is valid.");
+            System.out.println("Assembling...");
+            LabelGenerator labgen = new LabelGenerator();
+            String asm = ";" + source.checksum.getValue() + "\n" + ast.codeGeneration(labgen, env);
+
+            System.out.println("Code ready for execution!");
+
+            BufferedWriter wr = new BufferedWriter(new FileWriter(filename + ".asm"));
+            wr.write(asm + "\n");
+            wr.close();
+        }
         if(Runtime.getRuntime().freeMemory()<memsize){
             System.out.println("Not enough free system memory. Use -m argument to change allocated memory.");
             System.exit(1);
