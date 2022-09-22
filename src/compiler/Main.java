@@ -13,11 +13,9 @@ import util.LabelGenerator;
 import util.SemanticError;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.zip.CRC32;
 
 public class Main {
 
@@ -64,7 +62,7 @@ public class Main {
         if(asm_file!=null){
             String value = asm_file.readLine().substring(1);
             if(source.isEqual(Long.parseLong(value))){
-                compile = false;
+                compile = true;
                 System.out.println("An already compiled program has been found, and will be executed.");
             }
 
@@ -92,7 +90,7 @@ public class Main {
             System.out.println("Checking for semantic errors...");
             // Start Semantic analysis
             Environment env = new Environment();
-            ArrayList<SemanticError> err = ast.checkSemantics(env);
+            ArrayList<SemanticError> err = ast.checkSemantics(env, 0);
             if (err != null && err.size() > 0) {
                 BufferedWriter wr = new BufferedWriter(new FileWriter(filename + ".log"));
                 for (SemanticError e : err) {

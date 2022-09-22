@@ -45,7 +45,7 @@ public class CallNode implements Node {
         STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), 0); // funzioni definite solo a livello 0
 
         if (!(env.getSymbolTableManager().getLastEntry(id.getId(), 0).getType() instanceof FunctionTypeNode)) {
-            System.out.println("Trying to call non-function symbol " + this.id.getId());
+            System.out.println("Trying to call non-function symbol " + this.id.getId()+".");
             System.exit(0);
         }
 
@@ -126,17 +126,17 @@ public class CallNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         if (env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel()) == null) {
-            res.add(new SemanticError("Function " + this.id.getId() + " not declared."));
+            res.add(new SemanticError("Function " + this.id.getId() + " not declared at line "+ line +"."));
             return res;
         }
 
         if (this.exp != null) {
             for (Node arg : exp)
-                res.addAll(arg.checkSemantics(env));
+                res.addAll(arg.checkSemantics(env, line));
         }
         return res;
     }

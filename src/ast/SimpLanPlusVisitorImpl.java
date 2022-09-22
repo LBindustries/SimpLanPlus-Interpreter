@@ -45,10 +45,10 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
     @Override public Node visitDeclaration(SimpLanPlusParser.DeclarationContext ctx){
         DeclarationNode res;
         if(ctx.decFun()!=null){
-            res = new DeclarationNode(visit(ctx.decFun()));
+            res = new DeclarationNode(visit(ctx.decFun()), ctx.getStart().getLine());
         }
         else if(ctx.decVar()!=null){
-            res = new DeclarationNode(visit(ctx.decVar()));
+            res = new DeclarationNode(visit(ctx.decVar()), ctx.getStart().getLine());
         }
         else{
             return null;
@@ -79,7 +79,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         else{
             return null;
         }
-        return new StatementNode(res);
+        return new StatementNode(res, ctx.getStart().getLine());
     }
 
     @Override public Node visitDecVar(SimpLanPlusParser.DecVarContext ctx){

@@ -101,7 +101,7 @@ public class ProgramNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         env.incNestingLevel(1);
         HashMap<String, STentry> st = new HashMap<String, STentry>();
         env.getSymbolTableManager().addLevel(st);
@@ -111,12 +111,12 @@ public class ProgramNode implements Node {
 
         if (this.declarations != null && this.declarations.size() > 0) {
             for (Node n : this.declarations) {
-                res.addAll(n.checkSemantics(env));
+                res.addAll(n.checkSemantics(env, line));
             }
         }
         if (this.statements != null && this.statements.size() > 0) {
             for (Node n : this.statements) {
-                res.addAll(n.checkSemantics(env));
+                res.addAll(n.checkSemantics(env, line));
             }
         }
         localenv = new Environment(env);

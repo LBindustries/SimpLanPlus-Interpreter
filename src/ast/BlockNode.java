@@ -42,7 +42,7 @@ public class BlockNode implements Node {
 
     @Override
     public TypeNode typeCheck(Environment env) {
-        this.checkSemantics(env);
+        this.checkSemantics(env, 0);
         if(this.declarations!=null){
             for(Node dec: declarations){
                 dec.typeCheck(localenv);
@@ -102,7 +102,7 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         env.incNestingLevel(1);
         HashMap<String, STentry> level = new HashMap<String, STentry>();
         env.getSymbolTableManager().addLevel(level);
@@ -112,12 +112,12 @@ public class BlockNode implements Node {
 
         if(this.declarations!=null && this.declarations.size()>0){
             for(Node n: this.declarations){
-                res.addAll(n.checkSemantics(env));
+                res.addAll(n.checkSemantics(env, line));
             }
         }
         if(this.statements!=null && this.statements.size()>0){
             for(Node n: this.statements){
-                res.addAll(n.checkSemantics(env));
+                res.addAll(n.checkSemantics(env, line));
             }
         }
         this.localenv = new Environment(env);

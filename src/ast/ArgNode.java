@@ -49,7 +49,7 @@ public class ArgNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
 
@@ -60,7 +60,7 @@ public class ArgNode implements Node{
         }
 
         if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(offset), new Effect(true), false)) != null){
-            res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function."));
+            res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function at line "+ line +"."));
         }
 
         return res;

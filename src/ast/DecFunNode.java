@@ -189,7 +189,7 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         // Check if function is not already declared
@@ -236,18 +236,18 @@ public class DecFunNode implements Node {
         localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).put(this.id.getId(), new STentry(localenv.getNestingLevel(), t, 0, new Effect(true), true));
         if (this.args.size() > 0) {
             for (Node arg : this.args) {
-                res.addAll(arg.checkSemantics(localenv));
+                res.addAll(arg.checkSemantics(localenv, line));
             }
         }
         localenv.setOffset(8);
         if (this.decs.size() > 0) {
             for (Node dec : this.decs) {
-                res.addAll(dec.checkSemantics(localenv));
+                res.addAll(dec.checkSemantics(localenv, line));
             }
         }
         if (this.stms.size() > 0) {
             for (Node stm : this.stms) {
-                res.addAll(stm.checkSemantics(localenv));
+                res.addAll(stm.checkSemantics(localenv, line));
             }
         }
         this.localenv = localenv;

@@ -33,7 +33,7 @@ public class ValExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         return new ArrayList<SemanticError>();
     }
 }

@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class DeclarationNode implements Node{
 
     private Node dec;
+    private int line;
 
-    public DeclarationNode(Node dec){
+    public DeclarationNode(Node dec, int line){
         this.dec = dec;
+        this.line = line;
     }
 
     @Override
@@ -31,10 +33,10 @@ public class DeclarationNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         if(dec==null){
             return new ArrayList<SemanticError>();
         }
-        return this.dec.checkSemantics(env);
+        return this.dec.checkSemantics(env, this.line);
     }
 }

@@ -34,7 +34,7 @@ public class CallExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
-        return call.checkSemantics(env);
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
+        return call.checkSemantics(env, line);
     }
 }

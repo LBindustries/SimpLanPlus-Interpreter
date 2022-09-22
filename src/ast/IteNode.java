@@ -89,16 +89,16 @@ public class IteNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         if (this.exp != null) {
-            res.addAll(this.exp.checkSemantics(env));
+            res.addAll(this.exp.checkSemantics(env, line));
         }
         if (this.then_statement != null) {
-            res.addAll(this.then_statement.checkSemantics(env));
+            res.addAll(this.then_statement.checkSemantics(env, line));
         }
         if (this.else_statement != null) {
-            res.addAll(this.else_statement.checkSemantics(env));
+            res.addAll(this.else_statement.checkSemantics(env, line));
         }
         this.localSymbolTable = env.getSymbolTableManager().getSymbolTable();
         return res;

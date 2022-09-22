@@ -62,18 +62,18 @@ public class AssignmentNode implements Node{
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         // check for variable with such id in current level and below
         STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel());
 
         if (entry==null)
-            res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
+            res.add(new SemanticError("Variable "+this.id.getId()+" not declared at line "+ line +"."));
 
         // else, if variable exists, check the exp
         else if(this.exp != null)
-                res.addAll(this.exp.checkSemantics(env));
+                res.addAll(this.exp.checkSemantics(env, line));
 
         st = entry;
         return res;

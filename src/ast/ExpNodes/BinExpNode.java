@@ -92,13 +92,13 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         if (this.left != null) {
-            res.addAll(left.checkSemantics(env));
+            res.addAll(left.checkSemantics(env, line));
         }
         if (this.right != null) {
-            res.addAll(right.checkSemantics(env));
+            res.addAll(right.checkSemantics(env, line));
         }
         return res;
     }

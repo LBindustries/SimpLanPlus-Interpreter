@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class StatementNode implements Node {
 
     private Node statement;
+    private int line;
 
-    public StatementNode(Node statement) {
+    public StatementNode(Node statement, int line) {
         this.statement = statement;
+        this.line = line;
     }
 
     public Node getStatement() {
@@ -35,10 +37,10 @@ public class StatementNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         if (statement != null) {
-            res.addAll(this.statement.checkSemantics(env));
+            res.addAll(this.statement.checkSemantics(env, this.line));
         }
         return res;
     }

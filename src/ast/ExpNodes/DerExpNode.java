@@ -66,13 +66,13 @@ public class DerExpNode implements Node {
     }
 
     @Override
-    public ArrayList<SemanticError> checkSemantics(Environment env) {
+    public ArrayList<SemanticError> checkSemantics(Environment env, int line) {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel());
 
         if (entry==null)
-            res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
+            res.add(new SemanticError("Variable "+this.id.getId()+" not declared at line "+line+"."));
         return res;
     }
 }
