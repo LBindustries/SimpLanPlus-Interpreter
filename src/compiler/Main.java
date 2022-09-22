@@ -19,10 +19,28 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+
         String filename = "prova.simplan";
-        if(args.length>0){
-            filename = args[0];
+        int i = 0;
+        int memsize = 100000;
+        while(args.length-i>0){
+            String command = args[i];
+            switch (command){
+                case "-m":
+                    memsize = Integer.parseInt(args[i+1]);
+                    i=i+2;
+                    break;
+                default:
+                    if(filename.equals("prova.simplan")){
+                        filename=command;
+                    }
+                    else{
+                        System.out.println("Unknown parameter "+ command+", ignoring...");
+                    }
+                    i++;
+            }
         }
+
         FileInputStream is;
         try {
             is = new FileInputStream(filename);
@@ -75,7 +93,7 @@ public class Main {
         wr.write(asm+"\n");
         wr.close();
 
-        Interpreter interpreter = new Interpreter(filename+".asm");
+        Interpreter interpreter = new Interpreter(filename+".asm", memsize);
         interpreter.runVM();
     }
 }

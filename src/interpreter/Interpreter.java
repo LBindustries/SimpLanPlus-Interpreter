@@ -12,19 +12,24 @@ import java.util.HashMap;
 
 public class Interpreter {
 
-    public ProgramNode code;
-    public int MEMSIZE = 10000;
-    public int pc = 0;
+    private ProgramNode code;
+    private int MEMSIZE;
+    private int pc = 0;
 
-    public byte[] stack = new byte[MEMSIZE];
-    public int sp = MEMSIZE;
-    public int fp = MEMSIZE;
-    public int a0, t1, t2, ra;
+    private byte[] stack;
+    private int sp;
+    private int fp;
+    private int a0, t1, t2, ra;
 
     HashMap<String, Integer> labels;
 
-    public Interpreter(String path) throws Exception{
+    public Interpreter(String path, int memsize) throws Exception{
         labels = new HashMap<>();
+        this.MEMSIZE = memsize;
+        this.stack = new byte[this.MEMSIZE];
+        this.sp = this.MEMSIZE;
+        this.fp = this.MEMSIZE;
+
         FileInputStream is;
         try {
             is = new FileInputStream(path);
