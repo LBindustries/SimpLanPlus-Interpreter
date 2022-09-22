@@ -1,5 +1,6 @@
 package ast;
 
+import ast.Types.FunctionTypeNode;
 import ast.Types.TypeNode;
 import ast.Types.VoidTypeNode;
 import util.Environment;
@@ -7,6 +8,7 @@ import util.LabelGenerator;
 import util.SemanticError;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class PrintNode implements Node{
     //'print' exp;
@@ -26,7 +28,11 @@ public class PrintNode implements Node{
 
     @Override
     public TypeNode typeCheck(Environment env) {
-        exp.typeCheck(env);
+        TypeNode type = exp.typeCheck(env);
+        if(type instanceof VoidTypeNode || (type instanceof FunctionTypeNode && Objects.equals(type.getType(), "void"))){
+            System.out.println("Attempt to print void type at line "+line+".");
+            System.exit(1);
+        }
         return new VoidTypeNode();
     }
 

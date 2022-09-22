@@ -31,12 +31,12 @@ public class AssignmentNode implements Node{
     @Override
     public TypeNode typeCheck(Environment env) {
         if(st == null){
-            System.out.println("Variable "+this.id.getId()+" not declared");
+            System.out.println("Variable "+this.id.getId()+" not declared"+ " at line "+line+".");
             System.exit(0);
         }
 
         if(!Objects.equals(exp.typeCheck(env).getType(), st.getType().getType())) {
-            System.out.println("Types of variable and value are not compatible");
+            System.out.println("Types of variable and value are not compatible"+ " at line "+line+".");
             System.exit(0);
         }
 

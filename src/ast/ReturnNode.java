@@ -40,6 +40,10 @@ public class ReturnNode implements Node {
         return exp;
     }
 
+    public int getLine(){
+        return line;
+    }
+
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = ";Return\n";

@@ -1,11 +1,18 @@
 {
     void fun(var int a){
-        int c = b;
-        if(a==z){
+        if(a==1){
             return;
         }
-        a = b - 1;
+        a = a - 1;
         fun(a);
     }
+    int a = 100;
     fun(a);
+    print(a);
+    if(a==1){
+        print(false);
+    }
+    else{
+        return false;
+    }
 }

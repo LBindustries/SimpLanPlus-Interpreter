@@ -33,15 +33,15 @@ public class DerExpNode implements Node {
     @Override
     public TypeNode typeCheck(Environment env) {
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()) == null){
-            System.out.println("Variable "+this.id.getId()+" not declared"); // "Vogliamo ristamparlo?" -Ale
+            System.out.println("Variable "+this.id.getId()+" not declared at line "+line+"."); // "Vogliamo ristamparlo?" -Ale
             System.exit(0);
         }
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getType() instanceof FunctionTypeNode){
-            System.out.println("Trying to use function "+this.id.getId()+" as a variable.");
+            System.out.println("Trying to use function "+this.id.getId()+" as a variable at line "+line+".");
             System.exit(0);
         }
         if (! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isInitialized() && ! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isUsed()){
-            System.out.println("Variable "+this.id.getId()+" not initialized");
+            System.out.println("Variable "+this.id.getId()+" not initialized at line "+line+".");
             System.exit(0);
         }
 

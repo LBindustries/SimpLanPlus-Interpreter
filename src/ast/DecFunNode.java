@@ -66,19 +66,19 @@ public class DecFunNode implements Node {
                 if (tmp.getStatement() instanceof ReturnNode) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                         System.exit(0);
                     }
                 } else if (tmp.getStatement() instanceof BlockNode && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                         System.exit(0);
                     }
                 } else if (tmp.getStatement() instanceof IteNode  && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                         System.exit(0);
                     }
                 }
@@ -86,11 +86,11 @@ public class DecFunNode implements Node {
         }
         for (String id : localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()) {
             if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() && !Objects.equals(id, this.id.getId())) {
-                System.out.println("Warning: symbol " + id + " is unused.");
+                System.out.println("Warning: symbol " + id + " is unused at line "+line+".");
             }
         }
         if (!fuse && !Objects.equals(this.type.getType(), "void")) {
-            System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void");
+            System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void in function declared at line "+line+".");
             System.exit(0);
         } else {
             switch (type.getType()) {

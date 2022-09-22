@@ -165,7 +165,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
 
     @Override public Node visitCall(SimpLanPlusParser.CallContext ctx){
         if(ctx.exp().isEmpty()){
-            return new CallNode(new IdNode(ctx.ID().getText(), ctx.getStart().getLine()));
+            return new CallNode(new IdNode(ctx.ID().getText(), ctx.getStart().getLine()),ctx.getStart().getLine());
         }
         ArrayList<Node> params = new ArrayList<Node>();
         for(SimpLanPlusParser.ExpContext ex: ctx.exp()){

@@ -46,7 +46,7 @@ public class DecVarNode implements Node{
     @Override
     public TypeNode typeCheck(Environment env) {
         if(this.exp!=null && !Objects.equals(this.type.getType(), exp.typeCheck(env).getType())){
-            System.out.println("Type mismatch: symbol "+id.getId()+" and expression are not matching types.");
+            System.out.println("Type mismatch: symbol "+id.getId()+" and expression are not matching types at line "+line+".");
             System.exit(0);
         }
         if(this.exp!=null){

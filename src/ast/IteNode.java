@@ -48,7 +48,7 @@ public class IteNode implements Node {
     public TypeNode typeCheck(Environment env) {
 
         if (!exp.typeCheck(env).getClass().equals(BoolTypeNode.class)) {
-            System.out.println("Condition of if statement not boolean");
+            System.out.println("Condition of if statement not boolean at line "+line+".");
             System.exit(0);
         }
 
@@ -59,7 +59,7 @@ public class IteNode implements Node {
         if (else_statement != null) {
             TypeNode else_node = else_statement.typeCheck(envOld);
             if (!then_node.getType().equals(else_node.getType())) {
-                System.out.println("Then and else have different types");
+                System.out.println("Then and else have different types in structure at line "+line+".");
                 System.exit(0);
             }
         }
