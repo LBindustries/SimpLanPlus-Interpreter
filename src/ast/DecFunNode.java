@@ -255,4 +255,13 @@ public class DecFunNode implements Node {
         this.localenv = localenv;
         return res;
     }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if(this.stms!=null && this.stms.size()>0){
+            for(Node n:this.stms){
+                n.setupBreaks(breaks);
+            }
+        }
+    }
 }

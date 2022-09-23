@@ -39,4 +39,9 @@ public class DeclarationNode implements Node{
         }
         return this.dec.checkSemantics(env);
     }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        dec.setupBreaks(breaks);
+    }
 }

@@ -18,6 +18,8 @@ public interface Node {
 
     ArrayList<SemanticError> checkSemantics(Environment env);
 
+    void setupBreaks(ArrayList<Integer> breaks);
+
     /*
      *   La funzione ritorna:
      *       - 0 se i tipi sono uguali;

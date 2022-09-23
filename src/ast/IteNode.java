@@ -77,6 +77,16 @@ public class IteNode implements Node {
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if(this.then_statement!=null){
+            this.then_statement.setupBreaks(breaks);
+        }
+        if(this.else_statement!=null){
+            this.else_statement.setupBreaks(breaks);
+        }
+    }
+
+    @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = ";Ite\n"+exp.codeGeneration(labgen, localenv);
         String then_label = labgen.new_label("ITE_THEN");

@@ -56,6 +56,11 @@ public class DecVarNode implements Node{
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
+
+    @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = "";
         if(exp!=null){

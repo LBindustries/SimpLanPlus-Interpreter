@@ -67,4 +67,9 @@ public class ArgNode implements Node{
 
         return res;
     }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
 }

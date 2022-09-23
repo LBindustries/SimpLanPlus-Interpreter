@@ -6,6 +6,8 @@ import ast.Types.TypeNode;
 import util.Environment;
 import util.LabelGenerator;
 
+import java.util.ArrayList;
+
 public class NotExpNode extends BaseExpNode{
     public NotExpNode(Node exp, int line) {
         super(exp, line);
@@ -31,4 +33,5 @@ public class NotExpNode extends BaseExpNode{
     public String toPrint(String indent) {
         return "\n"+indent+"NotExpNode "+this.exp.toPrint(indent+" ");
     }
+
 }

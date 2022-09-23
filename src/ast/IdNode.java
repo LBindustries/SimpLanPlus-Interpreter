@@ -32,6 +32,11 @@ public class IdNode implements Node{
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
+
+    @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         return null;
     }

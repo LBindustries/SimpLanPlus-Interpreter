@@ -37,4 +37,9 @@ public class ExpNode implements Node {
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return exp.checkSemantics(env);
     }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
 }

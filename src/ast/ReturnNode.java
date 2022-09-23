@@ -61,6 +61,11 @@ public class ReturnNode implements Node {
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
+
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         if(exp != null) {
             return exp.checkSemantics(env);

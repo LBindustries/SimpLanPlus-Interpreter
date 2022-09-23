@@ -74,6 +74,15 @@ public class BlockNode implements Node {
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if(this.statements!=null && this.statements.size()>0){
+            for(Node stm:this.statements){
+                stm.setupBreaks(breaks);
+            }
+        }
+    }
+
+    @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
         String asm = ";Block\n";
         if (this.declarations != null && this.declarations.size() > 0) {

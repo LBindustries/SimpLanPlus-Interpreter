@@ -36,6 +36,11 @@ public class CallExpNode implements Node {
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
+
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return call.checkSemantics(env);
     }

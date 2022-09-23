@@ -77,4 +77,9 @@ public class DerExpNode implements Node {
             res.add(new SemanticError("Variable "+this.id.getId()+" not declared at line "+line+"."));
         return res;
     }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
 }

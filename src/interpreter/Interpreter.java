@@ -9,6 +9,8 @@ import parser.assembly.AssemblyParser;
 
 import java.io.FileInputStream;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Interpreter {
 
@@ -20,20 +22,22 @@ public class Interpreter {
     private int sp;
     private int fp;
     private int a0, t1, t2, ra;
+    private boolean debug;
 
     HashMap<String, Integer> labels;
 
-    public Interpreter(String path, int memsize) throws Exception{
+    public Interpreter(String path, int memsize, boolean debug) throws Exception {
         labels = new HashMap<>();
         this.MEMSIZE = memsize;
         this.stack = new byte[this.MEMSIZE];
         this.sp = this.MEMSIZE;
         this.fp = this.MEMSIZE;
+        this.debug = debug;
 
         FileInputStream is;
         try {
             is = new FileInputStream(path);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Something went wrong while accessing the ASM file. Please check the filename.");
             return;
         }
@@ -46,42 +50,41 @@ public class Interpreter {
     }
 
 
-
     private int fromByteArray(byte[] bytes, int start) {
         return ((bytes[start] & 0xFF) << 24) |
                 ((bytes[start + 1] & 0xFF) << 16) |
-                ((bytes[start + 2] & 0xFF) << 8 ) |
-                ((bytes[start + 3] & 0xFF) << 0 );
+                ((bytes[start + 2] & 0xFF) << 8) |
+                ((bytes[start + 3] & 0xFF) << 0);
     }
 
     private byte[] toByteArray(int value) {
-        return new byte[] {
-                (byte)(value >> 24),
-                (byte)(value >> 16),
-                (byte)(value >> 8),
-                (byte)value };
+        return new byte[]{
+                (byte) (value >> 24),
+                (byte) (value >> 16),
+                (byte) (value >> 8),
+                (byte) value};
     }
 
-    private int LoadBool(int offset, int addrs){
+    private int LoadBool(int offset, int addrs) {
         int start = offset + addrs;
         return ((stack[start] & 0xFF) << 24) |
                 ((stack[start] & 0xFF) << 16) |
-                ((stack[start] & 0xFF) << 8 ) |
-                ((stack[start] & 0xFF) << 0 );
+                ((stack[start] & 0xFF) << 8) |
+                ((stack[start] & 0xFF) << 0);
     }
 
-    private  void StoreBool(int trg, int offset, int addrs){
+    private void StoreBool(int trg, int offset, int addrs) {
         try {
             byte[] trgByte;
             trgByte = toByteArray(trg);
             stack[addrs + offset] = trgByte[0];
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Error: out of memory.");
+            System.out.println("Error: out of memory. Please adjust the amount of allocated memory with the -m param.");
             System.exit(1);
         }
     }
 
-    private void StoreWord(int trg, int offset, int addrs){
+    private void StoreWord(int trg, int offset, int addrs) {
         try {
             byte[] trgByte;
             trgByte = toByteArray(trg);
@@ -89,18 +92,71 @@ public class Interpreter {
                 stack[addrs + offset + i] = trgByte[i];
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Error: out of memory.");
+            System.out.println("Error: out of memory. Please adjust the amount of allocated memory with the -m param.");
             System.exit(1);
         }
     }
 
-    private int LoadWord(int offset, int addrs){
-        return fromByteArray(stack,offset+addrs);
+    private int LoadWord(int offset, int addrs) {
+        return fromByteArray(stack, offset + addrs);
     }
 
-    private int getRegister(String regName){
+    private void MemoryInspector(ASMNode prev, ASMNode next) {
+        System.out.println("");
+        String input = "";
+
+        Scanner sc = new Scanner(System.in);
+        while (!input.equals("q")) {
+            System.out.println("SLP Memory Inspector started. \nProgram Counter:" + this.pc);
+            System.out.println("Previous instruction: " + prev.toPrint() + " Next instruction:" + next.toPrint());
+            System.out.println("MEMORY STATUS: Frame pointer:" + this.fp + " Stack pointer:" + this.sp + "\nRegisters: a0:" + this.a0 + " t1:" + this.t1 + " t2:" + this.t2 + "\nReturn address: " + this.ra);
+            System.out.println("\nTo inspect memory allocations, please type a range of memory addresses \nin the format start end [!], where ! will show only the non-zero values. \nType q to resume execution.");
+            System.out.println("Maximum available memory is " + this.MEMSIZE + " bytes.");
+            input = sc.nextLine();
+            if (!input.equals("q")) {
+                String[] parts = input.split(" ");
+                if (parts.length < 2 || parts.length > 3) {
+                    System.out.println("Could not recognize pattern.");
+                    continue;
+                }
+                int start = Integer.parseInt(parts[0]);
+                int end = Integer.parseInt(parts[1]);
+                boolean zero = false;
+                if (parts.length == 3) {
+                    zero = true;
+                }
+                if (start > MEMSIZE || start > end || start < 0 || end > MEMSIZE || end < 0) {
+                    System.out.println("Given interval is not valid.");
+                    continue;
+                }
+                int elements_in_line = 0;
+                for (int i = start; i < end; i++) {
+                    if (elements_in_line > 9) {
+                        System.out.print("\n");
+                        elements_in_line = 0;
+                    }
+                    if ((zero && stack[i] != 0) || !zero) {
+                        int value = stack[i];
+                        //System.out.print(i+": "+value);
+                        System.out.printf("%2d. %-10d ",  i, value);
+                        elements_in_line++;
+                    }
+                }
+                System.out.println("\nPress enter to proceed...");
+                try{
+                    System.in.read();
+                } catch (Exception e){
+
+                }
+
+            }
+        }
+        System.out.println("Resuming execution...\n");
+    }
+
+    private int getRegister(String regName) {
         int iRet = 0;
-        switch (regName){
+        switch (regName) {
             case "$a0":
                 iRet = this.a0;
                 break;
@@ -123,8 +179,8 @@ public class Interpreter {
         return iRet;
     }
 
-    private void setRegister(String regName, int value){
-        switch (regName){
+    private void setRegister(String regName, int value) {
+        switch (regName) {
             case "$a0":
                 this.a0 = value;
                 break;
@@ -146,14 +202,15 @@ public class Interpreter {
         }
     }
 
-    public void runVM(){
+    public void runVM() {
 
-        while(pc<code.getProgSize()){
+        while (pc < code.getProgSize()) {
             ASMNode instruction = code.getInstruction(pc++);
             InstructionNode ist = (InstructionNode) instruction;
 
-            switch(ist.getOpcode()){
-                case "push","pop","top","li","mov","lw","sw","lb","sb","add","addi","sub","subi","mult","multi","div","divi","lt","lte","gt","gte","eq","neq","and","or","not","neg","print","jal","jr","beq","halt": break;
+            switch (ist.getOpcode()) {
+                case "push", "pop", "top", "li", "mov", "lw", "sw", "lb", "sb", "add", "addi", "sub", "subi", "mult", "multi", "div", "divi", "lt", "lte", "gt", "gte", "eq", "neq", "and", "or", "not", "neg", "print", "jal", "jr", "beq", "halt":
+                    break;
                 case "label":
                     pc -= 1;
                     labels.put(ist.getParam1(), pc);
@@ -163,113 +220,113 @@ public class Interpreter {
         }
 
         pc = 0;
-
-        while(pc<code.getProgSize()){
+        // A cosa serve?
+        while (pc < code.getProgSize()) {
             ASMNode instruction = code.getInstruction(pc++);
             InstructionNode ist = (InstructionNode) instruction;
         }
 
-        System.out.println("-----------------------\n\n");
+        System.out.println("-----------------------");
 
         pc = 0;
 
-        while(pc<code.getProgSize()){
+        while (pc < code.getProgSize()) {
             ASMNode instruction = code.getInstruction(pc++);
             InstructionNode ist = (InstructionNode) instruction;
 
-            switch(ist.getOpcode()){
+            switch (ist.getOpcode()) {
                 case "push":
                     sp = sp - 4;
-                    StoreWord(getRegister(ist.getParam1()),0,sp);
+                    StoreWord(getRegister(ist.getParam1()), 0, sp);
                     break;
                 case "pop":
-                    setRegister(ist.getParam1(),LoadWord(0,sp));
+                    setRegister(ist.getParam1(), LoadWord(0, sp));
                     sp = sp + 4;
                     break;
                 case "top":
-                    setRegister(ist.getParam1(),LoadWord(0,sp));
+                    setRegister(ist.getParam1(), LoadWord(0, sp));
                     break;
                 case "li":
-                    setRegister(ist.getParam1(),Integer.parseInt(ist.getParam2()));
+                    setRegister(ist.getParam1(), Integer.parseInt(ist.getParam2()));
                     break;
                 case "mov":
                     setRegister(ist.getParam1(), getRegister(ist.getParam2()));
                     break;
                 case "lw":
-                    setRegister(ist.getParam1(), LoadWord(Integer.parseInt(ist.getParam2()),getRegister(ist.getParam3())));
+                    setRegister(ist.getParam1(), LoadWord(Integer.parseInt(ist.getParam2()), getRegister(ist.getParam3())));
                     break;
                 case "sw":
                     StoreWord(getRegister(ist.getParam1()), Integer.parseInt(ist.getParam2()), getRegister(ist.getParam3()));
                     break;
                 case "lb":
-                    setRegister(ist.getParam1(), LoadBool(Integer.parseInt(ist.getParam2()),getRegister(ist.getParam3())));
+                    setRegister(ist.getParam1(), LoadBool(Integer.parseInt(ist.getParam2()), getRegister(ist.getParam3())));
                     break;
                 case "sb":
                     StoreBool(getRegister(ist.getParam1()), Integer.parseInt(ist.getParam2()), getRegister(ist.getParam3()));
                     break;
                 case "add":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) + getRegister(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) + getRegister(ist.getParam3()));
                     break;
                 case "addi":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) + Integer.parseInt(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) + Integer.parseInt(ist.getParam3()));
                     break;
                 case "sub":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) - getRegister(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) - getRegister(ist.getParam3()));
                     break;
                 case "subi":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) - Integer.parseInt(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) - Integer.parseInt(ist.getParam3()));
                     break;
                 case "mult":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) * getRegister(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) * getRegister(ist.getParam3()));
                     break;
                 case "multi":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) * Integer.parseInt(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) * Integer.parseInt(ist.getParam3()));
                     break;
                 case "div":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) / getRegister(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) / getRegister(ist.getParam3()));
                     break;
                 case "divi":
-                    setRegister(ist.getParam1(),getRegister(ist.getParam2()) / Integer.parseInt(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) / Integer.parseInt(ist.getParam3()));
                     break;
                 case "lt":
                     if (getRegister(ist.getParam2()) < getRegister(ist.getParam3())) {
                         setRegister(ist.getParam1(), -1);
-                    }else{
+                    } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "lte":
                     if (getRegister(ist.getParam2()) <= getRegister(ist.getParam3())) {
                         setRegister(ist.getParam1(), -1);
-                    }else{
+                    } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "gt":
                     if (getRegister(ist.getParam2()) > getRegister(ist.getParam3())) {
                         setRegister(ist.getParam1(), -1);
-                    }else{
+                    } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "gte":
                     if (getRegister(ist.getParam2()) >= getRegister(ist.getParam3())) {
                         setRegister(ist.getParam1(), -1);
-                    }else{
+                    } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "eq":
                     if (getRegister(ist.getParam2()) == getRegister(ist.getParam3())) {
                         setRegister(ist.getParam1(), -1);
-                    }else{
+                    } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "neq":
                     if (getRegister(ist.getParam2()) != getRegister(ist.getParam3())) {
                         setRegister(ist.getParam1(), -1);
-                    }else{
+                    } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
@@ -280,14 +337,14 @@ public class Interpreter {
                     setRegister(ist.getParam2(), getRegister(ist.getParam2()) | getRegister(ist.getParam3()));
                     break;
                 case "not":
-                    if(getRegister(ist.getParam2()) == 0){
+                    if (getRegister(ist.getParam2()) == 0) {
                         setRegister(ist.getParam1(), ~0);
-                    }else{
+                    } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "neg":
-                    setRegister(ist.getParam1(),-1 * getRegister(ist.getParam2()));
+                    setRegister(ist.getParam1(), -1 * getRegister(ist.getParam2()));
                     break;
                 case "print":
                     System.out.println(getRegister(ist.getParam1()));
@@ -300,11 +357,20 @@ public class Interpreter {
                     pc = getRegister(ist.getParam1());
                     break;
                 case "beq":
-                    if(getRegister(ist.getParam1()) == getRegister(ist.getParam2())){
+                    if (getRegister(ist.getParam1()) == getRegister(ist.getParam2())) {
                         pc = labels.get(ist.getParam3());
                     }
                     break;
-                case "halt": break;
+                case "halt":
+                    if (!debug) {
+                        break;
+                    }
+                    try {
+                        MemoryInspector(code.getInstruction(pc - 2), code.getInstruction(pc + 1));
+                    } catch (Exception e) {
+                        System.out.println("Something went wrong within the memory inspector. Terminating session...");
+                    }
+                    break;
                 default:
                     break;
             }

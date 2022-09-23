@@ -101,6 +101,18 @@ public class ProgramNode implements Node {
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if (this.statements != null && this.statements.size() > 0) {
+            for(Node n: this.declarations){
+                n.setupBreaks(breaks);
+            }
+            for (Node n : this.statements) {
+                n.setupBreaks(breaks);
+            }
+        }
+    }
+
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         env.incNestingLevel(1);
         HashMap<String, STentry> st = new HashMap<String, STentry>();

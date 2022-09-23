@@ -143,4 +143,9 @@ public class CallNode implements Node {
         }
         return res;
     }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
 }

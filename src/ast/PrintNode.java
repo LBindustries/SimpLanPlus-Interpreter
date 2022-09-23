@@ -44,6 +44,11 @@ public class PrintNode implements Node{
     }
 
     @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
+
+    @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return exp.checkSemantics(env);
     }

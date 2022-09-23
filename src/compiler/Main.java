@@ -20,16 +20,32 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-
+        System.out.println("SimpLanPlus Compiler started.");
         String filename = "prova.simplan";
         int i = 0;
         int memsize = 100000;
+        ArrayList<Integer> breakpoints = new ArrayList<Integer>();
         while(args.length-i>0){
             String command = args[i];
             switch (command){
                 case "-m":
                     memsize = Integer.parseInt(args[i+1]);
                     i=i+2;
+                    break;
+                case "-d":
+                    int j = 1;
+                    Boolean fuse = false;
+                    while(!fuse){
+                        try{
+                            int line = Integer.parseInt(args[i+j]);
+                            breakpoints.add(line);
+                            j++;
+                        }
+                        catch(Exception e){
+                            fuse = true;
+                        }
+                    }
+                    i=i+j;
                     break;
                 default:
                     if(filename.equals("prova.simplan")){
@@ -41,7 +57,6 @@ public class Main {
                     i++;
             }
         }
-
         FileInputStream is;
         try {
             is = new FileInputStream(filename);
@@ -56,13 +71,16 @@ public class Main {
         Boolean compile = true;
         try{
             asm_file = new BufferedReader(new FileReader(filename +".asm"));
+            if(breakpoints.size()!=0){
+                throw new Exception();
+            }
         } catch (Exception e){
             asm_file = null;
         }
         if(asm_file!=null){
             String value = asm_file.readLine().substring(1);
             if(source.isEqual(Long.parseLong(value))){
-                compile = true;
+                compile = false;
                 System.out.println("An already compiled program has been found, and will be executed.");
             }
 
@@ -103,6 +121,11 @@ public class Main {
             System.out.println("Environment is good!");
             ast.typeCheck(env);
             System.out.println("Program is valid.");
+            if(breakpoints.size()>0){
+                System.out.println("Setting up breakpoints...");
+                ast.setupBreaks(breakpoints);
+                System.out.println("Breakpoints have been set up!");
+            }
             System.out.println("Assembling...");
             LabelGenerator labgen = new LabelGenerator();
             String asm = ";" + source.checksum.getValue() + "\n" + ast.codeGeneration(labgen, env);
@@ -117,7 +140,7 @@ public class Main {
             System.out.println("Not enough free system memory. Use -m argument to change allocated memory.");
             System.exit(1);
         }
-        Interpreter interpreter = new Interpreter(filename+".asm", memsize);
+        Interpreter interpreter = new Interpreter(filename+".asm", memsize, breakpoints.size()>0);
         interpreter.runVM();
     }
 }

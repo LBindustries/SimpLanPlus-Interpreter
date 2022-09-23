@@ -80,4 +80,9 @@ public class AssignmentNode implements Node{
         st = entry;
         return res;
     }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
+    }
 }
