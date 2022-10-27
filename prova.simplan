@@ -1,9 +1,11 @@
 {
-    int pippo(){
-        {
-            return 4;
-            return false;
-        }
+    void pippo(){
+
     }
-    print(pippo());
+
+    void pippo2(){
+        pippo();
+    }
+
+    pippo2();
 }

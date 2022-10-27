@@ -88,6 +88,10 @@ public class DecFunNode implements Node {
             if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() && !Objects.equals(id, this.id.getId())) {
                 System.out.println("[W] Symbol " + id + " is unused in function that starts at line "+line+".");
             }
+            if(localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() &&
+                    localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).isFn()){
+                env.getSymbolTableManager().getLevel(env.getNestingLevel()).get(id).getEffect().setUsed();
+            }
         }
         if (!fuse && !Objects.equals(this.type.getType(), "void")) {
             System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void in function declared at line "+line+".");
