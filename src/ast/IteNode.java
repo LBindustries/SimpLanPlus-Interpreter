@@ -48,7 +48,7 @@ public class IteNode implements Node {
     public TypeNode typeCheck(Environment env) {
 
         if (!exp.typeCheck(env).getClass().equals(BoolTypeNode.class)) {
-            System.out.println("Condition of if statement not boolean at line "+line+".");
+            System.out.println("[!] Condition of if statement not boolean at line "+line+".");
             System.exit(0);
         }
 
@@ -59,9 +59,15 @@ public class IteNode implements Node {
         if (else_statement != null) {
             TypeNode else_node = else_statement.typeCheck(envOld);
             if (!then_node.getType().equals(else_node.getType())) {
-                System.out.println("Then and else have different types in structure at line "+line+".");
+                System.out.println("[!] Then and else have different types in structure at line "+line+".");
                 System.exit(0);
             }
+        }
+
+        if (else_statement==null && !then_node.getType().equals("void")){
+            System.out.println("[W] Else not specified in structure at line "+line+" that contains a non-void return.\n" +
+                    "    Please be sure that there's another exit point outside of the ite.");
+            //System.exit(0);
         }
 
         for (int i = 0; i < env.getSymbolTableManager().getSymbolTable().size(); i++) {
@@ -74,6 +80,10 @@ public class IteNode implements Node {
         }
 
         return then_node;
+    }
+
+    public boolean has_else(){
+        return this.else_statement!=null;
     }
 
     @Override

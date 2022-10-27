@@ -34,7 +34,7 @@ public class BinExpNode implements Node {
         switch (op) {
             case "==", "!=": {
                 if (!(left.typeCheck(env).getType().equals(right.typeCheck(env).getType()))) {
-                    System.out.println("No match of operators type in " + op + " at line "+line+".");
+                    System.out.println("[!] No match of operators type in " + op + " at line "+line+".");
                     System.exit(0);
                 }
                 return new BoolTypeNode();
@@ -42,7 +42,7 @@ public class BinExpNode implements Node {
             case "+", "-", "*", "/": {
                 if (!(left.typeCheck(env).getType().equals("int") &&
                         right.typeCheck(env).getType().equals("int"))) {
-                    System.out.println("No integers in " + op+ " at line "+line+".");
+                    System.out.println("[!] No integers in " + op+ " at line "+line+".");
                     System.exit(0);
                 }
                 return new IntTypeNode();
@@ -50,7 +50,7 @@ public class BinExpNode implements Node {
             case ">=", "<=", "<", ">": {
                 if (!(left.typeCheck(env).getType().equals("int") &&
                         right.typeCheck(env).getType().equals("int"))) {
-                    System.out.println("No integers in " + op+ " at line "+line+".");
+                    System.out.println("[!] No integers in " + op+ " at line "+line+".");
                     System.exit(0);
                 }
                 return new BoolTypeNode();
@@ -58,7 +58,7 @@ public class BinExpNode implements Node {
             case "&&", "||": {
                 if (!(left.typeCheck(env).getType().equals("bool") &&
                         right.typeCheck(env).getType().equals("bool"))) {
-                    System.out.println("No booleans in " + op+ " at line "+line+".");
+                    System.out.println("[!] No booleans in " + op+ " at line "+line+".");
                     System.exit(0);
                 }
                 return new BoolTypeNode();

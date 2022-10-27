@@ -16,7 +16,7 @@ public class NegExpNode extends BaseExpNode{
     @Override
     public TypeNode typeCheck(Environment env) {
         if(! (exp.typeCheck(env).getType().equals("int"))) {
-            System.out.println("No integer in neg"+ " at line "+line+".");
+            System.out.println("[!] No integer in neg"+ " at line "+line+".");
             System.exit(0);
         }
         return new IntTypeNode();

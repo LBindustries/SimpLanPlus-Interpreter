@@ -30,7 +30,7 @@ public class PrintNode implements Node{
     public TypeNode typeCheck(Environment env) {
         TypeNode type = exp.typeCheck(env);
         if(type instanceof VoidTypeNode || (type instanceof FunctionTypeNode && Objects.equals(type.getType(), "void"))){
-            System.out.println("Attempt to print void type at line "+line+".");
+            System.out.println("[!] Attempt to print void type at line "+line+".");
             System.exit(1);
         }
         return new VoidTypeNode();

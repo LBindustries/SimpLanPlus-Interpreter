@@ -46,7 +46,7 @@ public class DecVarNode implements Node{
     @Override
     public TypeNode typeCheck(Environment env) {
         if(this.exp!=null && !Objects.equals(this.type.getType(), exp.typeCheck(env).getType())){
-            System.out.println("Type mismatch: symbol "+id.getId()+" and expression are not matching types at line "+line+".");
+            System.out.println("[!] Type mismatch: symbol "+id.getId()+" and expression are not matching types at line "+line+".");
             System.exit(0);
         }
         if(this.exp!=null){
@@ -79,7 +79,7 @@ public class DecVarNode implements Node{
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         HashMap<String, STentry> st = env.getSymbolTableManager().getLevel(env.getNestingLevel());
         if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset((Objects.equals(type.getType(), "int")? 4:1)), new Effect(false), false)) != null){
-            res.add(new SemanticError("Variable id "+this.id.getId()+" already declared at line "+ this.line +"."));
+            res.add(new SemanticError("[!] Variable id "+this.id.getId()+" already declared at line "+ this.line +"."));
         }
         if(this.exp!=null){
             res.addAll(this.exp.checkSemantics(env));

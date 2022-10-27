@@ -37,46 +37,43 @@ public class BlockNode implements Node {
                 res += dec.toPrint(indent + " ");
             }
         }
-        return "\n"+indent + "Block" + res;
+        return "\n" + indent + "Block" + res;
     }
 
     @Override
     public TypeNode typeCheck(Environment env) {
         this.checkSemantics(env);
-        if(this.declarations!=null){
-            for(Node dec: declarations){
+        if (this.declarations != null) {
+            for (Node dec : declarations) {
                 dec.typeCheck(localenv);
             }
         }
         TypeNode T = new VoidTypeNode();
         int counter = 1; // TODO: check if actually correct
-        if(this.statements!=null){
-            for(Node s: statements){
+        if (this.statements != null) {
+            for (Node s : statements) {
                 StatementNode tmp = (StatementNode) s;
                 T = s.typeCheck(localenv);
-                if(tmp.getStatement() instanceof ReturnNode){
-                    break;
-                }
-                if(tmp.getStatement() instanceof IteNode){
+                /* if(tmp.getStatement() instanceof IteNode){
                     if(!T.getType().equals("void")){
                         break;
                     }
-                }
+                 }*/
                 counter++;
             }
         }
-        for(String id: localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()){
-            if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()){
-                System.out.println("Warning: symbol "+id+" is unused.");
+        for (String id : localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()) {
+            if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()) {
+                System.out.println("[W] Symbol " + id + " is unused.");
             }
         }
         return T;
     }
 
     @Override
-    public void setupBreaks(ArrayList<Integer> breaks){
-        if(this.statements!=null && this.statements.size()>0){
-            for(Node stm:this.statements){
+    public void setupBreaks(ArrayList<Integer> breaks) {
+        if (this.statements != null && this.statements.size() > 0) {
+            for (Node stm : this.statements) {
                 stm.setupBreaks(breaks);
             }
         }
@@ -88,14 +85,14 @@ public class BlockNode implements Node {
         if (this.declarations != null && this.declarations.size() > 0) {
             asm += ";Variable Declaration\n";
             //li $t1 " + localenv.getDecSpace() + "\n";
-            asm += "subi $sp $sp "+ localenv.getDecSpace() + "\n";
+            asm += "subi $sp $sp " + localenv.getDecSpace() + "\n";
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
             for (Node declaration : this.declarations) {
                 asm += declaration.codeGeneration(labgen, this.localenv);
             }
 
-        }else {
+        } else {
             asm += "push $fp\n";
             asm += "mov $fp $sp\n";
         }
@@ -106,7 +103,7 @@ public class BlockNode implements Node {
         }
         asm += "pop $fp\n";
         //asm += "li $t1 " + localenv.getDecSpace() + "\n";
-        asm += "addi $sp $sp "+ localenv.getDecSpace() + "\n";
+        asm += "addi $sp $sp " + localenv.getDecSpace() + "\n";
         return asm;
     }
 
@@ -119,13 +116,13 @@ public class BlockNode implements Node {
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
-        if(this.declarations!=null && this.declarations.size()>0){
-            for(Node n: this.declarations){
+        if (this.declarations != null && this.declarations.size() > 0) {
+            for (Node n : this.declarations) {
                 res.addAll(n.checkSemantics(env));
             }
         }
-        if(this.statements!=null && this.statements.size()>0){
-            for(Node n: this.statements){
+        if (this.statements != null && this.statements.size() > 0) {
+            for (Node n : this.statements) {
                 res.addAll(n.checkSemantics(env));
             }
         }

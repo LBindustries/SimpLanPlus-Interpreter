@@ -62,7 +62,7 @@ public class ArgNode implements Node{
         }
 
         if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(offset), new Effect(true), false)) != null){
-            res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function at line "+ line +"."));
+            res.add(new SemanticError("[!] Argument id "+this.id.getId()+" already defined for the function at line "+ line +"."));
         }
 
         return res;

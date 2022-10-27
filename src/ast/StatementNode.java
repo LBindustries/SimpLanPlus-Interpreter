@@ -46,7 +46,7 @@ public class StatementNode implements Node {
     @Override
     public void setupBreaks(ArrayList<Integer> breaks){
         if(breaks.contains(this.line)){
-            System.out.println("Breakpoint enabled for line "+line);
+            System.out.println("[L] Breakpoint enabled for line "+line);
             this.isBreak = true;
         }
         if(this.statement!=null){

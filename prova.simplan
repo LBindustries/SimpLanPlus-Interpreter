@@ -6,7 +6,16 @@
         a = a - 1;
         fun(a);
     }
+
+    int fun2(){
+        {
+        if(false){
+            return 1;
+            }
+
+        }
+    }
     int a = 100;
     fun(a);
-    print(a);
+    print(fun2());
 }
