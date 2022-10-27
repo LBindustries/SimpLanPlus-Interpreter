@@ -15,16 +15,19 @@ public class IteNode implements Node {
     private Node then_statement;
     private Node else_statement;
     private ArrayList<HashMap<String, STentry>> localSymbolTable;
+    private int line;
 
-    public IteNode(Node exp, Node then_statement, Node else_statement) {
+    public IteNode(Node exp, Node then_statement, Node else_statement, int line) {
         this.exp = exp;
         this.then_statement = then_statement;
         this.else_statement = else_statement;
+        this.line = line;
     }
 
-    public IteNode(Node exp, Node then_statement) {
+    public IteNode(Node exp, Node then_statement, int line) {
         this.exp = exp;
         this.then_statement = then_statement;
+        this.line = line;
     }
 
     @Override
@@ -45,9 +48,11 @@ public class IteNode implements Node {
     public TypeNode typeCheck(Environment env) {
 
         if (!exp.typeCheck(env).getClass().equals(BoolTypeNode.class)) {
-            System.out.println("Condition of if statement not boolean");
+            System.out.println("Condition of if statement not boolean at line "+line+".");
             System.exit(0);
         }
+
+        boolean oldRet = env.getRet();
 
         Environment envOld = new Environment(env, true);
 
@@ -56,7 +61,7 @@ public class IteNode implements Node {
         if (else_statement != null) {
             TypeNode else_node = else_statement.typeCheck(envOld);
             if (!then_node.getType().equals(else_node.getType())) {
-                System.out.println("Then and else have different types");
+                System.out.println("Then and else have different types in structure at line "+line+".");
                 System.exit(0);
             }
         }
@@ -70,7 +75,21 @@ public class IteNode implements Node {
 
         }
 
+        if(!env.getRet() || !envOld.getRet()){
+            env.setRet(false);
+        }
+
         return then_node;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if(this.then_statement!=null){
+            this.then_statement.setupBreaks(breaks);
+        }
+        if(this.else_statement!=null){
+            this.else_statement.setupBreaks(breaks);
+        }
     }
 
     @Override

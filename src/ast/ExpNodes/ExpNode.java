@@ -11,9 +11,11 @@ import java.util.ArrayList;
 public class ExpNode implements Node {
 
     protected Node exp;
+    protected int line;
 
-    public ExpNode(Node exp){
+    public ExpNode(Node exp, int line){
         this.exp = exp;
+        this.line = line;
     }
 
     @Override
@@ -34,5 +36,10 @@ public class ExpNode implements Node {
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
         return exp.checkSemantics(env);
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
     }
 }

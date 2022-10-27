@@ -3,6 +3,7 @@ package ast;
 import ast.Types.*;
 import util.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -15,13 +16,15 @@ public class DecFunNode implements Node {
     private ArrayList<Node> decs;
     private ArrayList<Node> stms;
     private Environment localenv;
+    private int line;
 
-    public DecFunNode(Node type, Node id, ArrayList<Node> args, ArrayList<Node> decs, ArrayList<Node> stms) {
+    public DecFunNode(Node type, Node id, ArrayList<Node> args, ArrayList<Node> decs, ArrayList<Node> stms, int line) {
         this.type = (TypeNode) type;
         this.id = (IdNode) id;
         this.args = args;
         this.decs = decs;
         this.stms = stms;
+        this.line = line;
     }
 
     @Override
@@ -56,51 +59,45 @@ public class DecFunNode implements Node {
                 dec.typeCheck(localenv);
             }
         }
-        boolean fuse = false;
+
         if (this.stms != null) {
             for (Node stm : this.stms) {
                 TypeNode type = stm.typeCheck(localenv);
                 StatementNode tmp = (StatementNode) stm;
                 if (tmp.getStatement() instanceof ReturnNode) {
+                    env.setRet(true);
+                } /*else if (tmp.getStatement() instanceof BlockNode && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
-                        System.exit(0);
-                    }
-                } else if (tmp.getStatement() instanceof BlockNode && !Objects.equals(type.getType(), "void")) {
-                    fuse = true;
-                    if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                         System.exit(0);
                     }
                 } else if (tmp.getStatement() instanceof IteNode  && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType());
+                        System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                         System.exit(0);
                     }
-                }
+                }*/
             }
         }
         for (String id : localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()) {
             if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() && !Objects.equals(id, this.id.getId())) {
-                System.out.println("Warning: symbol " + id + " is unused.");
+                System.out.println("Warning: symbol " + id + " is unused at line "+line+".");
             }
         }
-        if (!fuse && !Objects.equals(this.type.getType(), "void")) {
-            System.out.println("Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void");
-            System.exit(0);
-        } else {
-            switch (type.getType()) {
-                case "int":
-                    return new IntTypeNode();
-                case "bool":
-                    return new BoolTypeNode();
-                case "void":
-                    return new VoidTypeNode();
-            }
+        //if (!fuse && !Objects.equals(this.type.getType(), "void")) {
+        if (!(this.type instanceof VoidTypeNode) && !localenv.getRet()){
+            System.out.println("Warning: reach end of non-void function \""+this.id.getId()+"\" declared at line: "+line +".");
+            //System.exit(0);
         }
-        return null;
+
+        return switch (this.type.getType()) {
+            case "int" -> new IntTypeNode();
+            case "bool" -> new BoolTypeNode();
+            case "void" -> new VoidTypeNode();
+            default -> null;
+        };
     }
 
     @Override
@@ -221,6 +218,7 @@ public class DecFunNode implements Node {
             }
         }
         localenv.incNestingLevel(1);
+        localenv.setType(this.type);
         localenv.getSymbolTableManager().addLevel(st);
 
         // Calcolo offset dichiarazioni
@@ -252,5 +250,14 @@ public class DecFunNode implements Node {
         }
         this.localenv = localenv;
         return res;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if(this.stms!=null && this.stms.size()>0){
+            for(Node n:this.stms){
+                n.setupBreaks(breaks);
+            }
+        }
     }
 }

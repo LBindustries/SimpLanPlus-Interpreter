@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class DeclarationNode implements Node{
 
     private Node dec;
+    private int line;
 
-    public DeclarationNode(Node dec){
+    public DeclarationNode(Node dec, int line){
         this.dec = dec;
+        this.line = line;
     }
 
     @Override
@@ -36,5 +38,10 @@ public class DeclarationNode implements Node{
             return new ArrayList<SemanticError>();
         }
         return this.dec.checkSemantics(env);
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        dec.setupBreaks(breaks);
     }
 }

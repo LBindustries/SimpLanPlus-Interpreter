@@ -10,9 +10,12 @@ import java.util.ArrayList;
 public class StatementNode implements Node {
 
     private Node statement;
+    private int line;
+    private boolean isBreak = false;
 
-    public StatementNode(Node statement) {
+    public StatementNode(Node statement, int line) {
         this.statement = statement;
+        this.line = line;
     }
 
     public Node getStatement() {
@@ -31,7 +34,24 @@ public class StatementNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
-        return statement.codeGeneration(labgen, localenv);
+        String asm = "";
+        if(isBreak){
+            asm = ";Breakpoint\n"+"halt\n";
+        }
+        asm += statement.codeGeneration(labgen, localenv);
+
+        return asm;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if(breaks.contains(this.line)){
+            System.out.println("Breakpoint enabled for line "+line);
+            this.isBreak = true;
+        }
+        if(this.statement!=null){
+            statement.setupBreaks(breaks);
+        }
     }
 
     @Override

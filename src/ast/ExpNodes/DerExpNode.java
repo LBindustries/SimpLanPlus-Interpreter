@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class DerExpNode implements Node {
 
     private IdNode id; // "Perché non c'è una stringa e basta T.T" -Ale "Perchè sì" -Balu
+    private int line;
 
-    public DerExpNode(IdNode id){
+    public DerExpNode(IdNode id, int line){
         this.id = id;
+        this.line = line;
     }
 
     public IdNode getId() {
@@ -31,15 +33,15 @@ public class DerExpNode implements Node {
     @Override
     public TypeNode typeCheck(Environment env) {
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()) == null){
-            System.out.println("Variable "+this.id.getId()+" not declared"); // "Vogliamo ristamparlo?" -Ale
+            System.out.println("Variable "+this.id.getId()+" not declared at line "+line+"."); // "Vogliamo ristamparlo?" -Ale
             System.exit(0);
         }
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getType() instanceof FunctionTypeNode){
-            System.out.println("Trying to use function "+this.id.getId()+" as a variable.");
+            System.out.println("Trying to use function "+this.id.getId()+" as a variable at line "+line+".");
             System.exit(0);
         }
         if (! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isInitialized() && ! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isUsed()){
-            System.out.println("Variable "+this.id.getId()+" not initialized");
+            System.out.println("Variable "+this.id.getId()+" not initialized at line "+line+".");
             System.exit(0);
         }
 
@@ -72,7 +74,12 @@ public class DerExpNode implements Node {
         STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel());
 
         if (entry==null)
-            res.add(new SemanticError("Variable "+this.id.getId()+" not declared"));
+            res.add(new SemanticError("Variable "+this.id.getId()+" not declared at line "+line+"."));
         return res;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
     }
 }

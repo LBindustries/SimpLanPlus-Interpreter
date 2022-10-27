@@ -16,16 +16,19 @@ public class CallNode implements Node {
     private IdNode id;
     private ArrayList<Node> exp;
     private boolean isExp;
+    private int line;
 
-    public CallNode(IdNode id, ArrayList<Node> exp) {
+    public CallNode(IdNode id, ArrayList<Node> exp, int line) {
         this.id = id;
         this.exp = exp;
         this.isExp = false;
+        this.line = line;
     }
 
-    public CallNode(IdNode id) {
+    public CallNode(IdNode id, int line) {
         this.id = id;
         this.isExp = false;
+        this.line = line;
     }
 
     @Override
@@ -45,36 +48,36 @@ public class CallNode implements Node {
         STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), 0); // funzioni definite solo a livello 0
 
         if (!(env.getSymbolTableManager().getLastEntry(id.getId(), 0).getType() instanceof FunctionTypeNode)) {
-            System.out.println("Trying to call non-function symbol " + this.id.getId());
+            System.out.println("Trying to call non-function symbol " + this.id.getId()+ " at line "+line+".");
             System.exit(0);
         }
 
         FunctionTypeNode t = (FunctionTypeNode) entry.getType();
         if (t.getArgs().size() > 0) {
             if(this.exp == null){
-                System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got 0");
+                System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got 0 at line "+line+".");
                 System.exit(0);
             }
             if (t.getArgs().size() != this.exp.size()) { // stesso numero di parametri
-                System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size());
+                System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size()+ " at line "+line+".");
                 System.exit(0);
             }
             for (int i = 0; i < exp.size(); i++) {
 
                 if (!Objects.equals(exp.get(i).typeCheck(env).getType(), t.getArgs().get(i).getType())) { // tipi coerenti alle exp
-                    System.out.println("Parameters type mismatch for " + this.id.getId() + ": expecting " + t.getArgs().get(i).getType() + ", got " + exp.get(i).typeCheck(env).getType()+ " for parameter "+(i+1));
+                    System.out.println("Parameters type mismatch for " + this.id.getId() + ": expecting " + t.getArgs().get(i).getType() + ", got " + exp.get(i).typeCheck(env).getType()+ " for parameter "+(i+1)+ " at line "+line+".");
                     System.exit(0);
                 }
 
                 if (t.getArgs().get(i).isVar()) {
                     if (!exp.get(i).getClass().equals(DerExpNode.class)) { // se di tipo var deve essere una variabile
-                        System.out.println("Expecting variable in call of symbol " + this.id.getId() + " for parameter "+(i+1));
+                        System.out.println("Expecting variable in call of symbol " + this.id.getId() + " for parameter "+(i+1)+ " at line "+line+".");
                         System.exit(0);
                     }
                 }
             }
         } else if (this.exp != null) {
-            System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size());
+            System.out.println("Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size()+ " at line "+line+".");
             System.exit(0);
         }
 
@@ -130,7 +133,7 @@ public class CallNode implements Node {
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
 
         if (env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel()) == null) {
-            res.add(new SemanticError("Function " + this.id.getId() + " not declared."));
+            res.add(new SemanticError("Function " + this.id.getId() + " not declared at line "+ line +"."));
             return res;
         }
 
@@ -139,5 +142,10 @@ public class CallNode implements Node {
                 res.addAll(arg.checkSemantics(env));
         }
         return res;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
     }
 }

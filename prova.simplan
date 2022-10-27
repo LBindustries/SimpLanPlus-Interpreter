@@ -1,3 +1,9 @@
 {
-    bool b = false;
+    int ciao(){
+        if(true){
+            return 1;
+        }else{
+            print(1);
+        }
+    }
 }

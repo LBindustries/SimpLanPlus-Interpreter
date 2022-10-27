@@ -49,19 +49,23 @@ public class BlockNode implements Node {
             }
         }
         TypeNode T = new VoidTypeNode();
+        TypeNode First = new VoidTypeNode();
         int counter = 1; // TODO: check if actually correct
         if(this.statements!=null){
             for(Node s: statements){
                 StatementNode tmp = (StatementNode) s;
                 T = s.typeCheck(localenv);
                 if(tmp.getStatement() instanceof ReturnNode){
-                    break;
+                    env.setRet(true);
+                    if ( !(T instanceof VoidTypeNode) && (First instanceof VoidTypeNode)){
+                        First = T;
+                    }
                 }
-                if(tmp.getStatement() instanceof IteNode){
+                /*if(tmp.getStatement() instanceof IteNode){
                     if(!T.getType().equals("void")){
                         break;
                     }
-                }
+                }*/
                 counter++;
             }
         }
@@ -70,7 +74,16 @@ public class BlockNode implements Node {
                 System.out.println("Warning: symbol "+id+" is unused.");
             }
         }
-        return T;
+        return First;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        if(this.statements!=null && this.statements.size()>0){
+            for(Node stm:this.statements){
+                stm.setupBreaks(breaks);
+            }
+        }
     }
 
     @Override

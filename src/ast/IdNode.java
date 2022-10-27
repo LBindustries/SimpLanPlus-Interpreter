@@ -10,9 +10,11 @@ import java.util.ArrayList;
 public class IdNode implements Node{
 
     private String id;
+    private int line;
 
-    public IdNode(String id){
+    public IdNode(String id, int line){
         this.id = id;
+        this.line = line;
     }
 
     @Override
@@ -27,6 +29,11 @@ public class IdNode implements Node{
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
     }
 
     @Override

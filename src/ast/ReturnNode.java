@@ -1,5 +1,7 @@
 package ast;
 
+import ast.Types.BoolTypeNode;
+import ast.Types.IntTypeNode;
 import ast.Types.TypeNode;
 import ast.Types.VoidTypeNode;
 import util.Environment;
@@ -12,9 +14,11 @@ public class ReturnNode implements Node {
     // 'return' (exp)?;
 
     private Node exp;
+    private int line;
 
-    public ReturnNode(Node exp) {
+    public ReturnNode(Node exp, int line) {
         this.exp = exp;
+        this.line = line;
     }
 
     @Override
@@ -28,20 +32,34 @@ public class ReturnNode implements Node {
 
     @Override
     public TypeNode typeCheck(Environment env) {
+        TypeNode T;
         if (this.exp == null) {
-            return new VoidTypeNode();
+            T = new VoidTypeNode();
+        }else T = exp.typeCheck(env);
+        if (env.getType() instanceof VoidTypeNode || env.getType() instanceof IntTypeNode || env.getType() instanceof BoolTypeNode){
+            if(T.getType() != env.getType().getType()){
+                System.out.println("Return type mismatch at line " + this.line + ": expected " + env.getType().getType() + ", got "+T.getType()+".");
+                System.exit(0);
+            }
         }
-        return exp.typeCheck(env);
+        env.setRet(true);
+        return T;
     }
 
     public Node getExp() {
         return exp;
     }
 
+    public int getLine(){
+        return line;
+    }
+
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = ";Return\n";
-        asm += this.exp.codeGeneration(labgen, localenv);
+        if(this.exp!=null){
+            asm += this.exp.codeGeneration(labgen, localenv);
+        }
         asm += "mov $t1 $fp\n";
         for(int i = 0; i < localenv.getNestingLevel(); i++ ){
             asm += "lw $t1 0($t1)\n";
@@ -50,6 +68,11 @@ public class ReturnNode implements Node {
         asm += "lw $t1 4($t1)\n";
         asm += "jr $t1\n";
         return asm;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
     }
 
     @Override

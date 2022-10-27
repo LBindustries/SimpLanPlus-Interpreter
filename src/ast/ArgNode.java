@@ -14,11 +14,13 @@ public class ArgNode implements Node{
     private TypeNode type;
     private IdNode id;
     private boolean isVar = false;
+    private int line;
 
-    public ArgNode(TypeNode type, IdNode id, boolean isVar){
+    public ArgNode(TypeNode type, IdNode id, boolean isVar, int line){
         this.type = type;
         this.id = id;
         this.isVar = isVar;
+        this.line = line;
     }
 
     @Override
@@ -60,9 +62,14 @@ public class ArgNode implements Node{
         }
 
         if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(offset), new Effect(true), false)) != null){
-            res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function."));
+            res.add(new SemanticError("Argument id "+this.id.getId()+" already defined for the function at line "+ line +"."));
         }
 
         return res;
+    }
+
+    @Override
+    public void setupBreaks(ArrayList<Integer> breaks){
+        return;
     }
 }
