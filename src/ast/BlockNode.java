@@ -49,11 +49,20 @@ public class BlockNode implements Node {
             }
         }
         TypeNode T = new VoidTypeNode();
+        TypeNode first = null;
         int counter = 1; // TODO: check if actually correct
         if (this.statements != null) {
             for (Node s : statements) {
                 StatementNode tmp = (StatementNode) s;
                 T = s.typeCheck(localenv);
+                if(tmp.getStatement() instanceof ReturnNode && first == null){
+                    first = T;
+                }
+                else if(tmp.getStatement() instanceof ReturnNode){
+                    if(!T.getType().equals(first.getType())){
+                        System.out.println("[!] Found returns of mismatched type in block");
+                    }
+                }
                 /* if(tmp.getStatement() instanceof IteNode){
                     if(!T.getType().equals("void")){
                         break;
@@ -67,7 +76,10 @@ public class BlockNode implements Node {
                 System.out.println("[W] Symbol " + id + " is unused.");
             }
         }
-        return T;
+        if(first == null){
+            first = new VoidTypeNode();
+        }
+        return first;
     }
 
     @Override
