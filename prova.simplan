@@ -1,17 +1,9 @@
 {
-    void fun(var int a){
-        if(a<0){
-            return;
-        }
-        print(a);
-        a = a - 1;
-        fun(a);
-    }
-
-    void foo(){
+    int foo(){
         return 1;
     }
 
-    int a = 1;
-    fun(a);
+    foo = 4;
+
+    print(foo());
 }

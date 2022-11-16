@@ -52,7 +52,7 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) throws TypeCheckException {
+    public TypeNode typeCheck(Environment env) {
         if (this.decs != null) {
             for (Node dec : this.decs) {
                 dec.typeCheck(localenv);
@@ -66,25 +66,28 @@ public class DecFunNode implements Node {
                 if (tmp.getStatement() instanceof ReturnNode) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
+                        System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
+                        System.exit(0);
                     }
                 } else if (tmp.getStatement() instanceof BlockNode && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
+                        System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
+                        System.exit(0);
                     }
                 } else if (tmp.getStatement() instanceof IteNode  && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
+                        System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
+                        System.exit(0);
                     }
                 }
             }
         }
         for (String id : localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()) {
             if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() && !Objects.equals(id, this.id.getId())) {
-                if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).isFn()) {
-                    System.out.println("[W] Symbol " + id + " is unused in function that starts at line " + line + ".");
+                if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).isFn()){
+                    System.out.println("[W] Symbol " + id + " is unused in function that starts at line "+line+".");
                 }
             }
             if(localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed() &&
@@ -93,7 +96,8 @@ public class DecFunNode implements Node {
             }
         }
         if (!fuse && !Objects.equals(this.type.getType(), "void")) {
-            throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void in function declared at line "+line+".");
+            System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void in function declared at line "+line+".");
+            System.exit(0);
         } else {
             switch (type.getType()) {
                 case "int":
@@ -255,16 +259,6 @@ public class DecFunNode implements Node {
             }
         }
         this.localenv = localenv;
-
-        for(String key : this.localenv.getSymbolTableManager().getSymbolTable().get(0).keySet()){
-            if(this.localenv.getSymbolTableManager().getSymbolTable().get(0).get(key).isFn()){
-                STentry entry_internal = this.localenv.getSymbolTableManager().getSymbolTable().get(0).get(key);
-                if(entry_internal.getEffect().isUsed()){
-                    env.getSymbolTableManager().getSymbolTable().get(0).get(key).getEffect().setUsed();
-                }
-            }
-        }
-
         return res;
     }
 
