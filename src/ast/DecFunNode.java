@@ -52,7 +52,7 @@ public class DecFunNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if (this.decs != null) {
             for (Node dec : this.decs) {
                 dec.typeCheck(localenv);
@@ -66,20 +66,17 @@ public class DecFunNode implements Node {
                 if (tmp.getStatement() instanceof ReturnNode) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
-                        System.exit(0);
+                        throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                     }
                 } else if (tmp.getStatement() instanceof BlockNode && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
-                        System.exit(0);
+                        throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                     }
                 } else if (tmp.getStatement() instanceof IteNode  && !Objects.equals(type.getType(), "void")) {
                     fuse = true;
                     if (!Objects.equals(type.getType(), this.type.getType())) {
-                        System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
-                        System.exit(0);
+                        throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got " + type.getType()+ " in function declared at line "+line+".");
                     }
                 }
             }
@@ -96,8 +93,7 @@ public class DecFunNode implements Node {
             }
         }
         if (!fuse && !Objects.equals(this.type.getType(), "void")) {
-            System.out.println("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void in function declared at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Return type mismatch in function " + this.id.getId() + ": expected " + this.type.getType() + ", got void in function declared at line "+line+".");
         } else {
             switch (type.getType()) {
                 case "int":

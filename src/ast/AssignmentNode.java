@@ -39,8 +39,7 @@ public class AssignmentNode implements Node{
             throw new TypeCheckException("[!] Types of variable and value are not compatible"+ " at line "+line+".");
         }
         if(st.isFn()){
-            System.out.println("[!] Trying to assign value to function "+this.id.getId()+ " at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Trying to assign value to function "+this.id.getId()+ " at line "+line+".");
         }
         st.getEffect().setInitialized();
         return new VoidTypeNode();
