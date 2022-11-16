@@ -1,11 +1,17 @@
 {
-    void pippo(){
-
+    void fun(var int a){
+        if(a<0){
+            return;
+        }
+        print(a);
+        a = a - 1;
+        fun(a);
     }
 
-    void pippo2(){
-        pippo();
+    void foo(){
+        return 1;
     }
 
-    pippo2();
+    int a = 1;
+    fun(a);
 }

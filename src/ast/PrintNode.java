@@ -6,6 +6,7 @@ import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,11 +28,10 @@ public class PrintNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         TypeNode type = exp.typeCheck(env);
         if(type instanceof VoidTypeNode || (type instanceof FunctionTypeNode && Objects.equals(type.getType(), "void"))){
-            System.out.println("[!] Attempt to print void type at line "+line+".");
-            System.exit(1);
+            throw new TypeCheckException("[!] Attempt to print void type at line "+line+".");
         }
         return new VoidTypeNode();
     }

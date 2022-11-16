@@ -5,6 +5,7 @@ import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class ProgramNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if (this.declarations != null) {
             for (Node declaration : this.declarations) {
                 declaration.typeCheck(this.localenv);

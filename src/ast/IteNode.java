@@ -5,6 +5,7 @@ import ast.Types.TypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,11 +46,10 @@ public class IteNode implements Node {
 
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
 
         if (!exp.typeCheck(env).getClass().equals(BoolTypeNode.class)) {
-            System.out.println("[!] Condition of if statement not boolean at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Condition of if statement not boolean at line "+line+".");
         }
 
         Environment envOld = new Environment(env, true);
@@ -59,8 +59,7 @@ public class IteNode implements Node {
         if (else_statement != null) {
             TypeNode else_node = else_statement.typeCheck(envOld);
             if (!then_node.getType().equals(else_node.getType())) {
-                System.out.println("[!] Then and else have different types in structure at line "+line+".");
-                System.exit(0);
+                throw new TypeCheckException("[!] Then and else have different types in structure at line "+line+".");
             }
         }
 

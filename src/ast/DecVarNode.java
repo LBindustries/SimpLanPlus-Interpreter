@@ -1,10 +1,7 @@
 package ast;
 
 import ast.Types.TypeNode;
-import util.Effect;
-import util.Environment;
-import util.LabelGenerator;
-import util.SemanticError;
+import util.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,10 +41,9 @@ public class DecVarNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(this.exp!=null && !Objects.equals(this.type.getType(), exp.typeCheck(env).getType())){
-            System.out.println("[!] Type mismatch: symbol "+id.getId()+" and expression are not matching types at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Type mismatch: symbol "+id.getId()+" and expression are not matching types at line "+line+".");
         }
         if(this.exp!=null){
             env.getSymbolTableManager().getLastEntry(id.getId(), env.getNestingLevel()).getEffect().setInitialized();

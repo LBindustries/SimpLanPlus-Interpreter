@@ -8,6 +8,7 @@ import ast.Types.TypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 
@@ -31,18 +32,15 @@ public class DerExpNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()) == null){
-            System.out.println("[!] Variable "+this.id.getId()+" not declared at line "+line+"."); // "Vogliamo ristamparlo?" -Ale
-            System.exit(0);
+            throw new TypeCheckException("[!] Variable "+this.id.getId()+" not declared at line "+line+"."); // "Vogliamo ristamparlo?" -Ale
         }
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getType() instanceof FunctionTypeNode){
-            System.out.println("[!] Trying to use function "+this.id.getId()+" as a variable at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Trying to use function "+this.id.getId()+" as a variable at line "+line+".");
         }
         if (! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isInitialized() && ! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isUsed()){
-            System.out.println("[!] Variable "+this.id.getId()+" not initialized at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Variable "+this.id.getId()+" not initialized at line "+line+".");
         }
 
         env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().setUsed();

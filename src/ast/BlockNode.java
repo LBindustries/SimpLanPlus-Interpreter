@@ -5,6 +5,7 @@ import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class BlockNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         this.checkSemantics(env);
         if (this.declarations != null) {
             for (Node dec : declarations) {
@@ -60,7 +61,7 @@ public class BlockNode implements Node {
                 }
                 else if(tmp.getStatement() instanceof ReturnNode){
                     if(!T.getType().equals(first.getType())){
-                        System.out.println("[!] Found returns of mismatched type in block");
+                        throw new TypeCheckException("[!] Found returns of mismatched type in block");
                     }
                 }
                 /* if(tmp.getStatement() instanceof IteNode){

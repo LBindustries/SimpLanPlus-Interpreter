@@ -5,6 +5,7 @@ import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -29,15 +30,13 @@ public class AssignmentNode implements Node{
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(st == null){
-            System.out.println("[!] Variable "+this.id.getId()+" not declared"+ " at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Variable "+this.id.getId()+" not declared"+ " at line "+line+".");
         }
 
         if(!Objects.equals(exp.typeCheck(env).getType(), st.getType().getType())) {
-            System.out.println("[!] Types of variable and value are not compatible"+ " at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] Types of variable and value are not compatible"+ " at line "+line+".");
         }
 
         st.getEffect().setInitialized();

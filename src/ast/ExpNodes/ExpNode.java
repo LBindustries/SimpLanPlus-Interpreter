@@ -5,6 +5,7 @@ import ast.Types.TypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class ExpNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         return exp.typeCheck(env);
     }
 

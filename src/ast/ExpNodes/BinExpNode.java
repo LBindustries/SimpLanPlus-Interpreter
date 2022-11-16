@@ -7,6 +7,7 @@ import ast.Types.TypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 
@@ -30,36 +31,32 @@ public class BinExpNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         switch (op) {
             case "==", "!=": {
                 if (!(left.typeCheck(env).getType().equals(right.typeCheck(env).getType()))) {
-                    System.out.println("[!] No match of operators type in " + op + " at line "+line+".");
-                    System.exit(0);
+                    throw new TypeCheckException("[!] No match of operators type in " + op + " at line "+line+".");
                 }
                 return new BoolTypeNode();
             }
             case "+", "-", "*", "/": {
                 if (!(left.typeCheck(env).getType().equals("int") &&
                         right.typeCheck(env).getType().equals("int"))) {
-                    System.out.println("[!] No integers in " + op+ " at line "+line+".");
-                    System.exit(0);
+                    throw new TypeCheckException("[!] No integers in " + op+ " at line "+line+".");
                 }
                 return new IntTypeNode();
             }
             case ">=", "<=", "<", ">": {
                 if (!(left.typeCheck(env).getType().equals("int") &&
                         right.typeCheck(env).getType().equals("int"))) {
-                    System.out.println("[!] No integers in " + op+ " at line "+line+".");
-                    System.exit(0);
+                    throw new TypeCheckException("[!] No integers in " + op+ " at line "+line+".");
                 }
                 return new BoolTypeNode();
             }
             case "&&", "||": {
                 if (!(left.typeCheck(env).getType().equals("bool") &&
                         right.typeCheck(env).getType().equals("bool"))) {
-                    System.out.println("[!] No booleans in " + op+ " at line "+line+".");
-                    System.exit(0);
+                    throw new TypeCheckException("[!] No booleans in \" + op+ \" at line \"+line+\".");
                 }
                 return new BoolTypeNode();
             }

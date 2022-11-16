@@ -7,10 +7,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SimpLanPlusLexer;
 import parser.SimpLanPlusParser;
-import util.AsmChecksum;
-import util.Environment;
-import util.LabelGenerator;
-import util.SemanticError;
+import util.*;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -120,7 +117,18 @@ public class Main {
                 return;
             }
             System.out.println("[L] Environment is good!");
-            ast.typeCheck(env);
+            // Add error checking
+            try {
+                ast.typeCheck(env);
+            }
+            catch (TypeCheckException error){
+                System.out.println(error.getMessage());
+                BufferedWriter wr = new BufferedWriter(new FileWriter(filename + ".log"));
+                wr.write(error.getMessage() + "\n");
+                wr.close();
+                System.exit(1);
+            }
+
             System.out.println("[L] Program is valid.");
             if(breakpoints.size()>0){
                 System.out.println("[L] Setting up breakpoints...");

@@ -5,6 +5,7 @@ import ast.Node;
 import ast.Types.TypeNode;
 import util.Environment;
 import util.LabelGenerator;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 
@@ -14,10 +15,9 @@ public class NotExpNode extends BaseExpNode{
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(! (exp.typeCheck(env).getType().equals("bool"))) {
-            System.out.println("[!] No bool in not"+ " at line "+line+".");
-            System.exit(0);
+            throw new TypeCheckException("[!] No bool in not"+ " at line "+line+".");
         }
         return new BoolTypeNode();
     }

@@ -5,6 +5,7 @@ import ast.Node;
 import ast.Types.TypeNode;
 import util.Environment;
 import util.LabelGenerator;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ public class NegExpNode extends BaseExpNode{
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(! (exp.typeCheck(env).getType().equals("int"))) {
             System.out.println("[!] No integer in neg"+ " at line "+line+".");
             System.exit(0);

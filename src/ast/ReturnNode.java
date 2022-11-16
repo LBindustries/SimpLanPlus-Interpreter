@@ -5,6 +5,7 @@ import ast.Types.VoidTypeNode;
 import util.Environment;
 import util.LabelGenerator;
 import util.SemanticError;
+import util.TypeCheckException;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,7 @@ public class ReturnNode implements Node {
     }
 
     @Override
-    public TypeNode typeCheck(Environment env) {
+    public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if (this.exp == null) {
             return new VoidTypeNode();
         }
