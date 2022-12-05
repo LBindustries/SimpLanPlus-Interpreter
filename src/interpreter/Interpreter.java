@@ -331,10 +331,10 @@ public class Interpreter {
                     }
                     break;
                 case "and":
-                    setRegister(ist.getParam2(), getRegister(ist.getParam2()) & getRegister(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) & getRegister(ist.getParam3()));
                     break;
                 case "or":
-                    setRegister(ist.getParam2(), getRegister(ist.getParam2()) | getRegister(ist.getParam3()));
+                    setRegister(ist.getParam1(), getRegister(ist.getParam2()) | getRegister(ist.getParam3()));
                     break;
                 case "not":
                     if (getRegister(ist.getParam2()) == 0) {
