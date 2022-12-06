@@ -1,6 +1,8 @@
 {
-    bool i = false;
-    bool b = true;
-    print(b || i);
+int x = 1;
+void f(int n, int x){
+ if (n == 0) { print(x) ; }
+ else { x = x * n ; f(n-1,x) ; }
 }
-
+f(10, x);
+}
