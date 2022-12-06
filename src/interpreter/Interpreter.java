@@ -67,17 +67,14 @@ public class Interpreter {
 
     private int LoadBool(int offset, int addrs) {
         int start = offset + addrs;
-        return ((stack[start] & 0xFF) << 24) |
-                ((stack[start] & 0xFF) << 16) |
-                ((stack[start] & 0xFF) << 8) |
-                ((stack[start] & 0xFF) << 0);
+        return stack[start];
     }
 
     private void StoreBool(int trg, int offset, int addrs) {
         try {
             byte[] trgByte;
             trgByte = toByteArray(trg);
-            stack[addrs + offset] = trgByte[0];
+            stack[addrs + offset] = trgByte[3];
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Error: out of memory. Please adjust the amount of allocated memory with the -m param.");
             System.exit(1);
@@ -219,14 +216,7 @@ public class Interpreter {
             }
         }
 
-        pc = 0;
-        // A cosa serve?
-        while (pc < code.getProgSize()) {
-            ASMNode instruction = code.getInstruction(pc++);
-            InstructionNode ist = (InstructionNode) instruction;
-        }
-
-        System.out.println("-----------------------");
+        System.out.println("-----------------------------");
 
         pc = 0;
 
@@ -290,42 +280,42 @@ public class Interpreter {
                     break;
                 case "lt":
                     if (getRegister(ist.getParam2()) < getRegister(ist.getParam3())) {
-                        setRegister(ist.getParam1(), -1);
+                        setRegister(ist.getParam1(), 1);
                     } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "lte":
                     if (getRegister(ist.getParam2()) <= getRegister(ist.getParam3())) {
-                        setRegister(ist.getParam1(), -1);
+                        setRegister(ist.getParam1(), 1);
                     } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "gt":
                     if (getRegister(ist.getParam2()) > getRegister(ist.getParam3())) {
-                        setRegister(ist.getParam1(), -1);
+                        setRegister(ist.getParam1(), 1);
                     } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "gte":
                     if (getRegister(ist.getParam2()) >= getRegister(ist.getParam3())) {
-                        setRegister(ist.getParam1(), -1);
+                        setRegister(ist.getParam1(), 1);
                     } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "eq":
                     if (getRegister(ist.getParam2()) == getRegister(ist.getParam3())) {
-                        setRegister(ist.getParam1(), -1);
+                        setRegister(ist.getParam1(), 1);
                     } else {
                         setRegister(ist.getParam1(), 0);
                     }
                     break;
                 case "neq":
                     if (getRegister(ist.getParam2()) != getRegister(ist.getParam3())) {
-                        setRegister(ist.getParam1(), -1);
+                        setRegister(ist.getParam1(), 1);
                     } else {
                         setRegister(ist.getParam1(), 0);
                     }
@@ -337,8 +327,9 @@ public class Interpreter {
                     setRegister(ist.getParam1(), getRegister(ist.getParam2()) | getRegister(ist.getParam3()));
                     break;
                 case "not":
+                    // da rifare
                     if (getRegister(ist.getParam2()) == 0) {
-                        setRegister(ist.getParam1(), ~0);
+                        setRegister(ist.getParam1(), 1);
                     } else {
                         setRegister(ist.getParam1(), 0);
                     }
