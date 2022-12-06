@@ -76,12 +76,15 @@ public class Main {
             asm_file = null;
         }
         if(asm_file!=null){
+            try{
             String value = asm_file.readLine().substring(1);
             if(!value.equals("Program") && source.isEqual(Long.parseLong(value))){
                 compile = false;
                 System.out.println("[L] An already compiled program has been found, and will be executed.");
+            }}
+            catch (Exception e){
+                System.out.println("[W] An already compiled program has been found, but its checksum was not verifiable.\n    Hence it will be re-compiled.");
             }
-
         }
         if(compile) {
             ANTLRInputStream input = new ANTLRInputStream(is);

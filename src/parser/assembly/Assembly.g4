@@ -1,7 +1,5 @@
 grammar Assembly;
 
-// Sintassi allineata al più possibile con sintassi MIPS assembly
-
 @header {
 import java.util.HashMap;
 }
