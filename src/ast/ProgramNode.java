@@ -54,7 +54,7 @@ public class ProgramNode implements Node {
         // Locate unused symbols
         for(String id: localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()){
             if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()){
-                System.out.println("[W] Symbol "+id+" is unused.");
+                System.out.println("[W] Symbol "+id+" is unused in program.");
             }
         }
         return new VoidTypeNode();

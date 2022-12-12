@@ -14,10 +14,12 @@ public class BlockNode implements Node {
     private ArrayList<Node> declarations;
     private ArrayList<Node> statements;
     private Environment localenv;
+    private int line;
     // Code block inside program
-    public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
+    public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements, int line) {
         this.declarations = declarations;
         this.statements = statements;
+        this.line = line;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class BlockNode implements Node {
         // Block-related unused variables detection
         for (String id : localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()) {
             if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()) {
-                System.out.println("[W] Symbol " + id + " is unused.");
+                System.out.println("[W] Symbol " + id + " is unused in block that starts at line "+this.line+".");
             }
         }
         if(first == null){

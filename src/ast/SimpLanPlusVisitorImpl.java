@@ -38,7 +38,7 @@ public class SimpLanPlusVisitorImpl extends SimpLanPlusBaseVisitor<Node> {
         for(SimpLanPlusParser.StatementContext sc: ctx.statement()){
             statements.add(visit(sc));
         }
-        res = new BlockNode(declarations, statements);
+        res = new BlockNode(declarations, statements, ctx.getStart().getLine());
         return res;
     }
 

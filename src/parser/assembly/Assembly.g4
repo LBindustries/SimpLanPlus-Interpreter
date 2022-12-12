@@ -8,12 +8,7 @@ import java.util.HashMap;
 public int lexicalErrors=0;
 }
 
-/*------------------------------------------------------------------
- * PARSER RULES
- *------------------------------------------------------------------*/
-
 program: instruction* ;
-
 instruction : label
             | push
             | pop
@@ -47,8 +42,6 @@ instruction : label
             | jr
             | beq
             | halt;
-
-// MEM
 push    : PUSH src=REG;
 pop     : POP dest=REG;
 top     : TOP dest=REG;
@@ -58,8 +51,6 @@ lw      : LW reg1=REG offset=NUMBER'('reg2=REG')';
 sw      : SW reg1=REG offset=NUMBER'('reg2=REG')';
 lb      : LB reg1=REG offset=NUMBER'('reg2=REG')';
 sb      : SB reg1=REG offset=NUMBER'('reg2=REG')';
-
-// EXP
 add     : ADD dest=REG reg1=REG reg2=REG;
 addi    : ADDI dest=REG reg1=REG val=NUMBER;
 sub     : SUB dest=REG reg1=REG reg2=REG;
@@ -79,22 +70,16 @@ or      : OR dest=REG reg1=REG reg2=REG;
 not     : NOT dest=REG src=REG;
 neg     : NEG dest=REG src=REG;
 
-// STM
 print   : PRINT src=REG;
 beq     : BEQ reg1=REG reg2=REG lab=LABEL;
 
-// Program
 label   : LABEL_IST lab=LABEL':';
 halt    : HALT;
 jal     : JAL lab=LABEL;
 jr      : JR dest=REG;
-/*------------------------------------------------------------------
- * LEXER RULES
- *------------------------------------------------------------------*/
 
-// MEM
-PUSH  	 : 'push' ; 	// pushes constant in the stack
-POP	 : 'pop' ; 	// pops from stack
+PUSH  	 : 'push' ;
+POP	 : 'pop' ;
 TOP : 'top' ;
 LI      : 'li';
 MOV     : 'mov';
@@ -103,35 +88,34 @@ SW      : 'sw';
 LB      : 'lb';
 SB      : 'sb';
 
-// EXP
-ADD	 : 'add' ;  	// add two values from the stack
+ADD	 : 'add' ;
 ADDI : 'addi' ;
-SUB	 : 'sub' ;	// add two values from the stack
+SUB	 : 'sub' ;
 SUBI	: 'subi' ;
-MULT	 : 'mult' ;  	// add two values from the stack
+MULT	 : 'mult' ;
 MULTI	: 'multi' ;
-DIV	 : 'div' ;	// add two values from the stack
+DIV	 : 'div' ;
 DIVI : 'divi' ;
-LT        : 'lt' ; // Lower than
-LTE       : 'lte' ; // Lower than or equal
-GT        : 'gt' ; // Greater than
-GTE       : 'gte' ; // Greater than or equal
-EQ        : 'eq' ; // Equal
-NEQ       : 'neq' ; // Not Equal
+LT        : 'lt' ;
+LTE       : 'lte' ;
+GT        : 'gt' ;
+GTE       : 'gte' ;
+EQ        : 'eq' ;
+NEQ       : 'neq' ;
 AND       : 'and' ;
 OR        : 'or' ;
 NOT     : 'not' ;
 NEG     : 'neg' ;
 
 //STM
-PRINT	 : 'print' ;	// print top of stack
-BEQ      : 'beq' ;	// Break if equal w
+PRINT	 : 'print' ;
+BEQ      : 'beq' ;
 
 //Program
 LABEL_IST : 'label' ;
-HALT	 : 'halt' ;	// stop execution
-JAL     : 'jal' ; // Jump to label
-JR      : 'jr' ; // Jump to register
+HALT	 : 'halt' ;
+JAL     : 'jal' ;
+JR      : 'jr' ;
 SYMBOLS : '_';
 LABEL   : STRING(STRING|NUMBER|SYMBOLS)*;
 

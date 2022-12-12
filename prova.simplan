@@ -1,8 +1,7 @@
 {
-int x = 1;
-void f(int n, int x){
- if (n == 0) { print(x) ; }
- else { x = x * n ; f(n-1,x) ; }
+void f(int m, int n){
+ if (m>n) { print(m+n) ;}
+ else { int x = 1 ; f(m+1,n+1) ; }
 }
-f(10, x);
+f(5,4);
 }
