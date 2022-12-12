@@ -13,7 +13,7 @@ public class StatementNode implements Node {
     private Node statement;
     private int line;
     private boolean isBreak = false;
-
+    // Generic statement node, handles breakpoints.
     public StatementNode(Node statement, int line) {
         this.statement = statement;
         this.line = line;
@@ -36,6 +36,7 @@ public class StatementNode implements Node {
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv) {
         String asm = "";
+        // If this statement is a breakpoint, stop.
         if(isBreak){
             asm = ";Breakpoint\n"+"halt\n";
         }

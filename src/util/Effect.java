@@ -2,7 +2,7 @@ package util;
 
 public class Effect {
     private int status;
-
+    // All the possible effects, used as a sort of ENUM.
     private final int DECLARED = 0;
     private final int INITIALIZED = 1;
     private final int USED = 2;
@@ -38,6 +38,7 @@ public class Effect {
     }
 
     public void setInitialized(){
+        // If the symbol is beyond initialized, it will silently ignore this command
         if(this.status < INITIALIZED)
             this.status = INITIALIZED;
         //this.status = this.join(this.status, INITIALIZED);
@@ -53,6 +54,7 @@ public class Effect {
     public void setTop(){this.status = TOP;}
 
     public void join(int effect2){
+        // Effectmax function as described in the paper
         // D < I < U < T
         int effect1 = this.status;
         int iRet = DECLARED;

@@ -12,7 +12,7 @@ public class DeclarationNode implements Node{
 
     private Node dec;
     private int line;
-
+    // Generic declaration node
     public DeclarationNode(Node dec, int line){
         this.dec = dec;
         this.line = line;

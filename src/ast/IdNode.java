@@ -11,7 +11,7 @@ public class IdNode implements Node{
 
     private String id;
     private int line;
-
+    // Symbol node
     public IdNode(String id, int line){
         this.id = id;
         this.line = line;

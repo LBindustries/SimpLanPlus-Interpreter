@@ -17,7 +17,7 @@ public class BinExpNode implements Node {
     private Node left;
     private Node right;
     private int line;
-
+    // Binary expression node, left op right
     public BinExpNode(String op, Node left, Node right, int line) {
         this.op = op;
         this.left = left;
@@ -34,12 +34,14 @@ public class BinExpNode implements Node {
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
         switch (op) {
             case "==", "!=": {
+                // If operation is an equality one, the types must be equal. Returns a bool.
                 if (!(left.typeCheck(env).getType().equals(right.typeCheck(env).getType()))) {
                     throw new TypeCheckException("[!] No match of operators type in " + op + " at line "+line+".");
                 }
                 return new BoolTypeNode();
             }
             case "+", "-", "*", "/": {
+                // If the operation is an arithmetic one, the types must be both integers. Returns an integer.
                 if (!(left.typeCheck(env).getType().equals("int") &&
                         right.typeCheck(env).getType().equals("int"))) {
                     throw new TypeCheckException("[!] No integers in " + op+ " at line "+line+".");
@@ -47,6 +49,7 @@ public class BinExpNode implements Node {
                 return new IntTypeNode();
             }
             case ">=", "<=", "<", ">": {
+                // If the operation is a comparison one, the types must be both integers. Returns a boolean.
                 if (!(left.typeCheck(env).getType().equals("int") &&
                         right.typeCheck(env).getType().equals("int"))) {
                     throw new TypeCheckException("[!] No integers in " + op+ " at line "+line+".");
@@ -54,6 +57,7 @@ public class BinExpNode implements Node {
                 return new BoolTypeNode();
             }
             case "&&", "||": {
+                // If the operation is a boolean one, the types must be both booleans. Returns a boolean.
                 if (!(left.typeCheck(env).getType().equals("bool") &&
                         right.typeCheck(env).getType().equals("bool"))) {
                     throw new TypeCheckException("[!] No booleans in \" + op+ \" at line \"+line+\".");
@@ -70,6 +74,7 @@ public class BinExpNode implements Node {
         asm += "push $a0\n";
         asm += right.codeGeneration(labgen, localenv);
         asm += ";Binary Operation\n";
+        // Translates the opcode in a asm instruction
         String operation = switch (this.op) {
             case "+" -> "add";
             case "-" -> "sub";
@@ -92,6 +97,7 @@ public class BinExpNode implements Node {
 
     @Override
     public ArrayList<SemanticError> checkSemantics(Environment env) {
+        // Check for semantic errors on left and right.
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
         if (this.left != null) {
             res.addAll(left.checkSemantics(env));

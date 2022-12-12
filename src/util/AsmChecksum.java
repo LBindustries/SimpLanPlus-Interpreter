@@ -5,6 +5,7 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 public class AsmChecksum {
+    // Simple utility that calculates and compares CRC32 checksums.
     public CRC32 checksum;
     public AsmChecksum(String contents){
         byte[] bytes = contents.getBytes();

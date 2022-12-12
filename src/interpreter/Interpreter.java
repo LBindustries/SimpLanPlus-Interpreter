@@ -25,15 +25,16 @@ public class Interpreter {
     private boolean debug;
 
     HashMap<String, Integer> labels;
-
+    // Interpreter constructor. Takes the asm path, the stack size and if it's in debug mode
     public Interpreter(String path, int memsize, boolean debug) throws Exception {
+        // Initializes pointers, registers, label managers and stack.
         labels = new HashMap<>();
         this.MEMSIZE = memsize;
         this.stack = new byte[this.MEMSIZE];
         this.sp = this.MEMSIZE;
         this.fp = this.MEMSIZE;
         this.debug = debug;
-
+        // Try to read the asm file.
         FileInputStream is;
         try {
             is = new FileInputStream(path);
@@ -41,6 +42,7 @@ public class Interpreter {
             System.out.println("Something went wrong while accessing the ASM file. Please check the filename.");
             return;
         }
+        // Tokenize and parse the asm;
         ANTLRInputStream input = new ANTLRInputStream(is);
         AssemblyLexer lexer = new AssemblyLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -51,6 +53,7 @@ public class Interpreter {
 
 
     private int fromByteArray(byte[] bytes, int start) {
+        // Convert a bytearray to an integer
         return ((bytes[start] & 0xFF) << 24) |
                 ((bytes[start + 1] & 0xFF) << 16) |
                 ((bytes[start + 2] & 0xFF) << 8) |
@@ -58,6 +61,7 @@ public class Interpreter {
     }
 
     private byte[] toByteArray(int value) {
+        // Convert an integer value to a bytearray
         return new byte[]{
                 (byte) (value >> 24),
                 (byte) (value >> 16),
@@ -66,11 +70,19 @@ public class Interpreter {
     }
 
     private int LoadBool(int offset, int addrs) {
-        int start = offset + addrs;
-        return stack[start];
+        // Load a boolean from stack
+        try{
+            int start = offset + addrs;
+            return stack[start];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: out of memory. Please adjust the amount of allocated memory with the -m param.");
+            System.exit(1);
+        }
+        return 0;
     }
 
     private void StoreBool(int trg, int offset, int addrs) {
+        // Store a boolean
         try {
             byte[] trgByte;
             trgByte = toByteArray(trg);
@@ -82,6 +94,7 @@ public class Interpreter {
     }
 
     private void StoreWord(int trg, int offset, int addrs) {
+        // Save an integer
         try {
             byte[] trgByte;
             trgByte = toByteArray(trg);
@@ -95,10 +108,18 @@ public class Interpreter {
     }
 
     private int LoadWord(int offset, int addrs) {
-        return fromByteArray(stack, offset + addrs);
+        // Load an integer
+        try{
+            return fromByteArray(stack, offset + addrs);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: out of memory. Please adjust the amount of allocated memory with the -m param.");
+            System.exit(1);
+        }
+        return 0;
     }
 
     private void MemoryInspector(ASMNode prev, ASMNode next) {
+        // Memory inspector routine
         System.out.println("");
         String input = "";
 
@@ -152,6 +173,7 @@ public class Interpreter {
     }
 
     private int getRegister(String regName) {
+        // Get register by name
         int iRet = 0;
         switch (regName) {
             case "$a0":
@@ -177,6 +199,7 @@ public class Interpreter {
     }
 
     private void setRegister(String regName, int value) {
+        // Set register by name
         switch (regName) {
             case "$a0":
                 this.a0 = value;
@@ -200,11 +223,11 @@ public class Interpreter {
     }
 
     public void runVM() {
-
+        // Run the VM
         while (pc < code.getProgSize()) {
             ASMNode instruction = code.getInstruction(pc++);
             InstructionNode ist = (InstructionNode) instruction;
-
+            // Create labels
             switch (ist.getOpcode()) {
                 case "push", "pop", "top", "li", "mov", "lw", "sw", "lb", "sb", "add", "addi", "sub", "subi", "mult", "multi", "div", "divi", "lt", "lte", "gt", "gte", "eq", "neq", "and", "or", "not", "neg", "print", "jal", "jr", "beq", "halt":
                     break;
@@ -219,11 +242,11 @@ public class Interpreter {
         System.out.println("-----------------------------");
 
         pc = 0;
-
+        // Start execution
         while (pc < code.getProgSize()) {
             ASMNode instruction = code.getInstruction(pc++);
             InstructionNode ist = (InstructionNode) instruction;
-
+            // Handle instructions
             switch (ist.getOpcode()) {
                 case "push":
                     sp = sp - 4;

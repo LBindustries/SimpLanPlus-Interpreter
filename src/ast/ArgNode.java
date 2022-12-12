@@ -15,7 +15,7 @@ public class ArgNode implements Node{
     private IdNode id;
     private boolean isVar = false;
     private int line;
-
+    // Argument node, keeps track if it's used as var.
     public ArgNode(TypeNode type, IdNode id, boolean isVar, int line){
         this.type = type;
         this.id = id;
@@ -62,6 +62,7 @@ public class ArgNode implements Node{
         }
 
         if(st.put(this.id.getId(), new STentry(env.getNestingLevel(), type, env.decOffset(offset), new Effect(true), false)) != null){
+            // There can't be another argument with the same name as another.
             res.add(new SemanticError("[!] Argument id "+this.id.getId()+" already defined for the function at line "+ line +"."));
         }
 

@@ -14,7 +14,7 @@ public class DecVarNode implements Node{
     private IdNode id;
     private Node exp;
     private int line;
-
+    // Variable declaration node
     public DecVarNode(TypeNode type, IdNode id, Node exp, int line){
         this.type = type;
         this.id = id;

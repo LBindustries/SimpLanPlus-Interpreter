@@ -17,7 +17,7 @@ public class IteNode implements Node {
     private Node else_statement;
     private ArrayList<HashMap<String, STentry>> localSymbolTable;
     private int line;
-
+    // ITE Node with or without else branch
     public IteNode(Node exp, Node then_statement, Node else_statement, int line) {
         this.exp = exp;
         this.then_statement = then_statement;
@@ -47,28 +47,29 @@ public class IteNode implements Node {
 
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
-
+        // Check if exp is boolean
         if (!exp.typeCheck(env).getClass().equals(BoolTypeNode.class)) {
             throw new TypeCheckException("[!] Condition of if statement not boolean at line "+line+".");
         }
 
         Environment envOld = new Environment(env, true);
-
+        // Typecheck then_node
         TypeNode then_node = then_statement.typeCheck(env);
-
+        // If there's an else statement...
         if (else_statement != null) {
             TypeNode else_node = else_statement.typeCheck(envOld);
+            // If there's a mismatch in types...
             if (!then_node.getType().equals(else_node.getType())) {
                 throw new TypeCheckException("[!] Then and else have different types in structure at line "+line+".");
             }
         }
-
+        // Warn the user if the return type is not void, a non void return was found and the else branch is not present.
         if (else_statement==null && !then_node.getType().equals("void")){
             System.out.println("[W] Else not specified in structure at line "+line+" that contains a non-void return.\n" +
                     "    Please be sure that there's another exit point outside of the ite.");
             //System.exit(0);
         }
-
+        // EffectMax function between else and then branches
         for (int i = 0; i < env.getSymbolTableManager().getSymbolTable().size(); i++) {
             HashMap<String, STentry> tmp = env.getSymbolTableManager().getSymbolTable().get(i);
             HashMap<String, STentry> tmp1 = envOld.getSymbolTableManager().getSymbolTable().get(i);

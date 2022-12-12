@@ -13,7 +13,7 @@ public class ExpNode implements Node {
 
     protected Node exp;
     protected int line;
-
+    // Generic expression
     public ExpNode(Node exp, int line){
         this.exp = exp;
         this.line = line;

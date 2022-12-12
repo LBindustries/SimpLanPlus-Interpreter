@@ -10,8 +10,8 @@ public class STentry {
     private int offset;
     private Effect effect;
 
-    private boolean isFn = false;
-
+    private boolean isFn = false; // IsFunction Flag
+    // Symbol table entry class
     public STentry(int n, int os, Effect ef, boolean fn) {
         nl = n;
         offset = os;

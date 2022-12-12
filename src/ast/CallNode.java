@@ -18,7 +18,7 @@ public class CallNode implements Node {
     private ArrayList<Node> exp;
     private boolean isExp;
     private int line;
-
+    // Callnode statement, used when function is called.
     public CallNode(IdNode id, ArrayList<Node> exp, int line) {
         this.id = id;
         this.exp = exp;
@@ -46,28 +46,31 @@ public class CallNode implements Node {
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
 
-        STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), 0); // funzioni definite solo a livello 0
+        STentry entry = env.getSymbolTableManager().getLastEntry(id.getId(), 0); // Functions are only defined at level 0
 
         if (!(env.getSymbolTableManager().getLastEntry(id.getId(), 0).getType() instanceof FunctionTypeNode)) {
+            // Check if the symbol can be called.
             throw new TypeCheckException("[!] Trying to call non-function symbol " + this.id.getId()+ " at line "+line+".");
         }
 
         FunctionTypeNode t = (FunctionTypeNode) entry.getType();
         if (t.getArgs().size() > 0) {
             if(this.exp == null){
+                // Check for parameter number
                 throw new TypeCheckException("[!] Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got 0 at line "+line+".");
             }
-            if (t.getArgs().size() != this.exp.size()) { // stesso numero di parametri
+            if (t.getArgs().size() != this.exp.size()) {
+                // Check for parameter number
                 throw new TypeCheckException("[!] Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size()+ " at line "+line+".");
             }
             for (int i = 0; i < exp.size(); i++) {
-
-                if (!Objects.equals(exp.get(i).typeCheck(env).getType(), t.getArgs().get(i).getType())) { // tipi coerenti alle exp
+                // Check for Types and Var mismatches.
+                if (!Objects.equals(exp.get(i).typeCheck(env).getType(), t.getArgs().get(i).getType())) {
                     throw new TypeCheckException("[!] Parameters type mismatch for " + this.id.getId() + ": expecting " + t.getArgs().get(i).getType() + ", got " + exp.get(i).typeCheck(env).getType()+ " for parameter "+(i+1)+ " at line "+line+".");
                 }
 
                 if (t.getArgs().get(i).isVar()) {
-                    if (!exp.get(i).getClass().equals(DerExpNode.class)) { // se di tipo var deve essere una variabile
+                    if (!exp.get(i).getClass().equals(DerExpNode.class)) {
                         throw new TypeCheckException("[!] Expecting variable in call of symbol " + this.id.getId() + " for parameter "+(i+1)+ " at line "+line+".");
                     }
                 }
@@ -75,7 +78,7 @@ public class CallNode implements Node {
         } else if (this.exp != null) {
             throw new TypeCheckException("[!] Number of parameters for " + this.id.getId() + " is not correct. Expecting " + t.getArgs().size() + ", got " + this.exp.size()+ " at line "+line+".");
         }
-
+        // Set function as used
         entry.getEffect().setUsed();
         if (!isExp)
             return new VoidTypeNode();
@@ -96,9 +99,10 @@ public class CallNode implements Node {
         FunctionTypeNode t = (FunctionTypeNode) entry.getType();
 
         if(this.exp != null) {
+            // Load args
             for (int i = (exp.size() - 1); i >= 0; i--) {
                 asm += ";Loading arg " + i + "\n";
-
+                // Var loading
                 if (t.getArgs().get(i).isVar()) {
                     asm += "mov $t1 $fp\n";
                     DerExpNode idName = (DerExpNode) exp.get(i);
@@ -108,9 +112,9 @@ public class CallNode implements Node {
                     asm += "addi $t1 $t1 " + localenv.getSymbolTableManager().getLastEntry(idName.getId().getId(), localenv.getNestingLevel()).getOffset() + "\n";
                     asm += "push $t1\n";
                 }
-
+                // Generate asm for expression
                 asm += exp.get(i).codeGeneration(labgen, localenv);
-
+                // Push element on stack.
                 if (t.getArgs().get(i).getType().equals("int")) {
                     asm += "push $a0\n";
                 } else if (t.getArgs().get(i).getType().equals("bool")) {

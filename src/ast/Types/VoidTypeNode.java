@@ -6,7 +6,7 @@ import util.LabelGenerator;
 import util.SemanticError;
 
 public class VoidTypeNode extends TypeNode {
-
+    // The void return type
     public VoidTypeNode () {
         super("void");
     }

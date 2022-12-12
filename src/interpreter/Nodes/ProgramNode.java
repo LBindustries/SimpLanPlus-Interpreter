@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class ProgramNode implements ASMNode {
 
+    // A programnode is just a cointainer for InstructionNodes
+
     private ArrayList<ASMNode> code;
 
     public ProgramNode(){

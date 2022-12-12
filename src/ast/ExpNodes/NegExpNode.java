@@ -10,6 +10,7 @@ import util.TypeCheckException;
 import java.util.ArrayList;
 
 public class NegExpNode extends BaseExpNode{
+    // Negation operation, -a
     public NegExpNode(Node exp, int line) {
         super(exp, line);
     }
@@ -17,6 +18,7 @@ public class NegExpNode extends BaseExpNode{
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(! (exp.typeCheck(env).getType().equals("int"))) {
+            // exp must return an integer for this operation
             System.out.println("[!] No integer in neg"+ " at line "+line+".");
             System.exit(0);
         }

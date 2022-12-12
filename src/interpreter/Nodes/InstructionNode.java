@@ -18,7 +18,7 @@ public class InstructionNode implements ASMNode {
         this.param3 = param3;
         this.classname = classname;
     }
-
+    // Instruction node constructor, that represents a generic ASM instruction.
     public InstructionNode(ArrayList<String> contents, String classname){
         switch (contents.size()){
             case 4:

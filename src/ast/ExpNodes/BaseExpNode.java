@@ -5,6 +5,7 @@ import ast.Node;
 import java.util.ArrayList;
 
 public class BaseExpNode extends ExpNode {
+    // Base Expression node (), extends ExpNode.
     public BaseExpNode(Node exp, int line) {
         super(exp, line);
     }

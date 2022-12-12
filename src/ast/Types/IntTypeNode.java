@@ -6,7 +6,7 @@ import util.LabelGenerator;
 import util.SemanticError;
 
 public class IntTypeNode extends TypeNode {
-
+    // The int return type
     public IntTypeNode () {
         super("int");
     }

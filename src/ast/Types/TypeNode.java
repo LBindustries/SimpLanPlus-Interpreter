@@ -8,7 +8,7 @@ import util.SemanticError;
 import java.util.ArrayList;
 
 public class TypeNode implements Node {
-
+    // Generic type
     private String type;
 
     public TypeNode(String type){

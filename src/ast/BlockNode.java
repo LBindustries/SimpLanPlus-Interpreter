@@ -11,15 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BlockNode implements Node {
-
-    /*
-    Nella sintassi di SLP, le dichiarazioni delle variabili / funzioni devono venire fatte prima
-    degli statement.
-     */
     private ArrayList<Node> declarations;
     private ArrayList<Node> statements;
     private Environment localenv;
-
+    // Code block inside program
     public BlockNode(ArrayList<Node> declarations, ArrayList<Node> statements) {
         this.declarations = declarations;
         this.statements = statements;
@@ -51,7 +46,8 @@ public class BlockNode implements Node {
         }
         TypeNode T = new VoidTypeNode();
         TypeNode first = null;
-        int counter = 1; // TODO: check if actually correct
+        int counter = 1;
+        // Typecheck the statements inside the block. If different return types are detected, an error is raised.
         if (this.statements != null) {
             for (Node s : statements) {
                 StatementNode tmp = (StatementNode) s;
@@ -72,12 +68,14 @@ public class BlockNode implements Node {
                 counter++;
             }
         }
+        // Block-related unused variables detection
         for (String id : localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()) {
             if (!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()) {
                 System.out.println("[W] Symbol " + id + " is unused.");
             }
         }
         if(first == null){
+            // If no returns are inside block, returns void.
             first = new VoidTypeNode();
         }
         return first;

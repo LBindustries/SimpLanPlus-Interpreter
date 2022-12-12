@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class ValExpNode implements Node {
 
     private int value;
+    // Load immediate of an integer
 
     public ValExpNode(int value){
         this.value=value;

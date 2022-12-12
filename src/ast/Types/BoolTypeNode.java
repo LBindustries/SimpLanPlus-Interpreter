@@ -6,7 +6,7 @@ import util.LabelGenerator;
 import util.SemanticError;
 
 public class BoolTypeNode extends TypeNode {
-
+    // The bool return type
     public BoolTypeNode () {
         super("bool");
     }

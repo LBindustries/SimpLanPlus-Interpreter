@@ -12,11 +12,10 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class PrintNode implements Node{
-    //'print' exp;
 
     private Node exp;
     private int line;
-
+    // Print instruction
     public PrintNode(Node exp, int line){
         this.exp = exp;
         this.line = line;
@@ -30,6 +29,7 @@ public class PrintNode implements Node{
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
         TypeNode type = exp.typeCheck(env);
+        // Check for type != void or function that returns void
         if(type instanceof VoidTypeNode || (type instanceof FunctionTypeNode && Objects.equals(type.getType(), "void"))){
             throw new TypeCheckException("[!] Attempt to print void type at line "+line+".");
         }

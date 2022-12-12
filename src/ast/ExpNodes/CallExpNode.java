@@ -14,9 +14,10 @@ public class CallExpNode implements Node {
 
     private CallNode call;
     private int line;
-
+    // Call of a function inside an expression. Contains a CallNode.
     public CallExpNode(Node call, int line){
         this.call = (CallNode) call;
+        // Impose that the callnode is acting as an expnode.
         this.call.setIsExp(true);
         this.line = line;
     }

@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class DerExpNode implements Node {
 
-    private IdNode id; // "Perché non c'è una stringa e basta T.T" -Ale "Perchè sì" -Balu
+    private IdNode id;
     private int line;
-
+    // Variable invocation
     public DerExpNode(IdNode id, int line){
         this.id = id;
         this.line = line;
@@ -34,15 +34,18 @@ public class DerExpNode implements Node {
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()) == null){
-            throw new TypeCheckException("[!] Variable "+this.id.getId()+" not declared at line "+line+"."); // "Vogliamo ristamparlo?" -Ale
+            // If the variable is not declared.
+            throw new TypeCheckException("[!] Variable "+this.id.getId()+" not declared at line "+line+".");
         }
         if(env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getType() instanceof FunctionTypeNode){
+            // If Symbol is actually a function
             throw new TypeCheckException("[!] Trying to use function "+this.id.getId()+" as a variable at line "+line+".");
         }
         if (! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isInitialized() && ! env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().isUsed()){
+            // If the Variable is not initialized
             throw new TypeCheckException("[!] Variable "+this.id.getId()+" not initialized at line "+line+".");
         }
-
+        // Set this variable as used and return its type
         env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getEffect().setUsed();
         return env.getSymbolTableManager().getLastEntry(this.id.getId(), env.getNestingLevel()).getType();
     }
@@ -56,7 +59,7 @@ public class DerExpNode implements Node {
         for(int i = 0; i < (localenv.getNestingLevel() - localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getNestinglevel()); i++ ){
             asm += "lw $t1 0($t1)\n";
         }
-
+        // Use different asm opcodes to load up a word or a boolean
         if(localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("int")) {
             asm += "lw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($t1)\n";
         } else if (localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("bool")) {

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class AssemblyVisitorImpl extends AssemblyBaseVisitor<ASMNode> {
     @Override public ASMNode visitProgram(AssemblyParser.ProgramContext ctx){
+        // This visitor is responsible of visiting the whole flat structure of the asm file.
         ProgramNode program = new ProgramNode();
         for(AssemblyParser.InstructionContext ins: ctx.instruction()) {
             ArrayList<String> contents = new ArrayList<>();

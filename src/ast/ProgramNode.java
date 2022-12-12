@@ -12,10 +12,6 @@ import java.util.HashMap;
 
 public class ProgramNode implements Node {
 
-    /*
-    Nella sintassi di SLP, le dichiarazioni delle variabili / funzioni devono venire fatte prima
-    degli statement.
-     */
     private ArrayList<Node> declarations;
     private ArrayList<Node> statements;
     private Environment localenv;
@@ -43,16 +39,19 @@ public class ProgramNode implements Node {
 
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
+        // Typecheck the declarations
         if (this.declarations != null) {
             for (Node declaration : this.declarations) {
                 declaration.typeCheck(this.localenv);
             }
         }
+        // Typecheck the statements
         if (this.statements != null) {
             for (Node statement : this.statements) {
                 statement.typeCheck(this.localenv);
             }
         }
+        // Locate unused symbols
         for(String id: localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).keySet()){
             if(!localenv.getSymbolTableManager().getLevel(localenv.getNestingLevel()).get(id).getEffect().isUsed()){
                 System.out.println("[W] Symbol "+id+" is unused.");
@@ -63,8 +62,8 @@ public class ProgramNode implements Node {
 
     @Override
     public String codeGeneration(LabelGenerator labgen, Environment localenv2) {
-        String asm = ";Program\n"; // li $sp MEM_TOP\nli $fp MEM_TOP causano problemi con il parser
-
+        String asm = ";Program\n";
+        // Declarations setup
         if (this.declarations != null && this.declarations.size() > 0) {
             asm += ";Variable Declaration\n";
             //li $t1 " + localenv.getDecSpace() + "\n";
@@ -87,10 +86,11 @@ public class ProgramNode implements Node {
         }
         if (this.statements != null) {
             for (Node statement : this.statements) {
+                // Statements ASM codegen
                 asm += statement.codeGeneration(labgen, this.localenv);
             }
         }
-
+        // Program closeup
         asm += "lw $t1 4($fp)\n";
         asm += "jr $t1\n";
         asm += "label main_end :\n";
@@ -121,12 +121,13 @@ public class ProgramNode implements Node {
         env.setOffset(8);
 
         ArrayList<SemanticError> res = new ArrayList<SemanticError>();
-
+        // Check the semantics of declarations
         if (this.declarations != null && this.declarations.size() > 0) {
             for (Node n : this.declarations) {
                 res.addAll(n.checkSemantics(env));
             }
         }
+        // Check the semantics of statements
         if (this.statements != null && this.statements.size() > 0) {
             for (Node n : this.statements) {
                 res.addAll(n.checkSemantics(env));

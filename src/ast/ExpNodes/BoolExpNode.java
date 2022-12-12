@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class BoolExpNode implements Node {
 
     private boolean bool;
-
+    // Load immediate of a bool.
     public BoolExpNode(boolean bool){
         this.bool = bool;
     }

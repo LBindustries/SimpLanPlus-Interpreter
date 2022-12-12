@@ -10,6 +10,7 @@ import util.TypeCheckException;
 import java.util.ArrayList;
 
 public class NotExpNode extends BaseExpNode{
+    // Logical not operation, !a
     public NotExpNode(Node exp, int line) {
         super(exp, line);
     }
@@ -17,6 +18,7 @@ public class NotExpNode extends BaseExpNode{
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(! (exp.typeCheck(env).getType().equals("bool"))) {
+            // Exp must be a boolean for this operation
             throw new TypeCheckException("[!] No bool in not"+ " at line "+line+".");
         }
         return new BoolTypeNode();

@@ -4,7 +4,7 @@ public class Environment {
     private SymbolTableManager symbolTableManager;
     private int nestingLevel;
     private int offset;
-
+    // The environment class allows access to the ST and manages nestingLevel and offsets.
     public Environment(Environment env){
         this.symbolTableManager = new SymbolTableManager(env.getSymbolTableManager().getSymbolTable());
         this.nestingLevel = env.nestingLevel;

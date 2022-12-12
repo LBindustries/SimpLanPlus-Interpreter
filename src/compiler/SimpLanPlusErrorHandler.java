@@ -11,13 +11,13 @@ import java.util.ArrayList;
 
 public class SimpLanPlusErrorHandler extends BaseErrorListener {
     public static final SimpLanPlusErrorHandler INSTANCE = new SimpLanPlusErrorHandler();
-
+    // List of errors
     ArrayList<String> err_list;
 
     public SimpLanPlusErrorHandler() {
         this.err_list = new ArrayList<String>();
     }
-
+    // Custom error handler
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         this.err_list.add("[!] An error occurred at line " + line + ", character " + charPositionInLine + " :" + msg);
@@ -31,7 +31,7 @@ public class SimpLanPlusErrorHandler extends BaseErrorListener {
         }
         return res;
     }
-
+    // Dump to file the errorlog
     public void dumpToFile(String filename) throws IOException {
         BufferedWriter wr = new BufferedWriter(new FileWriter(filename));
         wr.write(this.toString());

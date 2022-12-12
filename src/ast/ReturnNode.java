@@ -10,11 +10,10 @@ import util.TypeCheckException;
 import java.util.ArrayList;
 
 public class ReturnNode implements Node {
-    // 'return' (exp)?;
 
     private Node exp;
     private int line;
-
+    // Return instruction
     public ReturnNode(Node exp, int line) {
         this.exp = exp;
         this.line = line;
@@ -31,9 +30,11 @@ public class ReturnNode implements Node {
 
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
+        // If instruction is return;
         if (this.exp == null) {
             return new VoidTypeNode();
         }
+        // else
         return exp.typeCheck(env);
     }
 

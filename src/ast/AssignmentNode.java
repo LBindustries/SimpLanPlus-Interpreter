@@ -11,13 +11,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class AssignmentNode implements Node{
-    // ID '=' exp
     private IdNode id;
     private Node exp;
     private int line;
 
     private STentry st;
-
+    // Assignment node, id=exp
     public AssignmentNode(IdNode ID, Node exp, int line){
         this.id = ID;
         this.exp = exp;
@@ -32,15 +31,19 @@ public class AssignmentNode implements Node{
     @Override
     public TypeNode typeCheck(Environment env) throws TypeCheckException {
         if(st == null){
+            // If variable is not declared
             throw new TypeCheckException("[!] Variable "+this.id.getId()+" not declared"+ " at line "+line+".");
         }
 
         if(!Objects.equals(exp.typeCheck(env).getType(), st.getType().getType())) {
+            // If types are not compatible
             throw new TypeCheckException("[!] Types of variable and value are not compatible"+ " at line "+line+".");
         }
         if(st.isFn()){
+            // If the symbol is a function
             throw new TypeCheckException("[!] Trying to assign value to function "+this.id.getId()+ " at line "+line+".");
         }
+        // Put the variable as initialized. This can safely be done due to how the setInitialized function works.
         st.getEffect().setInitialized();
         return new VoidTypeNode();
     }
@@ -55,7 +58,7 @@ public class AssignmentNode implements Node{
         for(int i = 0; i < (localenv.getNestingLevel() - localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getNestinglevel()); i++ ){
             asm += "lw $t1 0($t1)\n";
         }
-
+        // Different types require different opcodes to be saved.
         if(localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("int")) {
             asm += "sw $a0 " + localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getOffset() + "($t1)\n";
         } else if (localenv.getSymbolTableManager().getLastEntry(id.getId(), localenv.getNestingLevel()).getType().getType().equals("bool")) {
