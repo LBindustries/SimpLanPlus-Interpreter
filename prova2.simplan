@@ -1,7 +1,21 @@
-{   int a;
-    int fun1(int b){
-        int c;
-        a=1; b=1;
+{
+    int a;
+    int d;
+    int u;
+    int fun1(var int b, var int c, var int x){
+        if(b<3) {
+            return c+b;
+        } else {
+            x = x+1;
+            b = b-1;
+            print(x);
+            print(b);
+            return fun1(b, c, x);
+        }
     }
-    fun1(1, a);
+    a = 7;
+    d = 34;
+    u = 58;
+    print(fun1(a,d,a));
+    print(a);
 }
